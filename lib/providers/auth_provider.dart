@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../core/routes/app_routes.dart';
 import '../core/services/auth_service.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -48,6 +49,10 @@ class AuthProvider extends ChangeNotifier {
           }
           if (data.event == AuthChangeEvent.passwordRecovery) {
             _isPasswordRecovery = true;
+            AppRoutes.navigatorKey.currentState?.pushNamedAndRemoveUntil(
+              AppRoutes.updatePassword,
+              (route) => false,
+            );
           } else if (data.event == AuthChangeEvent.signedOut) {
             _isPasswordRecovery = false;
           }

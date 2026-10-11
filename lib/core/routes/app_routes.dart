@@ -18,6 +18,7 @@ class AppRoutes {
   static const String login = '/login';
   static const String forgotPassword = '/forgot-password';
   static const String updatePassword = '/update-password';
+  static const String resetCallback = '/reset-callback';
   static const String home = '/home';
   static const String medicines = '/medicines';
 
@@ -28,12 +29,29 @@ class AppRoutes {
     login: (context) => const LoginView(),
     forgotPassword: (context) => const ForgotPasswordView(),
     updatePassword: (context) => const UpdatePasswordView(),
+    resetCallback: (context) => const UpdatePasswordView(),
+    'reset-callback': (context) => const UpdatePasswordView(),
     home: (context) => const AuthGate(),
     medicines: (context) => const MedicineView(),
   };
 
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
-    switch (settings.name) {
+    final rawName = settings.name ?? '';
+    final uri = Uri.tryParse(rawName);
+    final path = (uri != null && uri.path.isNotEmpty) ? uri.path : rawName;
+
+    // Handle deep link callback from password recovery email
+    if (rawName.contains('reset-callback') ||
+        path.contains('reset-callback') ||
+        rawName.contains('update-password') ||
+        path.contains('update-password')) {
+      return MaterialPageRoute(
+        builder: (_) => const UpdatePasswordView(),
+        settings: settings,
+      );
+    }
+
+    switch (path) {
       case initial:
       case splash:
         return MaterialPageRoute(
@@ -57,6 +75,8 @@ class AppRoutes {
           settings: settings,
         );
       case updatePassword:
+      case resetCallback:
+      case 'reset-callback':
         return MaterialPageRoute(
           builder: (_) => const UpdatePasswordView(),
           settings: settings,
@@ -67,10 +87,10 @@ class AppRoutes {
           settings: settings,
         );
       default:
+        // Graceful fallback: Redirect unknown or deep-link routes to AuthGate
         return MaterialPageRoute(
-          builder: (_) => const Scaffold(
-            body: Center(child: Text('Route not found')),
-          ),
+          builder: (_) => const AuthGate(),
+          settings: settings,
         );
     }
   }

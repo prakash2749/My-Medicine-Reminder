@@ -37,7 +37,6 @@ void main() {
 
     // Verify UI title and elements
     expect(find.text('Reset password'), findsOneWidget);
-    expect(find.text('NOTIFY / RESET PASSWORD'), findsOneWidget);
     expect(find.text('Send reset link'), findsOneWidget);
 
     // Enter email

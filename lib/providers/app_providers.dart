@@ -18,6 +18,7 @@ class AppProviders {
 
     // Feature / Domain Providers
     ChangeNotifierProvider<AuthProvider>(
+      lazy: false,
       create: (_) => AuthProvider(),
     ),
     ChangeNotifierProvider<MedicineReminderProvider>(

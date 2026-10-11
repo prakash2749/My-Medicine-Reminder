@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:medicine_reminder/core/constants/app_assets.dart';
 import 'package:medicine_reminder/core/constants/app_colors.dart';
 import 'package:medicine_reminder/core/constants/app_strings.dart';
 import 'package:medicine_reminder/core/routes/app_routes.dart';
+import 'package:medicine_reminder/providers/auth_provider.dart';
 
 
 class SplashView extends StatefulWidget {
@@ -39,9 +41,20 @@ class _SplashViewState extends State<SplashView>
     _controller.forward();
 
     _navigationTimer = Timer(const Duration(milliseconds: 2000), () {
-      if (mounted) {
-        Navigator.of(context).pushReplacementNamed(AppRoutes.authGate);
+      if (!mounted) return;
+
+      final authProvider = context.read<AuthProvider>();
+      if (authProvider.isPasswordRecovery) {
+        Navigator.of(context).pushReplacementNamed(AppRoutes.updatePassword);
+        return;
       }
+
+      // If another route was already opened on top of Splash (e.g. via deep link), don't overwrite it
+      if (ModalRoute.of(context)?.isCurrent == false) {
+        return;
+      }
+
+      Navigator.of(context).pushReplacementNamed(AppRoutes.authGate);
     });
   }
 

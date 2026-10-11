@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="medicine_reminder"
+        android:label="Medicine Reminder"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

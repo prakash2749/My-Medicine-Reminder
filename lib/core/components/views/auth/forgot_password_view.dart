@@ -5,7 +5,6 @@ import 'package:medicine_reminder/core/constants/app_colors.dart';
 import 'package:medicine_reminder/core/constants/app_strings.dart';
 import 'package:medicine_reminder/core/routes/app_routes.dart';
 import 'package:medicine_reminder/providers/auth_provider.dart';
-import 'package:medicine_reminder/providers/theme_provider.dart';
 
 class ForgotPasswordView extends StatefulWidget {
   const ForgotPasswordView({super.key});
@@ -69,8 +68,6 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
     final bg = isDark ? AppColors.backgroundDark : AppColors.backgroundLight;
     final textPrimary = isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
     final textSecondary = isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight;
-    final tagBg = isDark ? AppColors.tagBgDark : AppColors.tagBgLight;
-    final tagText = isDark ? AppColors.tagTextDark : AppColors.tagTextLight;
 
     return Scaffold(
       backgroundColor: bg,
@@ -79,67 +76,14 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 480),
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
               child: Form(
                 key: _formKey,
                 autovalidateMode: _autovalidateMode,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Header row with Breadcrumb Tag & Theme Switcher
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Notify Badge Tag (matches Figma breadcrumb: NOTIFY / RESET PASSWORD)
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: tagBg,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                width: 6,
-                                height: 6,
-                                decoration: BoxDecoration(
-                                  color: tagText,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                              const SizedBox(width: 6),
-                              Text(
-                                AppStrings.authTagResetPassword,
-                                style: TextStyle(
-                                  fontSize: 11.5,
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: 0.8,
-                                  color: tagText,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        // Theme Mode Toggle
-                        Consumer<ThemeProvider>(
-                          builder: (context, themeProvider, _) {
-                            return IconButton(
-                              icon: Icon(
-                                themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode,
-                                color: textSecondary,
-                                size: 22,
-                              ),
-                              tooltip: 'Toggle Theme',
-                              onPressed: () => themeProvider.toggleTheme(),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 28),
+                    const SizedBox(height: 12),
 
                     // Header Title
                     Text(

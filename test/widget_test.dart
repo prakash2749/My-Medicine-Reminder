@@ -19,9 +19,10 @@ void main() {
     await tester.pump(const Duration(seconds: 3));
     await tester.pumpAndSettle();
 
-    // Verify presence of Notify Login screen elements
+    // Verify presence of Notify Login screen brand and form elements
+    expect(find.text('Notify'), findsOneWidget);
+    expect(find.text('Medicine Assistant'), findsOneWidget);
     expect(find.text('Welcome back'), findsOneWidget);
-    expect(find.text('NOTIFY / LOG IN'), findsOneWidget);
     expect(find.text('Log in'), findsOneWidget);
   });
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:medicine_reminder/core/constants/app_assets.dart';
 import 'package:medicine_reminder/core/constants/app_colors.dart';
 import 'package:medicine_reminder/core/constants/app_strings.dart';
 import 'package:medicine_reminder/core/routes/app_routes.dart';
@@ -185,8 +186,6 @@ class _LoginViewState extends State<LoginView> {
     final bg = isDark ? AppColors.backgroundDark : AppColors.backgroundLight;
     final textPrimary = isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
     final textSecondary = isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight;
-    final tagBg = isDark ? AppColors.tagBgDark : AppColors.tagBgLight;
-    final tagText = isDark ? AppColors.tagTextDark : AppColors.tagTextLight;
 
     return Scaffold(
       backgroundColor: bg,
@@ -195,62 +194,110 @@ class _LoginViewState extends State<LoginView> {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 480),
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
               child: Form(
                 key: _formKey,
                 autovalidateMode: _autovalidateMode,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Top App Bar row with Breadcrumb Tag & Theme Switcher
+                    // Brand Logo & Theme Header
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        // Notify Badge Tag (matches Figma breadcrumb: NOTIFY / LOG IN)
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: tagBg,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                width: 6,
-                                height: 6,
-                                decoration: BoxDecoration(
-                                  color: tagText,
-                                  shape: BoxShape.circle,
+                        // Brand Logo Tile with subtle name pill
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 52,
+                              height: 52,
+                              padding: const EdgeInsets.all(9),
+                              decoration: BoxDecoration(
+                                color: isDark ? AppColors.surfaceDark : Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: isDark
+                                      ? AppColors.borderDark
+                                      : AppColors.primary.withValues(alpha: 0.12),
+                                  width: 1.5,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: AppColors.primary.withValues(alpha: isDark ? 0.22 : 0.10),
+                                    blurRadius: 16,
+                                    offset: const Offset(0, 6),
+                                  ),
+                                  if (!isDark)
+                                    BoxShadow(
+                                      color: Colors.black.withValues(alpha: 0.03),
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                ],
+                              ),
+                              child: Image.asset(
+                                AppAssets.appLogo,
+                                fit: BoxFit.contain,
+                                errorBuilder: (_, _, _) => const Icon(
+                                  Icons.medication_rounded,
+                                  color: AppColors.primary,
+                                  size: 26,
                                 ),
                               ),
-                              const SizedBox(width: 6),
-                              Text(
-                                _isSignUp ? AppStrings.authTagRegister : AppStrings.authTagLogin,
-                                style: TextStyle(
-                                  fontSize: 11.5,
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: 0.8,
-                                  color: tagText,
+                            ),
+                            const SizedBox(width: 12),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  AppStrings.appName,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w800,
+                                    letterSpacing: -0.4,
+                                    color: textPrimary,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
+                                Text(
+                                  AppStrings.appSubtitle,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                    color: textSecondary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
 
-                        // Theme Mode Toggle
-                        Consumer<ThemeProvider>(
-                          builder: (context, themeProvider, _) {
-                            return IconButton(
-                              icon: Icon(
-                                themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode,
-                                color: textSecondary,
-                                size: 22,
-                              ),
-                              tooltip: 'Toggle Theme',
-                              onPressed: () => themeProvider.toggleTheme(),
-                            );
-                          },
+                        // Theme Mode Toggle Button
+                        Container(
+                          decoration: BoxDecoration(
+                            color: isDark
+                                ? AppColors.surfaceDark
+                                : AppColors.tagBgLight,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: isDark ? AppColors.borderDark : AppColors.borderLight,
+                            ),
+                          ),
+                          child: Consumer<ThemeProvider>(
+                            builder: (context, themeProvider, _) {
+                              return IconButton(
+                                icon: Icon(
+                                  themeProvider.isDarkMode ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
+                                  color: textSecondary,
+                                  size: 20,
+                                ),
+                                tooltip: 'Toggle Theme',
+                                visualDensity: VisualDensity.compact,
+                                onPressed: () => themeProvider.toggleTheme(),
+                              );
+                            },
+                          ),
                         ),
                       ],
                     ),
