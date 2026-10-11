@@ -44,5 +44,13 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+config/dev.json
+config/prod.json
+
 # Widget Preview related
 .widget_preview/
+
+# MCP and Agent configuration (contains tokens)
+.agent/
+.agents/
+*mcp_config.json
