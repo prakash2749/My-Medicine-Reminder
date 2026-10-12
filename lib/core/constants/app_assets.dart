@@ -8,7 +8,8 @@ class AppAssets {
   static const String appIcon = 'assets/favicon.png';
 
   /// Companion launch animation video
-  static const String launchVideo = 'assets/Notify_Launch.mp4';
+  static const String launchVideo =
+      'assets/Notify_Launch_Animation_5s_20261012160214.mp4';
 
   /// Welcome banner image for Get Started screen
   static const String banner = 'assets/banner.png';

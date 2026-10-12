@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'supabase_service.dart';
+import '../config/app_config.dart';
 
 /// Result container for authentication operations with email verification metadata.
 class AuthResult {
@@ -116,6 +117,7 @@ class AuthService {
       final response = await supabase.auth.signUp(
         email: email,
         password: password,
+        emailRedirectTo: AppConfig.authRedirectUrl,
         data: fullName != null && fullName.isNotEmpty
             ? {'full_name': fullName, 'name': fullName}
             : null,
@@ -168,8 +170,7 @@ class AuthService {
 
       await supabase.auth.resetPasswordForEmail(
         email,
-        redirectTo:
-            redirectTo ?? 'io.supabase.medicinereminder://reset-callback',
+        redirectTo: redirectTo ?? AppConfig.resetPasswordRedirectUrl,
       );
       return AuthResult.success();
     } on AuthException catch (e) {

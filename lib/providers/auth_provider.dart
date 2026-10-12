@@ -44,8 +44,8 @@ class AuthProvider extends ChangeNotifier {
       final stream = _authService.onAuthStateChange;
       if (stream != null) {
         _authSubscription = stream.listen((data) {
-          _user = data.session?.user;
-          _session = data.session;
+          _user = data.session?.user ?? _authService.currentUser;
+          _session = data.session ?? _authService.currentSession;
           if (_user != null) {
             _needsEmailVerification = false;
           }
@@ -118,6 +118,64 @@ class AuthProvider extends ChangeNotifier {
     );
     _setLoading(false);
     return success;
+  }
+
+  /// Verifies or establishes an active session after email verification.
+  /// Checks active client session, refreshes if possible, or signs in using credentials.
+  Future<bool> refreshOrCheckSession({String? email, String? password}) async {
+    _setLoading(true);
+    try {
+      // 1. Check existing session on Supabase client
+      final current = _authService.currentSession;
+      if (current != null) {
+        _session = current;
+        _user = current.user;
+        _needsEmailVerification = false;
+        _setLoading(false);
+        notifyListeners();
+        return true;
+      }
+
+      // 2. Try refreshing if credentials/tokens exist
+      final client = _authService.client;
+      if (client != null) {
+        try {
+          final refreshed = await client.auth.refreshSession();
+          if (refreshed.session != null) {
+            _session = refreshed.session;
+            _user = refreshed.user;
+            _needsEmailVerification = false;
+            _setLoading(false);
+            notifyListeners();
+            return true;
+          }
+        } catch (_) {}
+      }
+
+      // 3. If credentials provided, sign in directly to create session
+      if (email != null &&
+          password != null &&
+          email.isNotEmpty &&
+          password.isNotEmpty) {
+        final result = await _authService.signIn(
+          email: email,
+          password: password,
+        );
+        if (result.success &&
+            (result.session != null || result.user != null)) {
+          _session = result.session;
+          _user = result.user;
+          _needsEmailVerification = false;
+          _setLoading(false);
+          notifyListeners();
+          return true;
+        }
+      }
+    } catch (e) {
+      debugPrint('refreshOrCheckSession error: $e');
+    }
+    _setLoading(false);
+    return false;
   }
 
   Future<AuthResult> sendPasswordResetEmail(

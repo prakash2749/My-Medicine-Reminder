@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import 'package:medicine_reminder/core/components/shared/shared.dart';
 import 'package:medicine_reminder/core/constants/app_colors.dart';
 import 'package:medicine_reminder/core/constants/app_strings.dart';
 import 'package:medicine_reminder/core/routes/app_routes.dart';
@@ -215,24 +216,16 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                     ],
 
                     // Email Field
-                    Text(
-                      AppStrings.emailLabel,
-                      style: TextStyle(
-                        fontSize: 13.5,
-                        fontWeight: FontWeight.w600,
-                        color: textPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
+                    AppTextField(
                       controller: _emailController,
+                      label: AppStrings.emailLabel,
+                      hintText: AppStrings.emailPlaceholder,
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.done,
                       onFieldSubmitted: (_) => _handleSendResetLink(),
-                      style: TextStyle(color: textPrimary, fontSize: 15),
-                      decoration: const InputDecoration(
-                        hintText: AppStrings.emailPlaceholder,
-                        prefixIcon: Icon(Icons.mail_outline_rounded, size: 20),
+                      prefixIcon: const Icon(
+                        Icons.mail_outline_rounded,
+                        size: 20,
                       ),
                       onChanged: (_) {
                         if (_errorMessage != null) {

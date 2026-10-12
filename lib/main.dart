@@ -21,10 +21,22 @@ Future<void> main() async {
       publishableKey: AppConfig.supabasePublishableKey,
     );
 
-    // 1. Supabase auth stream listener: Capture recovery auth state
+    // 1. Supabase auth stream listener: Capture recovery auth state and signedIn state
     Supabase.instance.client.auth.onAuthStateChange.listen((data) {
       if (data.event == AuthChangeEvent.passwordRecovery) {
         AppRoutes.router.go(AppRoutes.updatePassword);
+      } else if (data.event == AuthChangeEvent.signedIn) {
+        // Automatically route to Dashboard when authenticated (e.g. from email verification link)
+        final uri = AppRoutes.router.routerDelegate.currentConfiguration.uri
+            .toString();
+        final isOnboardingOrAuth =
+            uri.contains('signup') ||
+            uri.contains('login') ||
+            uri.contains('verify-email') ||
+            uri.contains('get-started');
+        if (isOnboardingOrAuth) {
+          AppRoutes.router.go(AppRoutes.authGate);
+        }
       }
     });
 
@@ -74,6 +86,19 @@ void _setupDeepLinkHandler() {
       }
 
       AppRoutes.router.go(AppRoutes.updatePassword);
+    } else if (uriString.contains('login-callback') ||
+        uriString.contains('signup-callback') ||
+        uriString.contains('type=signup') ||
+        uriString.contains('type=email_confirmation') ||
+        uriString.contains('code=') ||
+        uriString.contains('access_token')) {
+      try {
+        await Supabase.instance.client.auth.getSessionFromUrl(uri);
+      } catch (e) {
+        debugPrint('getSessionFromUrl error: $e');
+      }
+
+      AppRoutes.router.go(AppRoutes.authGate);
     }
   }
 

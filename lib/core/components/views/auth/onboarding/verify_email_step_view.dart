@@ -19,6 +19,7 @@ class _VerifyEmailStepViewState extends State<VerifyEmailStepView> {
   int _cooldownSeconds = 60;
   Timer? _cooldownTimer;
   bool _isResending = false;
+  bool _isCheckingVerification = false;
   String? _statusMessage;
 
   @override
@@ -72,16 +73,57 @@ class _VerifyEmailStepViewState extends State<VerifyEmailStepView> {
     }
   }
 
-  void _handleVerified() {
-    // Navigate into main application
-    context.go(AppRoutes.authGate);
+  Future<void> _handleVerified() async {
+    if (_isCheckingVerification) return;
+
+    final signup = context.read<SignupProvider>();
+    final auth = context.read<AuthProvider>();
+
+    setState(() {
+      _isCheckingVerification = true;
+      _statusMessage = null;
+    });
+
+    final hasSession = await auth.refreshOrCheckSession(
+      email: signup.email,
+      password: signup.password,
+    );
+
+    if (!mounted) return;
+    setState(() => _isCheckingVerification = false);
+
+    if (hasSession) {
+      signup.reset();
+      context.go(AppRoutes.authGate);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Email verified! Welcome to My Medicine Reminder.'),
+          backgroundColor: AppColors.success,
+        ),
+      );
+    } else {
+      setState(() {
+        _statusMessage = 'Your email is not verified yet. Please check your inbox or click the link sent to your email.';
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final signup = context.watch<SignupProvider>();
+    final auth = context.watch<AuthProvider>();
     final email = signup.email.isNotEmpty ? signup.email : 'your email';
+
+    // If deep link verified the user while on this screen, proceed automatically to dashboard
+    if (auth.isAuthenticated) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          signup.reset();
+          context.go(AppRoutes.authGate);
+        }
+      });
+    }
 
     return Scaffold(
       backgroundColor: isDark
@@ -225,7 +267,9 @@ class _VerifyEmailStepViewState extends State<VerifyEmailStepView> {
                       width: double.infinity,
                       height: 52,
                       child: ElevatedButton(
-                        onPressed: _handleVerified,
+                        onPressed: _isCheckingVerification
+                            ? null
+                            : _handleVerified,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
                           foregroundColor: Colors.white,
@@ -234,13 +278,22 @@ class _VerifyEmailStepViewState extends State<VerifyEmailStepView> {
                             borderRadius: BorderRadius.circular(16),
                           ),
                         ),
-                        child: const Text(
-                          "I’ve verified my email",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
+                        child: _isCheckingVerification
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Text(
+                                "I’ve verified my email",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
                       ),
                     ),
                     const SizedBox(height: 12),

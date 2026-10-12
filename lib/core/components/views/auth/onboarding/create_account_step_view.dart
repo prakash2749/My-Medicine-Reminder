@@ -6,6 +6,7 @@ import 'package:medicine_reminder/core/routes/app_routes.dart';
 import 'package:medicine_reminder/core/services/onboarding_service.dart';
 import 'package:medicine_reminder/providers/auth_provider.dart';
 import 'package:medicine_reminder/providers/signup_provider.dart';
+import 'package:medicine_reminder/core/components/shared/shared.dart';
 
 class CreateAccountStepView extends StatefulWidget {
   const CreateAccountStepView({super.key});
@@ -94,7 +95,12 @@ class _CreateAccountStepViewState extends State<CreateAccountStepView> {
           }
         }
         if (!mounted) return;
-        context.go(AppRoutes.authGate);
+        if (result.needsEmailVerification) {
+          context.go(AppRoutes.verifyEmail);
+        } else {
+          signup.reset();
+          context.go(AppRoutes.authGate);
+        }
       } else {
         setState(() {
           _localError = result.errorMessage ?? 'Failed to create account.';
@@ -234,48 +240,18 @@ class _CreateAccountStepViewState extends State<CreateAccountStepView> {
                     ],
 
                     // Email Input
-                    Text(
-                      'Email Address',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: isDark
-                            ? AppColors.textPrimaryDark
-                            : AppColors.textPrimaryLight,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
+                    AppTextField(
+                      label: 'Email Address',
+                      hintText: 'you@example.com',
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      autocorrect: false,
-                      style: TextStyle(
-                        color: isDark
-                            ? AppColors.textPrimaryDark
-                            : AppColors.textPrimaryLight,
+                      prefixIcon: const Icon(
+                        Icons.email_outlined,
+                        color: AppColors.primary,
                       ),
-                      decoration: InputDecoration(
-                        hintText: 'you@example.com',
-                        filled: true,
-                        fillColor: isDark
-                            ? AppColors.surfaceDark
-                            : AppColors.surfaceLight,
-                        prefixIcon: const Icon(
-                          Icons.email_outlined,
-                          color: AppColors.primary,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide(
-                            color: isDark
-                                ? AppColors.borderDark
-                                : AppColors.borderLight,
-                          ),
-                        ),
-                        errorText: (_submittedOnce && !signup.isEmailValid)
-                            ? 'Invalid email format'
-                            : null,
-                      ),
+                      errorText: (_submittedOnce && !signup.isEmailValid)
+                          ? 'Invalid email format'
+                          : null,
                       onChanged: (val) {
                         signup.setEmail(val);
                         if (_localError != null) {
@@ -286,58 +262,27 @@ class _CreateAccountStepViewState extends State<CreateAccountStepView> {
                     const SizedBox(height: 20),
 
                     // Password Input
-                    Text(
-                      'Password',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: isDark
-                            ? AppColors.textPrimaryDark
-                            : AppColors.textPrimaryLight,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
+                    AppTextField(
+                      label: 'Password',
+                      hintText: 'Create a password',
                       controller: _passwordController,
                       obscureText: _obscurePassword,
-                      style: TextStyle(
-                        color: isDark
-                            ? AppColors.textPrimaryDark
-                            : AppColors.textPrimaryLight,
+                      prefixIcon: const Icon(
+                        Icons.lock_outline,
+                        color: AppColors.primary,
                       ),
-                      decoration: InputDecoration(
-                        hintText: 'Create a password',
-                        filled: true,
-                        fillColor: isDark
-                            ? AppColors.surfaceDark
-                            : AppColors.surfaceLight,
-                        prefixIcon: const Icon(
-                          Icons.lock_outline,
-                          color: AppColors.primary,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                          color: isDark
+                              ? AppColors.textSecondaryDark
+                              : AppColors.textSecondaryLight,
                         ),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscurePassword
-                                ? Icons.visibility_off_outlined
-                                : Icons.visibility_outlined,
-                            color: isDark
-                                ? AppColors.textSecondaryDark
-                                : AppColors.textSecondaryLight,
-                          ),
-                          onPressed: () {
-                            setState(
-                              () => _obscurePassword = !_obscurePassword,
-                            );
-                          },
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide(
-                            color: isDark
-                                ? AppColors.borderDark
-                                : AppColors.borderLight,
-                          ),
-                        ),
+                        onPressed: () {
+                          setState(() => _obscurePassword = !_obscurePassword);
+                        },
                       ),
                       onChanged: (val) {
                         signup.setPassword(val);
@@ -369,26 +314,16 @@ class _CreateAccountStepViewState extends State<CreateAccountStepView> {
                     const SizedBox(height: 20),
 
                     // Terms agreement
-                    CheckboxListTile(
-                      contentPadding: EdgeInsets.zero,
-                      activeColor: AppColors.primary,
+                    AppCheckboxTile(
                       value: signup.agreedToTerms,
+                      titleText:
+                          'I agree to the Terms of Service and Privacy Policy.',
                       onChanged: (val) {
                         signup.setAgreedToTerms(val ?? false);
                         if (val == true && _localError != null) {
                           setState(() => _localError = null);
                         }
                       },
-                      title: Text(
-                        'I agree to the Terms of Service and Privacy Policy.',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: isDark
-                              ? AppColors.textPrimaryDark
-                              : AppColors.textPrimaryLight,
-                        ),
-                      ),
-                      controlAffinity: ListTileControlAffinity.leading,
                     ),
 
                     const SizedBox(height: 24),

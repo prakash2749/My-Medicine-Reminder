@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:medicine_reminder/core/constants/app_colors.dart';
 import 'package:medicine_reminder/core/routes/app_routes.dart';
 import 'package:medicine_reminder/providers/signup_provider.dart';
+import 'package:medicine_reminder/core/components/shared/shared.dart';
 
 import 'widgets/onboarding_step_header.dart';
 
@@ -43,10 +46,19 @@ class _CareCircleStepViewState extends State<CareCircleStepView> {
     if (signup.wantsCareCircle) {
       final name = _nameController.text.trim();
       final phone = _phoneController.text.trim();
+      final digitsOnly = phone.replaceAll(RegExp(r'\D'), '');
 
       setState(() {
         _nameError = name.isEmpty ? 'Please enter a contact name.' : null;
-        _phoneError = phone.isEmpty ? 'Please enter a phone number.' : null;
+        if (phone.isEmpty) {
+          _phoneError = 'Please enter a mobile number.';
+        } else if (signup.countryCode == '+91' && digitsOnly.length != 10) {
+          _phoneError = 'Please enter a valid 10-digit mobile number.';
+        } else if (digitsOnly.length < 6) {
+          _phoneError = 'Please enter a valid mobile number.';
+        } else {
+          _phoneError = null;
+        }
         _agreementError = !signup.agreedToShareAlerts
             ? 'Please agree to share alerts to invite this person.'
             : null;
@@ -123,44 +135,15 @@ class _CareCircleStepViewState extends State<CareCircleStepView> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Contact Name *',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: isDark
-                                    ? AppColors.textPrimaryDark
-                                    : AppColors.textPrimaryLight,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            TextField(
+                            AppTextField(
+                              label: 'Contact Name *',
+                              hintText: 'e.g. Sarah Smith',
                               controller: _nameController,
-                              style: TextStyle(
-                                color: isDark
-                                    ? AppColors.textPrimaryDark
-                                    : AppColors.textPrimaryLight,
+                              prefixIcon: const Icon(
+                                Icons.badge_outlined,
+                                color: AppColors.primary,
                               ),
-                              decoration: InputDecoration(
-                                hintText: "e.g. Sarah Smith",
-                                filled: true,
-                                fillColor: isDark
-                                    ? AppColors.surfaceDark
-                                    : AppColors.surfaceLight,
-                                prefixIcon: const Icon(
-                                  Icons.badge_outlined,
-                                  color: AppColors.primary,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                  borderSide: BorderSide(
-                                    color: isDark
-                                        ? AppColors.borderDark
-                                        : AppColors.borderLight,
-                                  ),
-                                ),
-                                errorText: _nameError,
-                              ),
+                              errorText: _nameError,
                               onChanged: (val) {
                                 signup.setContactName(val);
                                 if (_nameError != null) {
@@ -170,51 +153,60 @@ class _CareCircleStepViewState extends State<CareCircleStepView> {
                             ),
                             const SizedBox(height: 18),
 
-                            Text(
-                              'Mobile Number *',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: isDark
-                                    ? AppColors.textPrimaryDark
-                                    : AppColors.textPrimaryLight,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            TextField(
+                            AppTextField(
                               controller: _phoneController,
+                              label: 'Mobile Number *',
                               keyboardType: TextInputType.phone,
-                              style: TextStyle(
-                                color: isDark
-                                    ? AppColors.textPrimaryDark
-                                    : AppColors.textPrimaryLight,
-                              ),
-                              decoration: InputDecoration(
-                                hintText: "(555) 000-0000",
-                                prefixText: "${signup.countryCode} ",
-                                prefixStyle: TextStyle(
+                              errorText: _phoneError,
+                              hintText: signup.countryCode == '+91'
+                                  ? '98765 43210'
+                                  : 'Phone number',
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(
+                                  signup.countryCode == '+91' ? 10 : 15,
+                                ),
+                              ],
+                              prefixIcon: CountryCodePicker(
+                                onChanged: (country) {
+                                  if (country.dialCode != null) {
+                                    signup.setCountryCode(country.dialCode!);
+                                  }
+                                },
+                                initialSelection: 'IN',
+                                favorite: const ['+91', 'IN'],
+                                showCountryOnly: false,
+                                showOnlyCountryWhenClosed: false,
+                                alignLeft: false,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                ),
+                                textStyle: TextStyle(
                                   fontWeight: FontWeight.w600,
+                                  fontSize: 14,
                                   color: isDark
                                       ? AppColors.accent
                                       : AppColors.primary,
                                 ),
-                                filled: true,
-                                fillColor: isDark
+                                dialogTextStyle: TextStyle(
+                                  color: isDark
+                                      ? AppColors.textPrimaryDark
+                                      : AppColors.textPrimaryLight,
+                                ),
+                                searchStyle: TextStyle(
+                                  color: isDark
+                                      ? AppColors.textPrimaryDark
+                                      : AppColors.textPrimaryLight,
+                                ),
+                                dialogBackgroundColor: isDark
                                     ? AppColors.surfaceDark
                                     : AppColors.surfaceLight,
-                                prefixIcon: const Icon(
-                                  Icons.phone_outlined,
-                                  color: AppColors.primary,
-                                ),
-                                border: OutlineInputBorder(
+                                boxDecoration: BoxDecoration(
+                                  color: isDark
+                                      ? AppColors.surfaceDark
+                                      : AppColors.surfaceLight,
                                   borderRadius: BorderRadius.circular(16),
-                                  borderSide: BorderSide(
-                                    color: isDark
-                                        ? AppColors.borderDark
-                                        : AppColors.borderLight,
-                                  ),
                                 ),
-                                errorText: _phoneError,
                               ),
                               onChanged: (val) {
                                 signup.setPhoneNumber(val);
@@ -316,40 +308,18 @@ class _CareCircleStepViewState extends State<CareCircleStepView> {
                             ),
 
                             // Checkbox agreement
-                            CheckboxListTile(
-                              contentPadding: EdgeInsets.zero,
-                              activeColor: AppColors.primary,
+                            AppCheckboxTile(
                               value: signup.agreedToShareAlerts,
+                              titleText: 'I agree to share unconfirmed-dose alerts with this person.',
+                              errorText: _agreementError,
                               onChanged: (val) {
                                 signup.setAgreedToShareAlerts(val ?? false);
                                 if (val == true && _agreementError != null) {
                                   setState(() => _agreementError = null);
                                 }
                               },
-                              title: Text(
-                                'I agree to share unconfirmed-dose alerts with this person.',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: isDark
-                                      ? AppColors.textPrimaryDark
-                                      : AppColors.textPrimaryLight,
-                                ),
-                              ),
-                              controlAffinity: ListTileControlAffinity.leading,
                             ),
-                            if (_agreementError != null) ...[
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Text(
-                                  _agreementError!,
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: AppColors.error,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                            ],
+                            const SizedBox(height: 8),
 
                             Container(
                               padding: const EdgeInsets.all(12),

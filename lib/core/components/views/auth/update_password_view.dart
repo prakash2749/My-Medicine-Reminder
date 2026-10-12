@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import 'package:medicine_reminder/core/components/shared/shared.dart';
 import 'package:medicine_reminder/core/constants/app_colors.dart';
 import 'package:medicine_reminder/core/constants/app_strings.dart';
 import 'package:medicine_reminder/core/routes/app_routes.dart';
@@ -219,37 +220,26 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
                     ],
 
                     // New Password Label & Field
-                    Text(
-                      AppStrings.newPasswordLabel,
-                      style: TextStyle(
-                        fontSize: 13.5,
-                        fontWeight: FontWeight.w600,
-                        color: textPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
+                    AppTextField(
                       controller: _passwordController,
+                      label: AppStrings.newPasswordLabel,
                       obscureText: _obscurePassword,
                       textInputAction: TextInputAction.next,
-                      style: TextStyle(color: textPrimary, fontSize: 15),
-                      decoration: InputDecoration(
-                        hintText: 'Enter at least 6 characters',
-                        prefixIcon: const Icon(
-                          Icons.lock_outline_rounded,
+                      hintText: 'Enter at least 6 characters',
+                      prefixIcon: const Icon(
+                        Icons.lock_outline_rounded,
+                        size: 20,
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
                           size: 20,
+                          color: textSecondary,
                         ),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscurePassword
-                                ? Icons.visibility_outlined
-                                : Icons.visibility_off_outlined,
-                            size: 20,
-                            color: textSecondary,
-                          ),
-                          onPressed: () => setState(
-                            () => _obscurePassword = !_obscurePassword,
-                          ),
+                        onPressed: () => setState(
+                          () => _obscurePassword = !_obscurePassword,
                         ),
                       ),
                       onChanged: (_) {
@@ -271,39 +261,28 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
                     const SizedBox(height: 20),
 
                     // Confirm Password Label & Field
-                    Text(
-                      'Confirm password',
-                      style: TextStyle(
-                        fontSize: 13.5,
-                        fontWeight: FontWeight.w600,
-                        color: textPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
+                    AppTextField(
                       controller: _confirmPasswordController,
+                      label: 'Confirm password',
                       obscureText: _obscureConfirmPassword,
                       textInputAction: TextInputAction.done,
                       onFieldSubmitted: (_) => _handleUpdatePassword(),
-                      style: TextStyle(color: textPrimary, fontSize: 15),
-                      decoration: InputDecoration(
-                        hintText: 'Re-enter your new password',
-                        prefixIcon: const Icon(
-                          Icons.lock_reset_rounded,
+                      hintText: 'Re-enter your new password',
+                      prefixIcon: const Icon(
+                        Icons.lock_reset_rounded,
+                        size: 20,
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscureConfirmPassword
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
                           size: 20,
+                          color: textSecondary,
                         ),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscureConfirmPassword
-                                ? Icons.visibility_outlined
-                                : Icons.visibility_off_outlined,
-                            size: 20,
-                            color: textSecondary,
-                          ),
-                          onPressed: () => setState(
-                            () => _obscureConfirmPassword =
-                                !_obscureConfirmPassword,
-                          ),
+                        onPressed: () => setState(
+                          () => _obscureConfirmPassword =
+                              !_obscureConfirmPassword,
                         ),
                       ),
                       onChanged: (_) {
