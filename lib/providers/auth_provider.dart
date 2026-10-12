@@ -161,8 +161,7 @@ class AuthProvider extends ChangeNotifier {
           email: email,
           password: password,
         );
-        if (result.success &&
-            (result.session != null || result.user != null)) {
+        if (result.success && (result.session != null || result.user != null)) {
           _session = result.session;
           _user = result.user;
           _needsEmailVerification = false;
