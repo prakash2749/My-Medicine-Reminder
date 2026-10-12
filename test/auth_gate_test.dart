@@ -29,7 +29,12 @@ class FakeAuthService extends AuthService {
       createdAt: DateTime.now().toIso8601String(),
       email: email,
     );
-    return AuthResult.success(user: _mockUser);
+    final mockSession = Session(
+      accessToken: 'test-token',
+      tokenType: 'bearer',
+      user: _mockUser!,
+    );
+    return AuthResult.success(user: _mockUser, session: mockSession);
   }
 }
 
@@ -82,4 +87,38 @@ void main() {
     expect(find.byType(HomeScreen), findsOneWidget);
     expect(find.byType(LoginScreen), findsNothing);
   });
+
+  testWidgets(
+    'AuthGate transitions to HomeScreen when refreshOrCheckSession succeeds',
+    (tester) async {
+      final fakeService = FakeAuthService();
+      final authProvider = AuthProvider(authService: fakeService);
+
+      await tester.pumpWidget(
+        MultiProvider(
+          providers: [
+            ...AppProviders.providers.where(
+              (p) => p is! ChangeNotifierProvider<AuthProvider>,
+            ),
+            ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
+          ],
+          child: const MaterialApp(home: AuthGate()),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+      expect(find.byType(LoginScreen), findsOneWidget);
+
+      // Verify email verification session check
+      final verified = await authProvider.refreshOrCheckSession(
+        email: 'user@example.com',
+        password: 'password123',
+      );
+      expect(verified, isTrue);
+
+      await tester.pumpAndSettle();
+      expect(find.byType(HomeScreen), findsOneWidget);
+      expect(find.byType(LoginScreen), findsNothing);
+    },
+  );
 }

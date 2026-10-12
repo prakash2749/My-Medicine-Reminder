@@ -6,6 +6,7 @@ import 'package:medicine_reminder/core/constants/app_language.dart';
 import 'package:medicine_reminder/core/routes/app_routes.dart';
 import 'package:medicine_reminder/core/utils/date_time_utils.dart';
 import 'package:medicine_reminder/providers/signup_provider.dart';
+import 'package:medicine_reminder/core/components/shared/shared.dart';
 
 import 'widgets/onboarding_step_header.dart';
 
@@ -43,27 +44,13 @@ class _PersonalInfoStepViewState extends State<PersonalInfoStepView> {
     final initial =
         signup.birthDate ?? DateTime(now.year - 25, now.month, now.day);
 
-    final picked = await showDatePicker(
+    final picked = await showAppDatePicker(
       context: context,
       initialDate: initial.isAfter(now) ? now : initial,
       firstDate: DateTime(1900),
       lastDate: now,
       initialDatePickerMode: DatePickerMode.year,
       helpText: 'Select your birth date',
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: AppColors.primary,
-              onPrimary: Colors.white,
-              onSurface: Theme.of(context).brightness == Brightness.dark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-            ),
-          ),
-          child: child!,
-        );
-      },
     );
 
     if (picked != null) {
@@ -213,67 +200,15 @@ class _PersonalInfoStepViewState extends State<PersonalInfoStepView> {
                     const SizedBox(height: 32),
 
                     // Name Input
-                    Text(
-                      'Full Name *',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: isDark
-                            ? AppColors.textPrimaryDark
-                            : AppColors.textPrimaryLight,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
+                    AppTextField(
+                      label: 'Full Name *',
+                      hintText: 'Enter your name',
                       controller: _nameController,
-                      textCapitalization: TextCapitalization.words,
-                      style: TextStyle(
-                        color: isDark
-                            ? AppColors.textPrimaryDark
-                            : AppColors.textPrimaryLight,
+                      prefixIcon: const Icon(
+                        Icons.person_outline,
+                        color: AppColors.primary,
                       ),
-                      decoration: InputDecoration(
-                        hintText: 'Enter your name',
-                        hintStyle: TextStyle(
-                          color: isDark
-                              ? AppColors.textSecondaryDark
-                              : AppColors.textSecondaryLight.withValues(
-                                  alpha: 0.6,
-                                ),
-                        ),
-                        filled: true,
-                        fillColor: isDark
-                            ? AppColors.surfaceDark
-                            : AppColors.surfaceLight,
-                        prefixIcon: const Icon(
-                          Icons.person_outline,
-                          color: AppColors.primary,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide(
-                            color: isDark
-                                ? AppColors.borderDark
-                                : AppColors.borderLight,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide(
-                            color: isDark
-                                ? AppColors.borderDark
-                                : AppColors.borderLight,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: const BorderSide(
-                            color: AppColors.primary,
-                            width: 2,
-                          ),
-                        ),
-                        errorText: _nameError,
-                      ),
+                      errorText: _nameError,
                       onChanged: (val) {
                         signup.setName(val);
                         if (_nameError != null) {
@@ -285,82 +220,15 @@ class _PersonalInfoStepViewState extends State<PersonalInfoStepView> {
                     const SizedBox(height: 24),
 
                     // Birth Date Picker
-                    Text(
-                      'Birth Date *',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: isDark
-                            ? AppColors.textPrimaryDark
-                            : AppColors.textPrimaryLight,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    InkWell(
+                    AppDatePickerField(
+                      label: 'Birth Date *',
+                      hintText: 'Select your birth date',
+                      value: signup.birthDate != null
+                          ? _formatDate(signup.birthDate!)
+                          : null,
+                      errorText: _birthDateError,
                       onTap: _selectBirthDate,
-                      borderRadius: BorderRadius.circular(16),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 16,
-                        ),
-                        decoration: BoxDecoration(
-                          color: isDark
-                              ? AppColors.surfaceDark
-                              : AppColors.surfaceLight,
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: _birthDateError != null
-                                ? AppColors.error
-                                : (isDark
-                                      ? AppColors.borderDark
-                                      : AppColors.borderLight),
-                          ),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.calendar_today_outlined,
-                              color: AppColors.primary,
-                              size: 20,
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Text(
-                                signup.birthDate != null
-                                    ? _formatDate(signup.birthDate!)
-                                    : 'Select your birth date',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: signup.birthDate != null
-                                      ? (isDark
-                                            ? AppColors.textPrimaryDark
-                                            : AppColors.textPrimaryLight)
-                                      : (isDark
-                                            ? AppColors.textSecondaryDark
-                                            : AppColors.textSecondaryLight
-                                                  .withValues(alpha: 0.6)),
-                                ),
-                              ),
-                            ),
-                            const Icon(
-                              Icons.arrow_drop_down,
-                              color: AppColors.primary,
-                            ),
-                          ],
-                        ),
-                      ),
                     ),
-                    if (_birthDateError != null) ...[
-                      const SizedBox(height: 6),
-                      Text(
-                        _birthDateError!,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: AppColors.error,
-                        ),
-                      ),
-                    ],
 
                     const SizedBox(height: 24),
 

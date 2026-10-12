@@ -48,9 +48,9 @@ class AuthGate extends StatelessWidget {
 
         final session = snapshot.hasData
             ? snapshot.data!.session
-            : client.auth.currentSession;
+            : (client.auth.currentSession ?? authProvider.session);
 
-        if (session == null) {
+        if (session == null && !authProvider.isAuthenticated) {
           return const LoginScreen();
         }
 

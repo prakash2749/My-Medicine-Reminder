@@ -160,7 +160,7 @@ class SignupProvider extends ChangeNotifier {
   // --- Step 4: Care Circle ---
   bool _wantsCareCircle = false;
   String _contactName = '';
-  String _countryCode = '+1';
+  String _countryCode = '+91';
   String _phoneNumber = '';
   String? _relationship;
   int _alertDelayMinutes = 30;
@@ -289,7 +289,7 @@ class SignupProvider extends ChangeNotifier {
     _isRoutineFlexible = false;
     _wantsCareCircle = false;
     _contactName = '';
-    _countryCode = '+1';
+    _countryCode = '+91';
     _phoneNumber = '';
     _relationship = null;
     _alertDelayMinutes = 30;

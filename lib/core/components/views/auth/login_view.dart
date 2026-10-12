@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import 'package:medicine_reminder/core/components/shared/shared.dart';
 import 'package:medicine_reminder/core/constants/app_assets.dart';
 import 'package:medicine_reminder/core/constants/app_colors.dart';
 import 'package:medicine_reminder/core/constants/app_strings.dart';
 import 'package:medicine_reminder/core/routes/app_routes.dart';
 import 'package:medicine_reminder/providers/auth_provider.dart';
+import 'package:medicine_reminder/providers/signup_provider.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -47,6 +49,7 @@ class _LoginViewState extends State<LoginView> {
     if (!mounted) return;
 
     if (result.success) {
+      context.read<SignupProvider>().reset();
       context.go(AppRoutes.authGate);
     } else {
       final errorMsg = result.errorMessage ?? 'Authentication failed';
@@ -260,23 +263,15 @@ class _LoginViewState extends State<LoginView> {
                     ],
 
                     // Email Field
-                    Text(
-                      AppStrings.emailLabel,
-                      style: TextStyle(
-                        fontSize: 13.5,
-                        fontWeight: FontWeight.w600,
-                        color: textPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
+                    AppTextField(
                       controller: _emailController,
+                      label: AppStrings.emailLabel,
+                      hintText: AppStrings.emailPlaceholder,
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
-                      style: TextStyle(color: textPrimary, fontSize: 15),
-                      decoration: const InputDecoration(
-                        hintText: AppStrings.emailPlaceholder,
-                        prefixIcon: Icon(Icons.mail_outline_rounded, size: 20),
+                      prefixIcon: const Icon(
+                        Icons.mail_outline_rounded,
+                        size: 20,
                       ),
                       onChanged: (_) {
                         if (_localError != null) {
@@ -296,7 +291,7 @@ class _LoginViewState extends State<LoginView> {
 
                     const SizedBox(height: 18),
 
-                    // Password Field
+                    // Password Field Header
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -333,32 +328,27 @@ class _LoginViewState extends State<LoginView> {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    TextFormField(
+                    AppTextField(
                       controller: _passwordController,
                       obscureText: _obscurePassword,
                       textInputAction: TextInputAction.done,
                       onFieldSubmitted: (_) => _handleAuthSubmit(),
-                      style: TextStyle(color: textPrimary, fontSize: 15),
-                      decoration: InputDecoration(
-                        hintText: '••••••••••',
-                        prefixIcon: const Icon(
-                          Icons.lock_outline_rounded,
+                      hintText: '••••••••••',
+                      prefixIcon: const Icon(
+                        Icons.lock_outline_rounded,
+                        size: 20,
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
                           size: 20,
+                          color: textSecondary,
                         ),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscurePassword
-                                ? Icons.visibility_outlined
-                                : Icons.visibility_off_outlined,
-                            size: 20,
-                            color: textSecondary,
-                          ),
-                          onPressed: () {
-                            setState(
-                              () => _obscurePassword = !_obscurePassword,
-                            );
-                          },
-                        ),
+                        onPressed: () {
+                          setState(() => _obscurePassword = !_obscurePassword);
+                        },
                       ),
                       onChanged: (_) {
                         if (_localError != null) {

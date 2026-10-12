@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medicine_reminder/core/components/custom_button.dart';
 import 'package:medicine_reminder/core/constants/app_assets.dart';
 import 'package:medicine_reminder/core/constants/app_colors.dart';
+import 'package:medicine_reminder/core/components/shared/shared.dart';
 import 'package:medicine_reminder/providers/medicine_reminder_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,25 @@ class AddMedicineSheet extends StatefulWidget {
 }
 
 class _AddMedicineSheetState extends State<AddMedicineSheet> {
+  static const List<String> _commonMedicines = [
+    'Paracetamol',
+    'Amoxicillin',
+    'Metformin',
+    'Atorvastatin',
+    'Omeprazole',
+    'Amlodipine',
+    'Losartan',
+    'Ibuprofen',
+    'Cetirizine',
+    'Azithromycin',
+    'Pantoprazole',
+    'Aspirin',
+    'Metoprolol',
+    'Levothyroxine',
+    'Vitamin D3',
+    'Multivitamin',
+  ];
+
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _dosageController = TextEditingController();
@@ -153,14 +173,26 @@ class _AddMedicineSheetState extends State<AddMedicineSheet> {
               ),
               const SizedBox(height: 16),
 
-              // Medicine Name
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Medicine Name *',
-                  hintText: 'e.g. Paracetamol, Metformin',
-                  prefixIcon: Icon(Icons.medication_outlined),
-                ),
+              // Medicine Name Autocomplete
+              AppAutocompleteField<String>(
+                label: 'Medicine Name *',
+                hintText: 'e.g. Paracetamol, Metformin',
+                prefixIcon: const Icon(Icons.medication_outlined),
+                initialValue: _nameController.text.isNotEmpty
+                    ? _nameController.text
+                    : null,
+                optionsBuilder: (textEditingValue) {
+                  if (textEditingValue.text.isEmpty) {
+                    return const Iterable<String>.empty();
+                  }
+                  return _commonMedicines.where(
+                    (med) => med.toLowerCase().contains(
+                      textEditingValue.text.toLowerCase(),
+                    ),
+                  );
+                },
+                onSelected: (val) => _nameController.text = val,
+                onChanged: (val) => _nameController.text = val,
                 validator: (val) => (val == null || val.trim().isEmpty)
                     ? 'Please enter a name'
                     : null,
@@ -168,13 +200,11 @@ class _AddMedicineSheetState extends State<AddMedicineSheet> {
               const SizedBox(height: 12),
 
               // Dosage
-              TextFormField(
+              AppTextField(
                 controller: _dosageController,
-                decoration: const InputDecoration(
-                  labelText: 'Dosage / Strength *',
-                  hintText: 'e.g. 500 mg, 1 tablet, 10 ml',
-                  prefixIcon: Icon(Icons.scale_outlined),
-                ),
+                label: 'Dosage / Strength *',
+                hintText: 'e.g. 500 mg, 1 tablet, 10 ml',
+                prefixIcon: const Icon(Icons.scale_outlined),
                 validator: (val) => (val == null || val.trim().isEmpty)
                     ? 'Please enter dosage'
                     : null,
@@ -187,15 +217,56 @@ class _AddMedicineSheetState extends State<AddMedicineSheet> {
                   Expanded(
                     child: InkWell(
                       onTap: _pickTime,
-                      borderRadius: BorderRadius.circular(12),
-                      child: InputDecorator(
-                        decoration: const InputDecoration(
-                          labelText: 'Time',
-                          prefixIcon: Icon(Icons.access_time),
+                      borderRadius: BorderRadius.circular(16),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 14,
                         ),
-                        child: Text(
-                          _selectedTime.format(context),
-                          style: const TextStyle(fontWeight: FontWeight.w600),
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? AppColors.surfaceDark
+                              : AppColors.surfaceLight,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: isDark
+                                ? AppColors.borderDark
+                                : AppColors.borderLight,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.access_time,
+                              size: 20,
+                              color: AppColors.primary,
+                            ),
+                            const SizedBox(width: 8),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Time',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: isDark
+                                        ? AppColors.textSecondaryDark
+                                        : AppColors.textSecondaryLight,
+                                  ),
+                                ),
+                                Text(
+                                  _selectedTime.format(context),
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: isDark
+                                        ? AppColors.textPrimaryDark
+                                        : AppColors.textPrimaryLight,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -204,9 +275,33 @@ class _AddMedicineSheetState extends State<AddMedicineSheet> {
                   Expanded(
                     child: DropdownButtonFormField<String>(
                       initialValue: _selectedCategory,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'Form',
-                        prefixIcon: Icon(Icons.category_outlined),
+                        prefixIcon: const Icon(Icons.category_outlined),
+                        filled: true,
+                        fillColor: isDark
+                            ? AppColors.surfaceDark
+                            : AppColors.surfaceLight,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 14,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(
+                            color: isDark
+                                ? AppColors.borderDark
+                                : AppColors.borderLight,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(
+                            color: isDark
+                                ? AppColors.borderDark
+                                : AppColors.borderLight,
+                          ),
+                        ),
                       ),
                       items: _categories
                           .map(
@@ -227,9 +322,33 @@ class _AddMedicineSheetState extends State<AddMedicineSheet> {
               // Frequency
               DropdownButtonFormField<String>(
                 initialValue: _selectedFrequency,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Frequency',
-                  prefixIcon: Icon(Icons.repeat),
+                  prefixIcon: const Icon(Icons.repeat),
+                  filled: true,
+                  fillColor: isDark
+                      ? AppColors.surfaceDark
+                      : AppColors.surfaceLight,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 14,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                      color: isDark
+                          ? AppColors.borderDark
+                          : AppColors.borderLight,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                      color: isDark
+                          ? AppColors.borderDark
+                          : AppColors.borderLight,
+                    ),
+                  ),
                 ),
                 items: _frequencies
                     .map((f) => DropdownMenuItem(value: f, child: Text(f)))
@@ -241,13 +360,11 @@ class _AddMedicineSheetState extends State<AddMedicineSheet> {
               const SizedBox(height: 12),
 
               // Notes
-              TextFormField(
+              AppTextField(
                 controller: _notesController,
-                decoration: const InputDecoration(
-                  labelText: 'Instructions / Notes (optional)',
-                  hintText: 'e.g. After breakfast with warm water',
-                  prefixIcon: Icon(Icons.notes_outlined),
-                ),
+                label: 'Instructions / Notes (optional)',
+                hintText: 'e.g. After breakfast with warm water',
+                prefixIcon: const Icon(Icons.notes_outlined),
                 maxLines: 2,
               ),
               const SizedBox(height: 20),
