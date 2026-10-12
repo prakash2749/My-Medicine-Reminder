@@ -4,12 +4,11 @@ import 'package:medicine_reminder/providers/app_providers.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  testWidgets('App smoke test loads Notify Splash and Login screen', (WidgetTester tester) async {
+  testWidgets('App smoke test loads Notify Splash and Login screen', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(
-      MultiProvider(
-        providers: AppProviders.providers,
-        child: const MyApp(),
-      ),
+      MultiProvider(providers: AppProviders.providers, child: const MyApp()),
     );
 
     // Initial frame shows Splash
@@ -26,4 +25,3 @@ void main() {
     expect(find.text('Log in'), findsOneWidget);
   });
 }
-

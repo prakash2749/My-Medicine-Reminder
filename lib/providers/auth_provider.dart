@@ -1,6 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../core/routes/app_routes.dart';
 import '../core/services/auth_service.dart';
 
@@ -16,7 +18,7 @@ class AuthProvider extends ChangeNotifier {
   StreamSubscription<AuthState>? _authSubscription;
 
   AuthProvider({AuthService? authService})
-      : _authService = authService ?? AuthService() {
+    : _authService = authService ?? AuthService() {
     _initAuthListener();
   }
 
@@ -114,12 +116,17 @@ class AuthProvider extends ChangeNotifier {
     if (targetEmail == null || targetEmail.isEmpty) return false;
 
     _setLoading(true);
-    final success = await _authService.resendVerificationEmail(email: targetEmail);
+    final success = await _authService.resendVerificationEmail(
+      email: targetEmail,
+    );
     _setLoading(false);
     return success;
   }
 
-  Future<AuthResult> sendPasswordResetEmail(String email, {String? redirectTo}) async {
+  Future<AuthResult> sendPasswordResetEmail(
+    String email, {
+    String? redirectTo,
+  }) async {
     _setLoading(true);
     _errorMessage = null;
     final result = await _authService.sendPasswordResetEmail(

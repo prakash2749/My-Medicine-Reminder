@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+
 import '../core/components/views/medicine/models/medicine_reminder_model.dart';
 
 enum MedicineFilter { all, pending, taken }
@@ -24,7 +25,8 @@ class MedicineReminderProvider extends ChangeNotifier {
 
   List<MedicineReminder> get filteredReminders {
     return _reminders.where((item) {
-      final matchesSearch = item.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+      final matchesSearch =
+          item.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
           item.dosage.toLowerCase().contains(_searchQuery.toLowerCase());
 
       final matchesFilter = switch (_filter) {
@@ -40,7 +42,8 @@ class MedicineReminderProvider extends ChangeNotifier {
   int get totalCount => _reminders.length;
   int get pendingCount => _reminders.where((r) => !r.isTaken).length;
   int get takenCount => _reminders.where((r) => r.isTaken).length;
-  double get adherenceRate => _reminders.isEmpty ? 0.0 : (takenCount / totalCount);
+  double get adherenceRate =>
+      _reminders.isEmpty ? 0.0 : (takenCount / totalCount);
 
   // Initial Sample Reminders for Immediate Preview & Testing
   void _loadInitialReminders() {

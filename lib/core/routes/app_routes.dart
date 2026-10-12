@@ -10,7 +10,8 @@ import '../components/views/splash/splash_view.dart';
 class AppRoutes {
   AppRoutes._();
 
-  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
 
   static const String initial = '/';
   static const String splash = '/splash';
@@ -95,4 +96,3 @@ class AppRoutes {
     }
   }
 }
-

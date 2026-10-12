@@ -1,6 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
 import 'supabase_service.dart';
 
 /// Result container for authentication operations with email verification metadata.
@@ -32,7 +34,10 @@ class AuthResult {
     );
   }
 
-  factory AuthResult.failure(String errorMessage, {bool needsEmailVerification = false}) {
+  factory AuthResult.failure(
+    String errorMessage, {
+    bool needsEmailVerification = false,
+  }) {
     return AuthResult(
       success: false,
       needsEmailVerification: needsEmailVerification,
@@ -76,13 +81,11 @@ class AuthService {
         password: password,
       );
 
-      return AuthResult.success(
-        user: response.user,
-        session: response.session,
-      );
+      return AuthResult.success(user: response.user, session: response.session);
     } on AuthException catch (e) {
       final msg = e.message.toLowerCase();
-      final isUnconfirmed = msg.contains('email not confirmed') ||
+      final isUnconfirmed =
+          msg.contains('email not confirmed') ||
           msg.contains('not verified') ||
           e.statusCode == 'email_not_confirmed';
 
@@ -144,10 +147,7 @@ class AuthService {
       final supabase = client;
       if (supabase == null) return false;
 
-      await supabase.auth.resend(
-        type: OtpType.signup,
-        email: email,
-      );
+      await supabase.auth.resend(type: OtpType.signup, email: email);
       return true;
     } catch (e) {
       debugPrint('Error resending verification email: $e');
@@ -168,7 +168,8 @@ class AuthService {
 
       await supabase.auth.resetPasswordForEmail(
         email,
-        redirectTo: redirectTo ?? 'io.supabase.medicinereminder://reset-callback',
+        redirectTo:
+            redirectTo ?? 'io.supabase.medicinereminder://reset-callback',
       );
       return AuthResult.success();
     } on AuthException catch (e) {

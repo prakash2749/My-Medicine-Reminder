@@ -102,7 +102,9 @@ class MedicineView extends StatelessWidget {
                       child: LinearProgressIndicator(
                         value: provider.adherenceRate,
                         backgroundColor: Colors.white24,
-                        valueColor: const AlwaysStoppedAnimation<Color>(Colors.greenAccent),
+                        valueColor: const AlwaysStoppedAnimation<Color>(
+                          Colors.greenAccent,
+                        ),
                         minHeight: 8,
                       ),
                     ),
@@ -129,16 +131,23 @@ class MedicineView extends StatelessWidget {
                 Expanded(
                   child: TextField(
                     onChanged: (val) {
-                      context.read<MedicineReminderProvider>().setSearchQuery(val);
+                      context.read<MedicineReminderProvider>().setSearchQuery(
+                        val,
+                      );
                     },
                     decoration: InputDecoration(
                       hintText: 'Search medicine...',
                       prefixIcon: const Icon(Icons.search, size: 20),
-                      contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 0,
+                        horizontal: 12,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(
-                          color: isDark ? AppColors.borderDark : AppColors.borderLight,
+                          color: isDark
+                              ? AppColors.borderDark
+                              : AppColors.borderLight,
                         ),
                       ),
                     ),
@@ -169,7 +178,8 @@ class MedicineView extends StatelessWidget {
                       context,
                       label: AppStrings.filterPending,
                       count: provider.pendingCount,
-                      isSelected: provider.currentFilter == MedicineFilter.pending,
+                      isSelected:
+                          provider.currentFilter == MedicineFilter.pending,
                       onTap: () => provider.setFilter(MedicineFilter.pending),
                     ),
                     const SizedBox(width: 8),
@@ -177,7 +187,8 @@ class MedicineView extends StatelessWidget {
                       context,
                       label: AppStrings.filterTaken,
                       count: provider.takenCount,
-                      isSelected: provider.currentFilter == MedicineFilter.taken,
+                      isSelected:
+                          provider.currentFilter == MedicineFilter.taken,
                       onTap: () => provider.setFilter(MedicineFilter.taken),
                     ),
                   ],
@@ -209,14 +220,20 @@ class MedicineView extends StatelessWidget {
                             height: 100,
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: isDark ? AppColors.surfaceDark : Colors.white,
+                              color: isDark
+                                  ? AppColors.surfaceDark
+                                  : Colors.white,
                               borderRadius: BorderRadius.circular(24),
                               border: Border.all(
-                                color: isDark ? AppColors.borderDark : AppColors.borderLight,
+                                color: isDark
+                                    ? AppColors.borderDark
+                                    : AppColors.borderLight,
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.06),
+                                  color: Colors.black.withValues(
+                                    alpha: isDark ? 0.3 : 0.06,
+                                  ),
                                   blurRadius: 16,
                                   offset: const Offset(0, 4),
                                 ),
@@ -228,7 +245,9 @@ class MedicineView extends StatelessWidget {
                               errorBuilder: (_, _, _) => Icon(
                                 Icons.medication_outlined,
                                 size: 54,
-                                color: isDark ? Colors.grey[600] : Colors.grey[400],
+                                color: isDark
+                                    ? Colors.grey[600]
+                                    : Colors.grey[400],
                               ),
                             ),
                           ),
@@ -238,7 +257,9 @@ class MedicineView extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
-                              color: isDark ? Colors.grey[300] : Colors.grey[800],
+                              color: isDark
+                                  ? Colors.grey[300]
+                                  : Colors.grey[800],
                             ),
                           ),
                           const SizedBox(height: 6),
@@ -246,7 +267,9 @@ class MedicineView extends StatelessWidget {
                             AppStrings.addFirstMedicinePrompt,
                             style: TextStyle(
                               fontSize: 13,
-                              color: isDark ? Colors.grey[500] : Colors.grey[500],
+                              color: isDark
+                                  ? Colors.grey[500]
+                                  : Colors.grey[500],
                             ),
                           ),
                         ],
@@ -260,10 +283,7 @@ class MedicineView extends StatelessWidget {
                   itemCount: reminders.length,
                   itemBuilder: (context, index) {
                     final item = reminders[index];
-                    return MedicineCard(
-                      key: ValueKey(item.id),
-                      reminder: item,
-                    );
+                    return MedicineCard(key: ValueKey(item.id), reminder: item);
                   },
                 );
               },
@@ -297,10 +317,7 @@ class MedicineView extends StatelessWidget {
         const SizedBox(height: 2),
         Text(
           label,
-          style: const TextStyle(
-            color: Colors.white70,
-            fontSize: 11,
-          ),
+          style: const TextStyle(color: Colors.white70, fontSize: 11),
         ),
       ],
     );
@@ -342,7 +359,9 @@ class MedicineView extends StatelessWidget {
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                 color: isSelected
                     ? Colors.white
-                    : (isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight),
+                    : (isDark
+                          ? AppColors.textPrimaryDark
+                          : AppColors.textPrimaryLight),
               ),
             ),
             const SizedBox(width: 6),

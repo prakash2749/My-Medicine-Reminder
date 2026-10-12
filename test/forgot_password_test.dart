@@ -10,26 +10,31 @@ class ResetMockAuthService extends AuthService {
   String? lastResetEmail;
 
   @override
-  Future<AuthResult> sendPasswordResetEmail({required String email, String? redirectTo}) async {
+  Future<AuthResult> sendPasswordResetEmail({
+    required String email,
+    String? redirectTo,
+  }) async {
     lastResetEmail = email;
     return AuthResult.success();
   }
 }
 
 void main() {
-  testWidgets('ForgotPasswordView sends password recovery email successfully', (tester) async {
+  testWidgets('ForgotPasswordView sends password recovery email successfully', (
+    tester,
+  ) async {
     final mockService = ResetMockAuthService();
     final authProvider = AuthProvider(authService: mockService);
 
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ...AppProviders.providers.where((p) => p is! ChangeNotifierProvider<AuthProvider>),
+          ...AppProviders.providers.where(
+            (p) => p is! ChangeNotifierProvider<AuthProvider>,
+          ),
           ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
         ],
-        child: const MaterialApp(
-          home: ForgotPasswordView(),
-        ),
+        child: const MaterialApp(home: ForgotPasswordView()),
       ),
     );
 

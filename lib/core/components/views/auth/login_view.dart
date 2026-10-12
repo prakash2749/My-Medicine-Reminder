@@ -6,7 +6,6 @@ import 'package:medicine_reminder/core/constants/app_colors.dart';
 import 'package:medicine_reminder/core/constants/app_strings.dart';
 import 'package:medicine_reminder/core/routes/app_routes.dart';
 import 'package:medicine_reminder/providers/auth_provider.dart';
-import 'package:medicine_reminder/providers/theme_provider.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -61,7 +60,9 @@ class _LoginViewState extends State<LoginView> {
           Navigator.of(context).pushReplacementNamed(AppRoutes.authGate);
         }
       } else {
-        setState(() => _localError = result.errorMessage ?? 'Registration failed');
+        setState(
+          () => _localError = result.errorMessage ?? 'Registration failed',
+        );
       }
     } else {
       final result = await auth.signIn(email: email, password: password);
@@ -126,7 +127,11 @@ class _LoginViewState extends State<LoginView> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Row(
           children: const [
-            Icon(Icons.mark_email_read_outlined, color: AppColors.primary, size: 28),
+            Icon(
+              Icons.mark_email_read_outlined,
+              color: AppColors.primary,
+              size: 28,
+            ),
             SizedBox(width: 10),
             Text('Verify Your Email'),
           ],
@@ -137,12 +142,20 @@ class _LoginViewState extends State<LoginView> {
           children: [
             Text(
               'We sent a verification link to:\n$email',
-              style: const TextStyle(fontSize: 14.5, height: 1.4, fontWeight: FontWeight.w600),
+              style: const TextStyle(
+                fontSize: 14.5,
+                height: 1.4,
+                fontWeight: FontWeight.w600,
+              ),
             ),
             const SizedBox(height: 12),
             const Text(
               'Please check your inbox and tap the link to confirm your account before logging in.',
-              style: TextStyle(fontSize: 13.5, height: 1.4, color: AppColors.textSecondaryLight),
+              style: TextStyle(
+                fontSize: 13.5,
+                height: 1.4,
+                color: AppColors.textSecondaryLight,
+              ),
             ),
           ],
         ),
@@ -175,17 +188,18 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final authProvider = context.watch<AuthProvider>();
 
     final bg = isDark ? AppColors.backgroundDark : AppColors.backgroundLight;
-    final textPrimary = isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
-    final textSecondary = isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight;
+    final textPrimary = isDark
+        ? AppColors.textPrimaryDark
+        : AppColors.textPrimaryLight;
+    final textSecondary = isDark
+        ? AppColors.textSecondaryDark
+        : AppColors.textSecondaryLight;
 
     return Scaffold(
       backgroundColor: bg,
@@ -201,103 +215,73 @@ class _LoginViewState extends State<LoginView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Brand Logo & Theme Header
+                    // Brand Logo Header
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        // Brand Logo Tile with subtle name pill
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              width: 52,
-                              height: 52,
-                              padding: const EdgeInsets.all(9),
-                              decoration: BoxDecoration(
-                                color: isDark ? AppColors.surfaceDark : Colors.white,
-                                borderRadius: BorderRadius.circular(16),
-                                border: Border.all(
-                                  color: isDark
-                                      ? AppColors.borderDark
-                                      : AppColors.primary.withValues(alpha: 0.12),
-                                  width: 1.5,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: AppColors.primary.withValues(alpha: isDark ? 0.22 : 0.10),
-                                    blurRadius: 16,
-                                    offset: const Offset(0, 6),
-                                  ),
-                                  if (!isDark)
-                                    BoxShadow(
-                                      color: Colors.black.withValues(alpha: 0.03),
-                                      blurRadius: 4,
-                                      offset: const Offset(0, 2),
-                                    ),
-                                ],
-                              ),
-                              child: Image.asset(
-                                AppAssets.appLogo,
-                                fit: BoxFit.contain,
-                                errorBuilder: (_, _, _) => const Icon(
-                                  Icons.medication_rounded,
-                                  color: AppColors.primary,
-                                  size: 26,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  AppStrings.appName,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w800,
-                                    letterSpacing: -0.4,
-                                    color: textPrimary,
-                                  ),
-                                ),
-                                Text(
-                                  AppStrings.appSubtitle,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                    color: textSecondary,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-
-                        // Theme Mode Toggle Button
                         Container(
+                          width: 52,
+                          height: 52,
+                          padding: const EdgeInsets.all(9),
                           decoration: BoxDecoration(
                             color: isDark
                                 ? AppColors.surfaceDark
-                                : AppColors.tagBgLight,
-                            borderRadius: BorderRadius.circular(12),
+                                : Colors.white,
+                            borderRadius: BorderRadius.circular(16),
                             border: Border.all(
-                              color: isDark ? AppColors.borderDark : AppColors.borderLight,
+                              color: isDark
+                                  ? AppColors.borderDark
+                                  : AppColors.primary.withValues(alpha: 0.12),
+                              width: 1.5,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.primary.withValues(
+                                  alpha: isDark ? 0.22 : 0.10,
+                                ),
+                                blurRadius: 16,
+                                offset: const Offset(0, 6),
+                              ),
+                              if (!isDark)
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.03),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                ),
+                            ],
+                          ),
+                          child: Image.asset(
+                            AppAssets.appLogo,
+                            fit: BoxFit.contain,
+                            errorBuilder: (_, _, _) => const Icon(
+                              Icons.medication_rounded,
+                              color: AppColors.primary,
+                              size: 26,
                             ),
                           ),
-                          child: Consumer<ThemeProvider>(
-                            builder: (context, themeProvider, _) {
-                              return IconButton(
-                                icon: Icon(
-                                  themeProvider.isDarkMode ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
-                                  color: textSecondary,
-                                  size: 20,
-                                ),
-                                tooltip: 'Toggle Theme',
-                                visualDensity: VisualDensity.compact,
-                                onPressed: () => themeProvider.toggleTheme(),
-                              );
-                            },
-                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              AppStrings.appName,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: -0.4,
+                                color: textPrimary,
+                              ),
+                            ),
+                            Text(
+                              AppStrings.appSubtitle,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: textSecondary,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -306,7 +290,9 @@ class _LoginViewState extends State<LoginView> {
 
                     // Header Title
                     Text(
-                      _isSignUp ? AppStrings.createAccountTitle : AppStrings.welcomeBack,
+                      _isSignUp
+                          ? AppStrings.createAccountTitle
+                          : AppStrings.welcomeBack,
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.w800,
@@ -319,7 +305,9 @@ class _LoginViewState extends State<LoginView> {
 
                     // Header Subtitle
                     Text(
-                      _isSignUp ? AppStrings.createAccountSubtitle : AppStrings.loginSubtitle,
+                      _isSignUp
+                          ? AppStrings.createAccountSubtitle
+                          : AppStrings.loginSubtitle,
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
@@ -333,7 +321,10 @@ class _LoginViewState extends State<LoginView> {
                     // Error Message banner if any
                     if (_localError != null) ...[
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 10,
+                        ),
                         margin: const EdgeInsets.only(bottom: 20),
                         decoration: BoxDecoration(
                           color: AppColors.error.withValues(alpha: 0.1),
@@ -344,7 +335,11 @@ class _LoginViewState extends State<LoginView> {
                         ),
                         child: Row(
                           children: [
-                            const Icon(Icons.error_outline, size: 20, color: AppColors.error),
+                            const Icon(
+                              Icons.error_outline,
+                              size: 20,
+                              color: AppColors.error,
+                            ),
                             const SizedBox(width: 10),
                             Expanded(
                               child: Text(
@@ -381,7 +376,9 @@ class _LoginViewState extends State<LoginView> {
                           prefixIcon: Icon(Icons.person_outline, size: 20),
                         ),
                         onChanged: (_) {
-                          if (_localError != null) setState(() => _localError = null);
+                          if (_localError != null) {
+                            setState(() => _localError = null);
+                          }
                         },
                         validator: (val) {
                           if (val == null || val.trim().isEmpty) {
@@ -413,7 +410,9 @@ class _LoginViewState extends State<LoginView> {
                         prefixIcon: Icon(Icons.mail_outline_rounded, size: 20),
                       ),
                       onChanged: (_) {
-                        if (_localError != null) setState(() => _localError = null);
+                        if (_localError != null) {
+                          setState(() => _localError = null);
+                        }
                       },
                       validator: (val) {
                         if (val == null || val.trim().isEmpty) {
@@ -443,17 +442,23 @@ class _LoginViewState extends State<LoginView> {
                         if (!_isSignUp)
                           InkWell(
                             onTap: () {
-                              Navigator.of(context).pushNamed(AppRoutes.forgotPassword);
+                              Navigator.of(context)
+                                  .pushNamed(AppRoutes.forgotPassword);
                             },
                             borderRadius: BorderRadius.circular(4),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 4,
+                                vertical: 2,
+                              ),
                               child: Text(
                                 AppStrings.forgotPassword,
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
-                                  color: isDark ? AppColors.accent : AppColors.primary,
+                                  color: isDark
+                                      ? AppColors.accent
+                                      : AppColors.primary,
                                 ),
                               ),
                             ),
@@ -468,21 +473,32 @@ class _LoginViewState extends State<LoginView> {
                       onFieldSubmitted: (_) => _handleAuthSubmit(),
                       style: TextStyle(color: textPrimary, fontSize: 15),
                       decoration: InputDecoration(
-                        hintText: _isSignUp ? 'Create a strong password' : '••••••••••',
-                        prefixIcon: const Icon(Icons.lock_outline_rounded, size: 20),
+                        hintText: _isSignUp
+                            ? 'Create a strong password'
+                            : '••••••••••',
+                        prefixIcon: const Icon(
+                          Icons.lock_outline_rounded,
+                          size: 20,
+                        ),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                            _obscurePassword
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined,
                             size: 20,
                             color: textSecondary,
                           ),
                           onPressed: () {
-                            setState(() => _obscurePassword = !_obscurePassword);
+                            setState(
+                              () => _obscurePassword = !_obscurePassword,
+                            );
                           },
                         ),
                       ),
                       onChanged: (_) {
-                        if (_localError != null) setState(() => _localError = null);
+                        if (_localError != null) {
+                          setState(() => _localError = null);
+                        }
                       },
                       validator: (val) {
                         if (val == null || val.isEmpty) {
@@ -502,7 +518,9 @@ class _LoginViewState extends State<LoginView> {
                       width: double.infinity,
                       height: 52,
                       child: ElevatedButton(
-                        onPressed: authProvider.isLoading ? null : _handleAuthSubmit,
+                        onPressed: authProvider.isLoading
+                            ? null
+                            : _handleAuthSubmit,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
                           shape: RoundedRectangleBorder(
@@ -515,11 +533,15 @@ class _LoginViewState extends State<LoginView> {
                                 height: 22,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2.5,
-                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white,
+                                  ),
                                 ),
                               )
                             : Text(
-                                _isSignUp ? AppStrings.createAccount : AppStrings.logIn,
+                                _isSignUp
+                                    ? AppStrings.createAccount
+                                    : AppStrings.logIn,
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w700,
@@ -538,7 +560,9 @@ class _LoginViewState extends State<LoginView> {
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           Text(
-                            _isSignUp ? AppStrings.alreadyHaveAccount : AppStrings.dontHaveAccount,
+                            _isSignUp
+                                ? AppStrings.alreadyHaveAccount
+                                : AppStrings.dontHaveAccount,
                             style: TextStyle(
                               fontSize: 14,
                               color: textSecondary,
@@ -555,11 +579,15 @@ class _LoginViewState extends State<LoginView> {
                               _formKey.currentState?.reset();
                             },
                             child: Text(
-                              _isSignUp ? AppStrings.logIn : AppStrings.createAccount,
+                              _isSignUp
+                                  ? AppStrings.logIn
+                                  : AppStrings.createAccount,
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
-                                color: isDark ? AppColors.accent : AppColors.primary,
+                                color: isDark
+                                    ? AppColors.accent
+                                    : AppColors.primary,
                               ),
                             ),
                           ),

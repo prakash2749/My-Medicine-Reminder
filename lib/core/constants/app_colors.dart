@@ -40,4 +40,3 @@ class AppColors {
   static const Color tagBgDark = Color(0xFF132E2C);
   static const Color tagTextDark = Color(0xFF2DD4BF);
 }
-

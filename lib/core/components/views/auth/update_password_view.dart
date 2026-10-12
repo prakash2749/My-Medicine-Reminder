@@ -56,13 +56,13 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
       );
 
       // Navigate to Home or AuthGate
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        AppRoutes.home,
-        (route) => false,
-      );
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil(AppRoutes.home, (route) => false);
     } else {
       setState(() {
-        _errorMessage = result.errorMessage ?? 'Failed to update password. Please try again.';
+        _errorMessage =
+            result.errorMessage ??
+            'Failed to update password. Please try again.';
       });
     }
   }
@@ -73,8 +73,12 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
     final authProvider = context.watch<AuthProvider>();
 
     final bg = isDark ? AppColors.backgroundDark : AppColors.backgroundLight;
-    final textPrimary = isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
-    final textSecondary = isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight;
+    final textPrimary = isDark
+        ? AppColors.textPrimaryDark
+        : AppColors.textPrimaryLight;
+    final textSecondary = isDark
+        ? AppColors.textSecondaryDark
+        : AppColors.textSecondaryLight;
     final tagBg = isDark ? AppColors.tagBgDark : AppColors.tagBgLight;
     final tagText = isDark ? AppColors.tagTextDark : AppColors.tagTextLight;
 
@@ -97,7 +101,10 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
                           decoration: BoxDecoration(
                             color: tagBg,
                             borderRadius: BorderRadius.circular(20),
@@ -131,7 +138,9 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
                           builder: (context, themeProvider, _) {
                             return IconButton(
                               icon: Icon(
-                                themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+                                themeProvider.isDarkMode
+                                    ? Icons.light_mode
+                                    : Icons.dark_mode,
                                 color: textSecondary,
                                 size: 22,
                               ),
@@ -174,7 +183,10 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
                     // Error Message banner
                     if (_errorMessage != null) ...[
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 10,
+                        ),
                         margin: const EdgeInsets.only(bottom: 20),
                         decoration: BoxDecoration(
                           color: AppColors.error.withValues(alpha: 0.1),
@@ -185,7 +197,11 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
                         ),
                         child: Row(
                           children: [
-                            const Icon(Icons.error_outline, size: 20, color: AppColors.error),
+                            const Icon(
+                              Icons.error_outline,
+                              size: 20,
+                              color: AppColors.error,
+                            ),
                             const SizedBox(width: 10),
                             Expanded(
                               child: Text(
@@ -219,18 +235,27 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
                       style: TextStyle(color: textPrimary, fontSize: 15),
                       decoration: InputDecoration(
                         hintText: 'Enter at least 6 characters',
-                        prefixIcon: const Icon(Icons.lock_outline_rounded, size: 20),
+                        prefixIcon: const Icon(
+                          Icons.lock_outline_rounded,
+                          size: 20,
+                        ),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                            _obscurePassword
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined,
                             size: 20,
                             color: textSecondary,
                           ),
-                          onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                          onPressed: () => setState(
+                            () => _obscurePassword = !_obscurePassword,
+                          ),
                         ),
                       ),
                       onChanged: (_) {
-                        if (_errorMessage != null) setState(() => _errorMessage = null);
+                        if (_errorMessage != null) {
+                          setState(() => _errorMessage = null);
+                        }
                       },
                       validator: (val) {
                         if (val == null || val.trim().isEmpty) {
@@ -263,18 +288,28 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
                       style: TextStyle(color: textPrimary, fontSize: 15),
                       decoration: InputDecoration(
                         hintText: 'Re-enter your new password',
-                        prefixIcon: const Icon(Icons.lock_reset_rounded, size: 20),
+                        prefixIcon: const Icon(
+                          Icons.lock_reset_rounded,
+                          size: 20,
+                        ),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscureConfirmPassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                            _obscureConfirmPassword
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined,
                             size: 20,
                             color: textSecondary,
                           ),
-                          onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
+                          onPressed: () => setState(
+                            () => _obscureConfirmPassword =
+                                !_obscureConfirmPassword,
+                          ),
                         ),
                       ),
                       onChanged: (_) {
-                        if (_errorMessage != null) setState(() => _errorMessage = null);
+                        if (_errorMessage != null) {
+                          setState(() => _errorMessage = null);
+                        }
                       },
                       validator: (val) {
                         if (val == null || val.trim().isEmpty) {
@@ -294,7 +329,9 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
                       width: double.infinity,
                       height: 52,
                       child: ElevatedButton(
-                        onPressed: authProvider.isLoading ? null : _handleUpdatePassword,
+                        onPressed: authProvider.isLoading
+                            ? null
+                            : _handleUpdatePassword,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
                           shape: RoundedRectangleBorder(
@@ -307,7 +344,9 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
                                 height: 22,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2.5,
-                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white,
+                                  ),
                                 ),
                               )
                             : const Text(
@@ -338,7 +377,9 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
-                            color: isDark ? AppColors.accent : AppColors.primary,
+                            color: isDark
+                                ? AppColors.accent
+                                : AppColors.primary,
                           ),
                         ),
                       ),
