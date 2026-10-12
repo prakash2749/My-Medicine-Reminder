@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:medicine_reminder/core/constants/app_colors.dart';
@@ -308,8 +309,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                               if (Navigator.of(context).canPop()) {
                                 Navigator.of(context).pop();
                               } else {
-                                Navigator.of(context)
-                                    .pushReplacementNamed(AppRoutes.login);
+                                context.go(AppRoutes.login);
                               }
                             },
                             child: Text(

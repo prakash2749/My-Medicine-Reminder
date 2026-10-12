@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:medicine_reminder/core/constants/app_assets.dart';
@@ -54,11 +55,7 @@ class _LoginViewState extends State<LoginView> {
       if (!mounted) return;
 
       if (result.success) {
-        if (result.needsEmailVerification) {
-          _showEmailVerificationDialog(email);
-        } else {
-          Navigator.of(context).pushReplacementNamed(AppRoutes.authGate);
-        }
+        context.go(AppRoutes.authGate);
       } else {
         setState(
           () => _localError = result.errorMessage ?? 'Registration failed',
@@ -70,7 +67,7 @@ class _LoginViewState extends State<LoginView> {
       if (!mounted) return;
 
       if (result.success) {
-        Navigator.of(context).pushReplacementNamed(AppRoutes.authGate);
+        context.go(AppRoutes.authGate);
       } else {
         final errorMsg = result.errorMessage ?? 'Authentication failed';
         setState(() => _localError = errorMsg);
@@ -442,8 +439,7 @@ class _LoginViewState extends State<LoginView> {
                         if (!_isSignUp)
                           InkWell(
                             onTap: () {
-                              Navigator.of(context)
-                                  .pushNamed(AppRoutes.forgotPassword);
+                              context.push(AppRoutes.forgotPassword);
                             },
                             borderRadius: BorderRadius.circular(4),
                             child: Padding(
@@ -560,9 +556,7 @@ class _LoginViewState extends State<LoginView> {
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           Text(
-                            _isSignUp
-                                ? AppStrings.alreadyHaveAccount
-                                : AppStrings.dontHaveAccount,
+                            AppStrings.dontHaveAccount,
                             style: TextStyle(
                               fontSize: 14,
                               color: textSecondary,
@@ -571,17 +565,10 @@ class _LoginViewState extends State<LoginView> {
                           const SizedBox(width: 6),
                           GestureDetector(
                             onTap: () {
-                              setState(() {
-                                _isSignUp = !_isSignUp;
-                                _localError = null;
-                                _autovalidateMode = AutovalidateMode.disabled;
-                              });
-                              _formKey.currentState?.reset();
+                              context.go(AppRoutes.getStarted);
                             },
                             child: Text(
-                              _isSignUp
-                                  ? AppStrings.logIn
-                                  : AppStrings.createAccount,
+                              AppStrings.createAccount,
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
