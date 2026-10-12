@@ -41,7 +41,8 @@ class AuthGate extends StatelessWidget {
     return StreamBuilder<AuthState>(
       stream: client.auth.onAuthStateChange,
       builder: (context, snapshot) {
-        if (snapshot.hasData && snapshot.data!.event == AuthChangeEvent.passwordRecovery) {
+        if (snapshot.hasData &&
+            snapshot.data!.event == AuthChangeEvent.passwordRecovery) {
           return const UpdatePasswordView();
         }
 

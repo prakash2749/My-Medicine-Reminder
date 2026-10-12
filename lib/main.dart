@@ -38,10 +38,7 @@ Future<void> main() async {
   }
 
   runApp(
-    MultiProvider(
-      providers: AppProviders.providers,
-      child: const MyApp(),
-    ),
+    MultiProvider(providers: AppProviders.providers, child: const MyApp()),
   );
 }
 
@@ -90,13 +87,16 @@ void _setupDeepLinkHandler() {
   }
 
   // Handle initial link (cold start when app was terminated)
-  appLinks.getInitialLink().then((uri) {
-    if (uri != null) {
-      handleUri(uri);
-    }
-  }).catchError((e) {
-    debugPrint('getInitialLink error: $e');
-  });
+  appLinks
+      .getInitialLink()
+      .then((uri) {
+        if (uri != null) {
+          handleUri(uri);
+        }
+      })
+      .catchError((e) {
+        debugPrint('getInitialLink error: $e');
+      });
 
   // Handle incoming link stream (warm start when app was in background)
   appLinks.uriLinkStream.listen(

@@ -12,9 +12,7 @@ class AppProviders {
 
   static List<SingleChildWidget> get providers => [
     // Core Application Providers
-    ChangeNotifierProvider<ThemeProvider>(
-      create: (_) => ThemeProvider(),
-    ),
+    ChangeNotifierProvider<ThemeProvider>(create: (_) => ThemeProvider()),
 
     // Feature / Domain Providers
     ChangeNotifierProvider<AuthProvider>(

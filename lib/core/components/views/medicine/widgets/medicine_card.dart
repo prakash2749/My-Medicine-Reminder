@@ -8,10 +8,7 @@ import '../models/medicine_reminder_model.dart';
 class MedicineCard extends StatelessWidget {
   final MedicineReminder reminder;
 
-  const MedicineCard({
-    super.key,
-    required this.reminder,
-  });
+  const MedicineCard({super.key, required this.reminder});
 
   IconData _getCategoryIcon(String category) {
     switch (category.toLowerCase()) {
@@ -97,7 +94,10 @@ class MedicineCard extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 3,
+                        ),
                         decoration: BoxDecoration(
                           color: (isDark ? Colors.white10 : Colors.grey[100]),
                           borderRadius: BorderRadius.circular(8),
@@ -105,7 +105,11 @@ class MedicineCard extends StatelessWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.access_time, size: 12, color: AppColors.primary),
+                            const Icon(
+                              Icons.access_time,
+                              size: 12,
+                              color: AppColors.primary,
+                            ),
                             const SizedBox(width: 4),
                             Text(
                               reminder.time,
@@ -148,13 +152,17 @@ class MedicineCard extends StatelessWidget {
             // Toggle Taken Button
             IconButton(
               icon: Icon(
-                reminder.isTaken ? Icons.check_circle : Icons.radio_button_unchecked,
+                reminder.isTaken
+                    ? Icons.check_circle
+                    : Icons.radio_button_unchecked,
                 color: reminder.isTaken ? AppColors.success : Colors.grey[400],
                 size: 28,
               ),
               tooltip: reminder.isTaken ? 'Mark as pending' : 'Mark as taken',
               onPressed: () {
-                context.read<MedicineReminderProvider>().toggleTaken(reminder.id);
+                context.read<MedicineReminderProvider>().toggleTaken(
+                  reminder.id,
+                );
               },
             ),
 
@@ -163,7 +171,9 @@ class MedicineCard extends StatelessWidget {
               icon: Icon(Icons.more_vert, size: 20, color: Colors.grey[400]),
               onSelected: (value) {
                 if (value == 'delete') {
-                  context.read<MedicineReminderProvider>().deleteReminder(reminder.id);
+                  context.read<MedicineReminderProvider>().deleteReminder(
+                    reminder.id,
+                  );
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('${reminder.name} removed'),
@@ -177,7 +187,11 @@ class MedicineCard extends StatelessWidget {
                   value: 'delete',
                   child: Row(
                     children: [
-                      Icon(Icons.delete_outline, color: AppColors.error, size: 20),
+                      Icon(
+                        Icons.delete_outline,
+                        color: AppColors.error,
+                        size: 20,
+                      ),
                       SizedBox(width: 8),
                       Text('Delete', style: TextStyle(color: AppColors.error)),
                     ],

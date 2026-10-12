@@ -55,7 +55,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
       );
     } else {
       setState(() {
-        _errorMessage = result.errorMessage ?? 'Failed to send password recovery link';
+        _errorMessage =
+            result.errorMessage ?? 'Failed to send password recovery link';
       });
     }
   }
@@ -66,8 +67,12 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
     final authProvider = context.watch<AuthProvider>();
 
     final bg = isDark ? AppColors.backgroundDark : AppColors.backgroundLight;
-    final textPrimary = isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
-    final textSecondary = isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight;
+    final textPrimary = isDark
+        ? AppColors.textPrimaryDark
+        : AppColors.textPrimaryLight;
+    final textSecondary = isDark
+        ? AppColors.textSecondaryDark
+        : AppColors.textSecondaryLight;
 
     return Scaffold(
       backgroundColor: bg,
@@ -114,7 +119,10 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                     // Error Message banner if any
                     if (_errorMessage != null) ...[
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 10,
+                        ),
                         margin: const EdgeInsets.only(bottom: 20),
                         decoration: BoxDecoration(
                           color: AppColors.error.withValues(alpha: 0.1),
@@ -125,7 +133,11 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                         ),
                         child: Row(
                           children: [
-                            const Icon(Icons.error_outline, size: 20, color: AppColors.error),
+                            const Icon(
+                              Icons.error_outline,
+                              size: 20,
+                              color: AppColors.error,
+                            ),
                             const SizedBox(width: 10),
                             Expanded(
                               child: Text(
@@ -159,7 +171,11 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                           children: [
                             Row(
                               children: const [
-                                Icon(Icons.mark_email_read_outlined, color: AppColors.primary, size: 26),
+                                Icon(
+                                  Icons.mark_email_read_outlined,
+                                  color: AppColors.primary,
+                                  size: 26,
+                                ),
                                 SizedBox(width: 10),
                                 Text(
                                   AppStrings.resetLinkSentTitle,
@@ -187,7 +203,9 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                                 minimumSize: Size.zero,
                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               ),
-                              onPressed: authProvider.isLoading ? null : _handleSendResetLink,
+                              onPressed: authProvider.isLoading
+                                  ? null
+                                  : _handleSendResetLink,
                               child: const Text('Resend recovery email'),
                             ),
                           ],
@@ -216,7 +234,9 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                         prefixIcon: Icon(Icons.mail_outline_rounded, size: 20),
                       ),
                       onChanged: (_) {
-                        if (_errorMessage != null) setState(() => _errorMessage = null);
+                        if (_errorMessage != null) {
+                          setState(() => _errorMessage = null);
+                        }
                       },
                       validator: (val) {
                         if (val == null || val.trim().isEmpty) {
@@ -236,7 +256,9 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                       width: double.infinity,
                       height: 52,
                       child: ElevatedButton(
-                        onPressed: authProvider.isLoading ? null : _handleSendResetLink,
+                        onPressed: authProvider.isLoading
+                            ? null
+                            : _handleSendResetLink,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
                           shape: RoundedRectangleBorder(
@@ -249,7 +271,9 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                                 height: 22,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2.5,
-                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white,
+                                  ),
                                 ),
                               )
                             : const Text(
@@ -284,7 +308,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                               if (Navigator.of(context).canPop()) {
                                 Navigator.of(context).pop();
                               } else {
-                                Navigator.of(context).pushReplacementNamed(AppRoutes.login);
+                                Navigator.of(context)
+                                    .pushReplacementNamed(AppRoutes.login);
                               }
                             },
                             child: Text(
@@ -292,7 +317,9 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
-                                color: isDark ? AppColors.accent : AppColors.primary,
+                                color: isDark
+                                    ? AppColors.accent
+                                    : AppColors.primary,
                               ),
                             ),
                           ),

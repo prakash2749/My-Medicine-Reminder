@@ -29,4 +29,3 @@ class SupabaseService {
 
   static bool get isAuthenticated => currentUser != null;
 }
-

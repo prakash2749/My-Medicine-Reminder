@@ -17,7 +17,10 @@ class FakeAuthService extends AuthService {
   bool get isAuthenticated => _mockUser != null;
 
   @override
-  Future<AuthResult> signIn({required String email, required String password}) async {
+  Future<AuthResult> signIn({
+    required String email,
+    required String password,
+  }) async {
     _mockUser = User(
       id: 'test-user',
       appMetadata: {},
@@ -31,13 +34,13 @@ class FakeAuthService extends AuthService {
 }
 
 void main() {
-  testWidgets('AuthGate renders LoginScreen when user is unauthenticated', (tester) async {
+  testWidgets('AuthGate renders LoginScreen when user is unauthenticated', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       MultiProvider(
         providers: AppProviders.providers,
-        child: const MaterialApp(
-          home: AuthGate(),
-        ),
+        child: const MaterialApp(home: AuthGate()),
       ),
     );
 
@@ -56,12 +59,12 @@ void main() {
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ...AppProviders.providers.where((p) => p is! ChangeNotifierProvider<AuthProvider>),
+          ...AppProviders.providers.where(
+            (p) => p is! ChangeNotifierProvider<AuthProvider>,
+          ),
           ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
         ],
-        child: const MaterialApp(
-          home: AuthGate(),
-        ),
+        child: const MaterialApp(home: AuthGate()),
       ),
     );
 
@@ -69,7 +72,10 @@ void main() {
     expect(find.byType(LoginScreen), findsOneWidget);
 
     // Simulate successful sign-in
-    await authProvider.signIn(email: 'user@example.com', password: 'password123');
+    await authProvider.signIn(
+      email: 'user@example.com',
+      password: 'password123',
+    );
     await tester.pumpAndSettle();
 
     // Verify HomeScreen is now rendered

@@ -25,7 +25,13 @@ class _AddMedicineSheetState extends State<AddMedicineSheet> {
   String _selectedFrequency = 'Daily';
 
   final List<String> _categories = ['Pill', 'Capsule', 'Syrup', 'Injection'];
-  final List<String> _frequencies = ['Daily', 'Twice a day', 'Thrice a day', 'Weekly', 'As needed'];
+  final List<String> _frequencies = [
+    'Daily',
+    'Twice a day',
+    'Thrice a day',
+    'Weekly',
+    'As needed',
+  ];
 
   @override
   void dispose() {
@@ -61,7 +67,9 @@ class _AddMedicineSheetState extends State<AddMedicineSheet> {
         time: formattedTime,
         category: _selectedCategory,
         frequency: _selectedFrequency,
-        notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+        notes: _notesController.text.trim().isEmpty
+            ? null
+            : _notesController.text.trim(),
         isTaken: false,
         createdAt: DateTime.now(),
       );
@@ -109,7 +117,9 @@ class _AddMedicineSheetState extends State<AddMedicineSheet> {
                         height: 32,
                         padding: const EdgeInsets.all(3),
                         decoration: BoxDecoration(
-                          color: isDark ? AppColors.surfaceDark : Colors.grey[100],
+                          color: isDark
+                              ? AppColors.surfaceDark
+                              : Colors.grey[100],
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Image.asset(
@@ -128,7 +138,9 @@ class _AddMedicineSheetState extends State<AddMedicineSheet> {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: isDark ? Colors.white : AppColors.textPrimaryLight,
+                          color: isDark
+                              ? Colors.white
+                              : AppColors.textPrimaryLight,
                         ),
                       ),
                     ],
@@ -149,8 +161,9 @@ class _AddMedicineSheetState extends State<AddMedicineSheet> {
                   hintText: 'e.g. Paracetamol, Metformin',
                   prefixIcon: Icon(Icons.medication_outlined),
                 ),
-                validator: (val) =>
-                    (val == null || val.trim().isEmpty) ? 'Please enter a name' : null,
+                validator: (val) => (val == null || val.trim().isEmpty)
+                    ? 'Please enter a name'
+                    : null,
               ),
               const SizedBox(height: 12),
 
@@ -162,8 +175,9 @@ class _AddMedicineSheetState extends State<AddMedicineSheet> {
                   hintText: 'e.g. 500 mg, 1 tablet, 10 ml',
                   prefixIcon: Icon(Icons.scale_outlined),
                 ),
-                validator: (val) =>
-                    (val == null || val.trim().isEmpty) ? 'Please enter dosage' : null,
+                validator: (val) => (val == null || val.trim().isEmpty)
+                    ? 'Please enter dosage'
+                    : null,
               ),
               const SizedBox(height: 12),
 
@@ -195,10 +209,14 @@ class _AddMedicineSheetState extends State<AddMedicineSheet> {
                         prefixIcon: Icon(Icons.category_outlined),
                       ),
                       items: _categories
-                          .map((c) => DropdownMenuItem(value: c, child: Text(c)))
+                          .map(
+                            (c) => DropdownMenuItem(value: c, child: Text(c)),
+                          )
                           .toList(),
                       onChanged: (val) {
-                        if (val != null) setState(() => _selectedCategory = val);
+                        if (val != null) {
+                          setState(() => _selectedCategory = val);
+                        }
                       },
                     ),
                   ),

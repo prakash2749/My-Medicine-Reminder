@@ -1,0 +1,43 @@
+name: Notify CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  flutter:
+    name: Flutter regression
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ vars.FLUTTER_VERSION || 'any' }}
+          cache: true
+      - run: flutter pub get
+      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: flutter analyze
+      - run: flutter test --coverage
+
+  database:
+    name: Database regression
+    if: false # Disabled temporarily while focusing on Flutter test suite; re-enable when Supabase DB tests are added
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v3
+        with:
+          version: ${{ vars.SUPABASE_CLI_VERSION || 'latest' }}
+      - run: supabase db start
+      - run: supabase test db
+      - if: always()
+        run: supabase stop --no-backup
