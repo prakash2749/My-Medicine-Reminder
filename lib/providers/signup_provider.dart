@@ -1,24 +1,42 @@
 import 'package:flutter/material.dart';
+
 import '../core/constants/app_language.dart';
+
+import '../core/models/onboarding_question_model.dart';
+import '../core/services/onboarding_service.dart';
 
 /// Manages multi-step onboarding & signup state across the setup flow.
 class SignupProvider extends ChangeNotifier {
-  // Purpose choices directly mapped from requirements & screenshot
-  static const List<String> availablePurposes = [
-    'Get medication reminders',
-    'Track whether I took my meds',
-    'Keep a list of my meds',
-    'Remember when it’s time to refill',
-    'Check for drug interaction',
-    'Track side effects / symptoms',
-    'Track measurements (e.g. Blood Pressure)',
-  ];
+  // Purpose choices loaded dynamically from public.onboarding_questions table
+  List<OnboardingQuestion> _questions = OnboardingService.defaultQuestions;
+  bool _isLoadingQuestions = false;
+
+  List<OnboardingQuestion> get questions => List.unmodifiable(_questions);
+  bool get isLoadingQuestions => _isLoadingQuestions;
+
+  // Convenience getter for question texts matching available choices
+  List<String> get availablePurposes =>
+      _questions.map((q) => q.questionText).toList();
+
+  Future<void> loadQuestions({OnboardingService? service}) async {
+    _isLoadingQuestions = true;
+    notifyListeners();
+    try {
+      final s = service ?? OnboardingService();
+      final fetched = await s.fetchOnboardingQuestions();
+      if (fetched.isNotEmpty) {
+        _questions = fetched;
+      }
+    } catch (e) {
+      debugPrint('Error loading onboarding questions: $e');
+    } finally {
+      _isLoadingQuestions = false;
+      notifyListeners();
+    }
+  }
 
   // Gender options
-  static const List<String> availableGenders = [
-    'Female',
-    'Male',
-  ];
+  static const List<String> availableGenders = ['Female', 'Male'];
 
   // Relationship options for Care Circle
   static const List<String> availableRelationships = [

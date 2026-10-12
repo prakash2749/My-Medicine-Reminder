@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:medicine_reminder/core/constants/app_colors.dart';
 import 'package:medicine_reminder/core/routes/app_routes.dart';
 import 'package:medicine_reminder/providers/signup_provider.dart';
+
 import 'widgets/onboarding_step_header.dart';
 
 class CareCircleStepView extends StatefulWidget {
@@ -55,10 +57,10 @@ class _CareCircleStepViewState extends State<CareCircleStepView> {
           _agreementError == null) {
         signup.setContactName(name);
         signup.setPhoneNumber(phone);
-        Navigator.of(context).pushNamed(AppRoutes.createAccount);
+        context.push(AppRoutes.createAccount);
       }
     } else {
-      Navigator.of(context).pushNamed(AppRoutes.createAccount);
+      context.push(AppRoutes.createAccount);
     }
   }
 
@@ -68,8 +70,9 @@ class _CareCircleStepViewState extends State<CareCircleStepView> {
     final signup = context.watch<SignupProvider>();
 
     return Scaffold(
-      backgroundColor:
-          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
+      backgroundColor: isDark
+          ? AppColors.backgroundDark
+          : AppColors.backgroundLight,
       body: SafeArea(
         child: Column(
           children: [
@@ -84,10 +87,9 @@ class _CareCircleStepViewState extends State<CareCircleStepView> {
                     OnboardingStepHeader(
                       currentStep: 4,
                       totalSteps: 4,
-                      onBack: () => Navigator.of(context).pop(),
+                      onBack: () => context.pop(),
                       title: 'A little support helps.',
-                      subtitle:
-                          'Would you like someone to receive an alert when a dose hasn’t been confirmed?',
+                      subtitle: 'Would you like someone to receive an alert when a dose hasn’t been confirmed?',
                     ),
                     const SizedBox(height: 24),
 
@@ -96,8 +98,7 @@ class _CareCircleStepViewState extends State<CareCircleStepView> {
                       isSelected: signup.wantsCareCircle,
                       icon: Icons.group_add_outlined,
                       title: 'Yes, invite someone',
-                      subtitle:
-                          'A caregiver, family member, or friend will receive a nudge.',
+                      subtitle: 'A caregiver, family member, or friend will receive a nudge.',
                       isDark: isDark,
                       onTap: () => signup.setWantsCareCircle(true),
                     ),
@@ -109,8 +110,7 @@ class _CareCircleStepViewState extends State<CareCircleStepView> {
                       isSelected: !signup.wantsCareCircle,
                       icon: Icons.person_outline,
                       title: 'Maybe later',
-                      subtitle:
-                          'You can always add care circle contacts anytime from settings.',
+                      subtitle: 'You can always add care circle contacts anytime from settings.',
                       isDark: isDark,
                       onTap: () => signup.setWantsCareCircle(false),
                     ),
@@ -266,18 +266,19 @@ class _CareCircleStepViewState extends State<CareCircleStepView> {
                                 style: TextStyle(
                                   color: isDark
                                       ? AppColors.textSecondaryDark
-                                      : AppColors.textSecondaryLight
-                                          .withValues(alpha: 0.6),
+                                      : AppColors.textSecondaryLight.withValues(
+                                          alpha: 0.6,
+                                        ),
                                 ),
                               ),
-                              items: SignupProvider.availableRelationships
-                                  .map((rel) {
-                                    return DropdownMenuItem(
-                                      value: rel,
-                                      child: Text(rel),
-                                    );
-                                  })
-                                  .toList(),
+                              items: SignupProvider.availableRelationships.map((
+                                rel,
+                              ) {
+                                return DropdownMenuItem(
+                                  value: rel,
+                                  child: Text(rel),
+                                );
+                              }).toList(),
                               onChanged: (val) => signup.setRelationship(val),
                             ),
                             const SizedBox(height: 18),
@@ -373,8 +374,8 @@ class _CareCircleStepViewState extends State<CareCircleStepView> {
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: isDark
-                                          ? AppColors.accent
-                                          : AppColors.primary,
+                                            ? AppColors.accent
+                                            : AppColors.primary,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
@@ -502,8 +503,8 @@ class _CareCircleStepViewState extends State<CareCircleStepView> {
                       color: isSelected
                           ? (isDark ? AppColors.accent : AppColors.primary)
                           : (isDark
-                              ? AppColors.textPrimaryDark
-                              : AppColors.textPrimaryLight),
+                                ? AppColors.textPrimaryDark
+                                : AppColors.textPrimaryLight),
                     ),
                   ),
                   const SizedBox(height: 4),

@@ -1,20 +1,8 @@
 /// Supported languages enum for Notify.
 enum AppLanguage {
-  english(
-    code: 'en',
-    displayName: 'English',
-    nativeName: 'English',
-  ),
-  gujarati(
-    code: 'gu',
-    displayName: 'Gujarati',
-    nativeName: 'ગુજરાતી',
-  ),
-  hindi(
-    code: 'hi',
-    displayName: 'Hindi',
-    nativeName: 'हिन्दी',
-  );
+  english(code: 'en', displayName: 'English', nativeName: 'English'),
+  gujarati(code: 'gu', displayName: 'Gujarati', nativeName: 'ગુજરાતી'),
+  hindi(code: 'hi', displayName: 'Hindi', nativeName: 'हिन्दी');
 
   final String code;
   final String displayName;

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:medicine_reminder/core/constants/app_colors.dart';
 import 'package:medicine_reminder/core/routes/app_routes.dart';
 import 'package:medicine_reminder/core/utils/date_time_utils.dart';
 import 'package:medicine_reminder/providers/signup_provider.dart';
+
 import 'widgets/onboarding_step_header.dart';
 
 class MyDayStepView extends StatelessWidget {
@@ -47,8 +49,9 @@ class MyDayStepView extends StatelessWidget {
     final signup = context.watch<SignupProvider>();
 
     return Scaffold(
-      backgroundColor:
-          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
+      backgroundColor: isDark
+          ? AppColors.backgroundDark
+          : AppColors.backgroundLight,
       body: SafeArea(
         child: Column(
           children: [
@@ -63,10 +66,9 @@ class MyDayStepView extends StatelessWidget {
                     OnboardingStepHeader(
                       currentStep: 3,
                       totalSteps: 4,
-                      onBack: () => Navigator.of(context).pop(),
+                      onBack: () => context.pop(),
                       title: 'Your day, your rhythm.',
-                      subtitle:
-                          'Confirm your usual times. You can change these later.',
+                      subtitle: 'Confirm your usual times. You can change these later.',
                     ),
                     const SizedBox(height: 24),
 
@@ -94,8 +96,8 @@ class MyDayStepView extends StatelessWidget {
                             color: signup.isRoutineFlexible
                                 ? AppColors.primary
                                 : (isDark
-                                    ? AppColors.textSecondaryDark
-                                    : AppColors.textSecondaryLight),
+                                      ? AppColors.textSecondaryDark
+                                      : AppColors.textSecondaryLight),
                             size: 22,
                           ),
                           const SizedBox(width: 12),
@@ -266,7 +268,7 @@ class MyDayStepView extends StatelessWidget {
                     height: 52,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed(AppRoutes.careCircle);
+                        context.push(AppRoutes.careCircle);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
@@ -295,7 +297,7 @@ class MyDayStepView extends StatelessWidget {
                   const SizedBox(height: 10),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed(AppRoutes.careCircle);
+                      context.push(AppRoutes.careCircle);
                     },
                     style: TextButton.styleFrom(
                       foregroundColor: isDark

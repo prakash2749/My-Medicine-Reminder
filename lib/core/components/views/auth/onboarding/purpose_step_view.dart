@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:medicine_reminder/core/constants/app_colors.dart';
 import 'package:medicine_reminder/core/routes/app_routes.dart';
 import 'package:medicine_reminder/providers/signup_provider.dart';
+
 import 'widgets/onboarding_step_header.dart';
 
-class PurposeStepView extends StatelessWidget {
+class PurposeStepView extends StatefulWidget {
   const PurposeStepView({super.key});
+
+  @override
+  State<PurposeStepView> createState() => _PurposeStepViewState();
+}
+
+class _PurposeStepViewState extends State<PurposeStepView> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<SignupProvider>().loadQuestions();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +29,9 @@ class PurposeStepView extends StatelessWidget {
     final signup = context.watch<SignupProvider>();
 
     return Scaffold(
-      backgroundColor:
-          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
+      backgroundColor: isDark
+          ? AppColors.backgroundDark
+          : AppColors.backgroundLight,
       body: SafeArea(
         child: Column(
           children: [
@@ -30,7 +46,7 @@ class PurposeStepView extends StatelessWidget {
                     OnboardingStepHeader(
                       currentStep: 2,
                       totalSteps: 4,
-                      onBack: () => Navigator.of(context).pop(),
+                      onBack: () => context.pop(),
                     ),
                     const SizedBox(height: 20),
 
@@ -41,27 +57,34 @@ class PurposeStepView extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: isDark
                             ? AppColors.surfaceDark
-                            : AppColors.tagBgLight,
-                        shape: BoxShape.circle,
+                            : AppColors.surfaceLight,
+                        borderRadius: BorderRadius.circular(14),
                         border: Border.all(
                           color: isDark
                               ? AppColors.borderDark
-                              : AppColors.primary.withValues(alpha: 0.2),
+                              : AppColors.borderLight,
                         ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(
+                              alpha: isDark ? 0.2 : 0.04,
+                            ),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
                       ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.help_outline_rounded,
-                          color: AppColors.primary,
-                          size: 24,
-                        ),
+                      child: const Icon(
+                        Icons.help_outline_rounded,
+                        color: AppColors.primary,
+                        size: 22,
                       ),
                     ),
                     const SizedBox(height: 16),
 
-                    // Title from screenshot
+                    // Heading from screenshot
                     Text(
-                      'What do you hope to achieve with Notify?',
+                      'What would you like Notify to help you with?',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w800,
@@ -86,169 +109,171 @@ class PurposeStepView extends StatelessWidget {
                     ),
                     const SizedBox(height: 24),
 
-                    // Option cards from screenshot
-                    ...SignupProvider.availablePurposes.map((purpose) {
-                      final isSelected =
-                          signup.selectedPurposes.contains(purpose);
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 12.0),
-                        child: InkWell(
-                          onTap: () => signup.togglePurpose(purpose),
-                          borderRadius: BorderRadius.circular(16),
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 180),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 18,
-                              vertical: 16,
-                            ),
-                            decoration: BoxDecoration(
-                              color: isSelected
-                                  ? (isDark
-                                      ? AppColors.tagBgDark
-                                      : AppColors.tagBgLight)
-                                  : (isDark
-                                      ? AppColors.surfaceDark
-                                      : AppColors.surfaceLight),
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color: isSelected
-                                    ? AppColors.primary
-                                    : (isDark
-                                        ? AppColors.borderDark
-                                        : AppColors.borderLight),
-                                width: isSelected ? 1.8 : 1.0,
-                              ),
-                              boxShadow: isSelected
-                                  ? [
-                                      BoxShadow(
-                                        color: AppColors.primary.withValues(
-                                          alpha: 0.12,
-                                        ),
-                                        blurRadius: 8,
-                                        offset: const Offset(0, 2),
-                                      ),
-                                    ]
-                                  : null,
-                            ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    purpose,
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: isSelected
-                                          ? FontWeight.w600
-                                          : FontWeight.w500,
-                                      color: isSelected
-                                          ? (isDark
-                                              ? AppColors.accent
-                                              : AppColors.primary)
-                                          : (isDark
-                                              ? AppColors.textPrimaryDark
-                                              : AppColors.textPrimaryLight),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                AnimatedContainer(
-                                  duration: const Duration(milliseconds: 180),
-                                  width: 24,
-                                  height: 24,
-                                  decoration: BoxDecoration(
-                                    color: isSelected
-                                        ? AppColors.primary
-                                        : Colors.transparent,
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: isSelected
-                                          ? AppColors.primary
-                                          : (isDark
-                                              ? AppColors.borderDark
-                                              : AppColors.borderLight),
-                                      width: 1.5,
-                                    ),
-                                  ),
-                                  child: isSelected
-                                      ? const Icon(
-                                          Icons.check,
-                                          size: 16,
-                                          color: Colors.white,
-                                        )
-                                      : null,
-                                ),
-                              ],
-                            ),
+                    // Option cards loaded dynamically from public.onboarding_questions table
+                    if (signup.isLoadingQuestions)
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 24),
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.primary,
                           ),
                         ),
-                      );
-                    }),
-                    const SizedBox(height: 16),
+                      )
+                    else
+                      ...signup.questions.map((q) {
+                        final purpose = q.questionText;
+                        final isSelected = signup.selectedPurposes.contains(
+                          purpose,
+                        );
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 12.0),
+                          child: InkWell(
+                            onTap: () => signup.togglePurpose(purpose),
+                            borderRadius: BorderRadius.circular(16),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 180),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 18,
+                                vertical: 16,
+                              ),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? (isDark
+                                          ? AppColors.tagBgDark
+                                          : AppColors.tagBgLight)
+                                    : (isDark
+                                          ? AppColors.surfaceDark
+                                          : AppColors.surfaceLight),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: isSelected
+                                      ? AppColors.primary
+                                      : (isDark
+                                            ? AppColors.borderDark
+                                            : AppColors.borderLight),
+                                  width: isSelected ? 1.8 : 1.0,
+                                ),
+                                boxShadow: isSelected
+                                    ? [
+                                        BoxShadow(
+                                          color: AppColors.primary.withValues(
+                                            alpha: 0.12,
+                                          ),
+                                          blurRadius: 8,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ]
+                                    : null,
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      purpose,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: isSelected
+                                            ? FontWeight.w700
+                                            : FontWeight.w600,
+                                        color: isSelected
+                                            ? (isDark
+                                                  ? AppColors.tagTextDark
+                                                  : AppColors.primary)
+                                            : (isDark
+                                                  ? AppColors.textPrimaryDark
+                                                  : AppColors.textPrimaryLight),
+                                      ),
+                                    ),
+                                  ),
+                                  AnimatedContainer(
+                                    duration: const Duration(milliseconds: 180),
+                                    width: 24,
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: isSelected
+                                          ? AppColors.primary
+                                          : Colors.transparent,
+                                      border: Border.all(
+                                        color: isSelected
+                                            ? AppColors.primary
+                                            : (isDark
+                                                  ? AppColors.borderDark
+                                                  : AppColors.borderLight),
+                                        width: 2,
+                                      ),
+                                    ),
+                                    child: isSelected
+                                        ? const Icon(
+                                            Icons.check,
+                                            size: 14,
+                                            color: Colors.white,
+                                          )
+                                        : null,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+                    const SizedBox(height: 24),
                   ],
                 ),
               ),
             ),
 
-            // Bottom actions
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24.0,
-                vertical: 16.0,
+            // Bottom action container
+            Container(
+              padding: const EdgeInsets.fromLTRB(24, 12, 24, 16),
+              decoration: BoxDecoration(
+                color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+                border: Border(
+                  top: BorderSide(
+                    color: isDark
+                        ? AppColors.borderDark
+                        : AppColors.borderLight,
+                  ),
+                ),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    height: 52,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(AppRoutes.myDay);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: Colors.white,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+              child: SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: ElevatedButton(
+                  onPressed: signup.selectedPurposes.isNotEmpty
+                      ? () {
+                          context.push(AppRoutes.myDay);
+                        }
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    disabledBackgroundColor: isDark
+                        ? Colors.white10
+                        : Colors.grey.shade200,
+                    disabledForegroundColor: isDark
+                        ? Colors.white30
+                        : Colors.grey.shade400,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Continue',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Done',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          SizedBox(width: 8),
-                          Icon(Icons.arrow_forward_ios, size: 14),
-                        ],
-                      ),
-                    ),
+                      SizedBox(width: 8),
+                      Icon(Icons.arrow_forward_rounded, size: 18),
+                    ],
                   ),
-                  const SizedBox(height: 10),
-                  TextButton(
-                    onPressed: () {
-                      signup.clearPurposes();
-                      Navigator.of(context).pushNamed(AppRoutes.myDay);
-                    },
-                    style: TextButton.styleFrom(
-                      foregroundColor: isDark
-                          ? AppColors.textSecondaryDark
-                          : AppColors.textSecondaryLight,
-                    ),
-                    child: const Text(
-                      'Skip for now',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ],

@@ -56,8 +56,19 @@ void main() {
       expect(SignupProvider.availableGenders, ['Female', 'Male']);
     });
 
+    test('Onboarding questions loaded from onboarding_questions table', () {
+      expect(provider.questions.length, 5);
+      expect(provider.availablePurposes, [
+        'Remember my medicines',
+        'Track doses I have taken',
+        'Know when to refill',
+        'Organize prescriptions',
+        'Get family support',
+      ]);
+    });
+
     test('Purpose toggling works correctly', () {
-      const purpose = 'Get medication reminders';
+      const purpose = 'Remember my medicines';
       provider.togglePurpose(purpose);
       expect(provider.selectedPurposes.contains(purpose), isTrue);
 

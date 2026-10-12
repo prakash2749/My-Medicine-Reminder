@@ -3,10 +3,7 @@ import 'package:medicine_reminder/core/components/custom_app_bar.dart';
 import 'package:medicine_reminder/core/constants/app_assets.dart';
 import 'package:medicine_reminder/core/constants/app_colors.dart';
 import 'package:medicine_reminder/core/constants/app_strings.dart';
-import 'package:medicine_reminder/core/routes/app_routes.dart';
-import 'package:medicine_reminder/providers/auth_provider.dart';
 import 'package:medicine_reminder/providers/medicine_reminder_provider.dart';
-import 'package:medicine_reminder/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'widgets/add_medicine_sheet.dart';

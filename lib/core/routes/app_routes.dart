@@ -43,22 +43,13 @@ class AppRoutes {
     navigatorKey: navigatorKey,
     initialLocation: initial,
     routes: [
-      GoRoute(
-        path: initial,
-        builder: (context, state) => const SplashView(),
-      ),
-      GoRoute(
-        path: splash,
-        builder: (context, state) => const SplashView(),
-      ),
+      GoRoute(path: initial, builder: (context, state) => const SplashView()),
+      GoRoute(path: splash, builder: (context, state) => const SplashView()),
       GoRoute(
         path: getStarted,
         builder: (context, state) => const GetStartedView(),
       ),
-      GoRoute(
-        path: login,
-        builder: (context, state) => const LoginView(),
-      ),
+      GoRoute(path: login, builder: (context, state) => const LoginView()),
       GoRoute(
         path: forgotPassword,
         builder: (context, state) => const ForgotPasswordView(),
@@ -71,14 +62,8 @@ class AppRoutes {
         path: resetCallback,
         builder: (context, state) => const UpdatePasswordView(),
       ),
-      GoRoute(
-        path: authGate,
-        builder: (context, state) => const AuthGate(),
-      ),
-      GoRoute(
-        path: home,
-        builder: (context, state) => const AuthGate(),
-      ),
+      GoRoute(path: authGate, builder: (context, state) => const AuthGate()),
+      GoRoute(path: home, builder: (context, state) => const AuthGate()),
       GoRoute(
         path: medicines,
         builder: (context, state) => const MedicineView(),
@@ -92,10 +77,7 @@ class AppRoutes {
         path: purpose,
         builder: (context, state) => const PurposeStepView(),
       ),
-      GoRoute(
-        path: myDay,
-        builder: (context, state) => const MyDayStepView(),
-      ),
+      GoRoute(path: myDay, builder: (context, state) => const MyDayStepView()),
       GoRoute(
         path: careCircle,
         builder: (context, state) => const CareCircleStepView(),

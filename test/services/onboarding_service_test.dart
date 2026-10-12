@@ -11,26 +11,36 @@ void main() {
         '07:00:00',
       );
       expect(
-        DateTimeUtils.formatTimeOfDayToSql(const TimeOfDay(hour: 8, minute: 30)),
+        DateTimeUtils.formatTimeOfDayToSql(
+          const TimeOfDay(hour: 8, minute: 30),
+        ),
         '08:30:00',
       );
       expect(
-        DateTimeUtils.formatTimeOfDayToSql(const TimeOfDay(hour: 22, minute: 45)),
+        DateTimeUtils.formatTimeOfDayToSql(
+          const TimeOfDay(hour: 22, minute: 45),
+        ),
         '22:45:00',
       );
     });
 
     test('formatTimeOfDayTo12Hour formats TimeOfDay to 12-hour AM/PM', () {
       expect(
-        DateTimeUtils.formatTimeOfDayTo12Hour(const TimeOfDay(hour: 7, minute: 0)),
+        DateTimeUtils.formatTimeOfDayTo12Hour(
+          const TimeOfDay(hour: 7, minute: 0),
+        ),
         '7:00 AM',
       );
       expect(
-        DateTimeUtils.formatTimeOfDayTo12Hour(const TimeOfDay(hour: 13, minute: 30)),
+        DateTimeUtils.formatTimeOfDayTo12Hour(
+          const TimeOfDay(hour: 13, minute: 30),
+        ),
         '1:30 PM',
       );
       expect(
-        DateTimeUtils.formatTimeOfDayTo12Hour(const TimeOfDay(hour: 0, minute: 15)),
+        DateTimeUtils.formatTimeOfDayTo12Hour(
+          const TimeOfDay(hour: 0, minute: 15),
+        ),
         '12:15 AM',
       );
     });
@@ -56,18 +66,9 @@ void main() {
 
   group('PhoneUtils Tests', () {
     test('formatE164 formats phone numbers with country code', () {
-      expect(
-        PhoneUtils.formatE164('+1', '555-123-4567'),
-        '+15551234567',
-      );
-      expect(
-        PhoneUtils.formatE164('+91', '98765 43210'),
-        '+919876543210',
-      );
-      expect(
-        PhoneUtils.formatE164('+1', '+15559876543'),
-        '+15559876543',
-      );
+      expect(PhoneUtils.formatE164('+1', '555-123-4567'), '+15551234567');
+      expect(PhoneUtils.formatE164('+91', '98765 43210'), '+919876543210');
+      expect(PhoneUtils.formatE164('+1', '+15559876543'), '+15559876543');
     });
 
     test('isValidE164 validates phone pattern', () {

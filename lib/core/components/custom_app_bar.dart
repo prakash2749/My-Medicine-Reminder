@@ -48,14 +48,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       final authProvider = context.watch<AuthProvider>();
       final user = authProvider.user;
       final userEmail = user?.email ?? 'user@notify.app';
-      final metadataName = (user?.userMetadata?['full_name'] as String?) ??
+      final metadataName =
+          (user?.userMetadata?['full_name'] as String?) ??
           (user?.userMetadata?['name'] as String?);
 
       final displayName = (metadataName != null && metadataName.isNotEmpty)
           ? metadataName
           : (user?.email != null && user!.email!.isNotEmpty
-              ? user.email!.split('@').first
-              : 'User');
+                ? user.email!.split('@').first
+                : 'User');
 
       effectiveTitle = title ?? displayName;
       effectiveSubtitle = subtitle ?? userEmail;

@@ -89,8 +89,9 @@ class _SplashViewState extends State<SplashView>
       return;
     }
 
-    final destination =
-        authProvider.isAuthenticated ? AppRoutes.authGate : AppRoutes.getStarted;
+    final destination = authProvider.isAuthenticated
+        ? AppRoutes.authGate
+        : AppRoutes.getStarted;
 
     context.go(destination);
   }
@@ -106,8 +107,9 @@ class _SplashViewState extends State<SplashView>
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bgColor =
-        isDark ? AppColors.backgroundDark : AppColors.backgroundLight;
+    final bgColor = isDark
+        ? AppColors.backgroundDark
+        : AppColors.backgroundLight;
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -129,13 +131,15 @@ class _SplashViewState extends State<SplashView>
                           height: 140,
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color:
-                                isDark ? AppColors.surfaceDark : Colors.white,
+                            color: isDark
+                                ? AppColors.surfaceDark
+                                : Colors.white,
                             borderRadius: BorderRadius.circular(32),
                             boxShadow: [
                               BoxShadow(
-                                color:
-                                    AppColors.primary.withValues(alpha: 0.18),
+                                color: AppColors.primary.withValues(
+                                  alpha: 0.18,
+                                ),
                                 blurRadius: 24,
                                 offset: const Offset(0, 10),
                               ),

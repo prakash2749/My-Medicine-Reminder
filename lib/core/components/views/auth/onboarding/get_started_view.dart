@@ -13,8 +13,9 @@ class GetStartedView extends StatelessWidget {
       builder: (ctx) {
         final isDark = Theme.of(ctx).brightness == Brightness.dark;
         return AlertDialog(
-          backgroundColor:
-              isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+          backgroundColor: isDark
+              ? AppColors.surfaceDark
+              : AppColors.surfaceLight,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -62,8 +63,9 @@ class GetStartedView extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor:
-          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
+      backgroundColor: isDark
+          ? AppColors.backgroundDark
+          : AppColors.backgroundLight,
       body: SafeArea(
         child: Column(
           children: [
@@ -192,7 +194,7 @@ class GetStartedView extends StatelessWidget {
                     height: 52,
                     child: ElevatedButton(
                       onPressed: () {
-                        context.go(AppRoutes.login);
+                        context.go(AppRoutes.personalInfo);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,

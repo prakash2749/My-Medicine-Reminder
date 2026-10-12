@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:medicine_reminder/core/constants/app_colors.dart';
 import 'package:medicine_reminder/core/routes/app_routes.dart';
@@ -73,10 +74,7 @@ class _VerifyEmailStepViewState extends State<VerifyEmailStepView> {
 
   void _handleVerified() {
     // Navigate into main application
-    Navigator.of(context).pushNamedAndRemoveUntil(
-      AppRoutes.authGate,
-      (route) => false,
-    );
+    context.go(AppRoutes.authGate);
   }
 
   @override
@@ -86,8 +84,9 @@ class _VerifyEmailStepViewState extends State<VerifyEmailStepView> {
     final email = signup.email.isNotEmpty ? signup.email : 'your email';
 
     return Scaffold(
-      backgroundColor:
-          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
+      backgroundColor: isDark
+          ? AppColors.backgroundDark
+          : AppColors.backgroundLight,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -203,7 +202,7 @@ class _VerifyEmailStepViewState extends State<VerifyEmailStepView> {
                     ],
 
                     TextButton.icon(
-                      onPressed: () => Navigator.of(context).pop(),
+                      onPressed: () => context.pop(),
                       icon: const Icon(Icons.edit_outlined, size: 16),
                       label: const Text('Change email'),
                       style: TextButton.styleFrom(
@@ -268,8 +267,8 @@ class _VerifyEmailStepViewState extends State<VerifyEmailStepView> {
                                 fontWeight: FontWeight.w600,
                                 color: _cooldownSeconds > 0
                                     ? (isDark
-                                        ? AppColors.textSecondaryDark
-                                        : AppColors.textSecondaryLight)
+                                          ? AppColors.textSecondaryDark
+                                          : AppColors.textSecondaryLight)
                                     : AppColors.primary,
                               ),
                             ),

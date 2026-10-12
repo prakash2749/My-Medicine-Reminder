@@ -12,14 +12,46 @@ select has_table('public', 'care_circle_members', 'public.care_circle_members ta
 select has_table('public', 'care_circle_invites', 'public.care_circle_invites table should exist');
 
 -- 2. Test Row Level Security (RLS) is enabled on all tables
-select tests.rls_enabled('public', 'profiles');
-select tests.rls_enabled('public', 'routine_times');
-select tests.rls_enabled('public', 'onboarding_questions');
-select tests.rls_enabled('public', 'onboarding_answers');
-select tests.rls_enabled('public', 'medication_schedules');
-select tests.rls_enabled('public', 'schedule_slots');
-select tests.rls_enabled('public', 'care_circle_members');
-select tests.rls_enabled('public', 'care_circle_invites');
+select results_eq(
+    $$select rowsecurity from pg_tables where schemaname = 'public' and tablename = 'profiles'$$,
+    ARRAY[true],
+    'RLS should be enabled on public.profiles'
+);
+select results_eq(
+    $$select rowsecurity from pg_tables where schemaname = 'public' and tablename = 'routine_times'$$,
+    ARRAY[true],
+    'RLS should be enabled on public.routine_times'
+);
+select results_eq(
+    $$select rowsecurity from pg_tables where schemaname = 'public' and tablename = 'onboarding_questions'$$,
+    ARRAY[true],
+    'RLS should be enabled on public.onboarding_questions'
+);
+select results_eq(
+    $$select rowsecurity from pg_tables where schemaname = 'public' and tablename = 'onboarding_answers'$$,
+    ARRAY[true],
+    'RLS should be enabled on public.onboarding_answers'
+);
+select results_eq(
+    $$select rowsecurity from pg_tables where schemaname = 'public' and tablename = 'medication_schedules'$$,
+    ARRAY[true],
+    'RLS should be enabled on public.medication_schedules'
+);
+select results_eq(
+    $$select rowsecurity from pg_tables where schemaname = 'public' and tablename = 'schedule_slots'$$,
+    ARRAY[true],
+    'RLS should be enabled on public.schedule_slots'
+);
+select results_eq(
+    $$select rowsecurity from pg_tables where schemaname = 'public' and tablename = 'care_circle_members'$$,
+    ARRAY[true],
+    'RLS should be enabled on public.care_circle_members'
+);
+select results_eq(
+    $$select rowsecurity from pg_tables where schemaname = 'public' and tablename = 'care_circle_invites'$$,
+    ARRAY[true],
+    'RLS should be enabled on public.care_circle_invites'
+);
 
 -- 3. Verify onboarding_questions seed rows (5 questions)
 select results_eq(

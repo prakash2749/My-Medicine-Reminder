@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:medicine_reminder/core/constants/app_colors.dart';
 import 'package:medicine_reminder/core/constants/app_language.dart';
 import 'package:medicine_reminder/core/routes/app_routes.dart';
 import 'package:medicine_reminder/core/utils/date_time_utils.dart';
 import 'package:medicine_reminder/providers/signup_provider.dart';
+
 import 'widgets/onboarding_step_header.dart';
 
 class PersonalInfoStepView extends StatefulWidget {
@@ -119,8 +121,8 @@ class _PersonalInfoStepViewState extends State<PersonalInfoStepView> {
                         color: isSelected
                             ? AppColors.primary
                             : (isDark
-                                ? AppColors.cardDark
-                                : AppColors.tagBgLight),
+                                  ? AppColors.cardDark
+                                  : AppColors.tagBgLight),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -133,13 +135,14 @@ class _PersonalInfoStepViewState extends State<PersonalInfoStepView> {
                       g,
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight:
-                            isSelected ? FontWeight.w700 : FontWeight.w500,
+                        fontWeight: isSelected
+                            ? FontWeight.w700
+                            : FontWeight.w500,
                         color: isSelected
                             ? (isDark ? AppColors.accent : AppColors.primary)
                             : (isDark
-                                ? AppColors.textPrimaryDark
-                                : AppColors.textPrimaryLight),
+                                  ? AppColors.textPrimaryDark
+                                  : AppColors.textPrimaryLight),
                       ),
                     ),
                     trailing: isSelected
@@ -168,13 +171,14 @@ class _PersonalInfoStepViewState extends State<PersonalInfoStepView> {
 
     setState(() {
       _nameError = name.isEmpty ? 'Please enter your name.' : null;
-      _birthDateError =
-          signup.birthDate == null ? 'Please select your birth date.' : null;
+      _birthDateError = signup.birthDate == null
+          ? 'Please select your birth date.'
+          : null;
     });
 
     if (_nameError == null && _birthDateError == null) {
       signup.setName(name);
-      Navigator.of(context).pushNamed(AppRoutes.purpose);
+      context.push(AppRoutes.purpose);
     }
   }
 
@@ -184,8 +188,9 @@ class _PersonalInfoStepViewState extends State<PersonalInfoStepView> {
     final signup = context.watch<SignupProvider>();
 
     return Scaffold(
-      backgroundColor:
-          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
+      backgroundColor: isDark
+          ? AppColors.backgroundDark
+          : AppColors.backgroundLight,
       body: SafeArea(
         child: Column(
           children: [
@@ -201,7 +206,7 @@ class _PersonalInfoStepViewState extends State<PersonalInfoStepView> {
                     OnboardingStepHeader(
                       currentStep: 1,
                       totalSteps: 4,
-                      onBack: () => Navigator.of(context).pop(),
+                      onBack: () => context.pop(),
                       title: 'Let’s get to know you.',
                       subtitle: 'A few details to make Notify feel like yours.',
                     ),
@@ -308,8 +313,8 @@ class _PersonalInfoStepViewState extends State<PersonalInfoStepView> {
                             color: _birthDateError != null
                                 ? AppColors.error
                                 : (isDark
-                                    ? AppColors.borderDark
-                                    : AppColors.borderLight),
+                                      ? AppColors.borderDark
+                                      : AppColors.borderLight),
                           ),
                         ),
                         child: Row(
@@ -329,12 +334,12 @@ class _PersonalInfoStepViewState extends State<PersonalInfoStepView> {
                                   fontSize: 15,
                                   color: signup.birthDate != null
                                       ? (isDark
-                                          ? AppColors.textPrimaryDark
-                                          : AppColors.textPrimaryLight)
+                                            ? AppColors.textPrimaryDark
+                                            : AppColors.textPrimaryLight)
                                       : (isDark
-                                          ? AppColors.textSecondaryDark
-                                          : AppColors.textSecondaryLight
-                                              .withValues(alpha: 0.6)),
+                                            ? AppColors.textSecondaryDark
+                                            : AppColors.textSecondaryLight
+                                                  .withValues(alpha: 0.6)),
                                 ),
                               ),
                             ),
@@ -419,12 +424,12 @@ class _PersonalInfoStepViewState extends State<PersonalInfoStepView> {
                                   fontSize: 15,
                                   color: signup.gender != null
                                       ? (isDark
-                                          ? AppColors.textPrimaryDark
-                                          : AppColors.textPrimaryLight)
+                                            ? AppColors.textPrimaryDark
+                                            : AppColors.textPrimaryLight)
                                       : (isDark
-                                          ? AppColors.textSecondaryDark
-                                          : AppColors.textSecondaryLight
-                                              .withValues(alpha: 0.6)),
+                                            ? AppColors.textSecondaryDark
+                                            : AppColors.textSecondaryLight
+                                                  .withValues(alpha: 0.6)),
                                 ),
                               ),
                             ),
@@ -470,18 +475,18 @@ class _PersonalInfoStepViewState extends State<PersonalInfoStepView> {
                                 decoration: BoxDecoration(
                                   color: isSelected
                                       ? (isDark
-                                          ? AppColors.tagBgDark
-                                          : AppColors.tagBgLight)
+                                            ? AppColors.tagBgDark
+                                            : AppColors.tagBgLight)
                                       : (isDark
-                                          ? AppColors.surfaceDark
-                                          : AppColors.surfaceLight),
+                                            ? AppColors.surfaceDark
+                                            : AppColors.surfaceLight),
                                   borderRadius: BorderRadius.circular(14),
                                   border: Border.all(
                                     color: isSelected
                                         ? AppColors.primary
                                         : (isDark
-                                            ? AppColors.borderDark
-                                            : AppColors.borderLight),
+                                              ? AppColors.borderDark
+                                              : AppColors.borderLight),
                                     width: isSelected ? 1.8 : 1.0,
                                   ),
                                 ),
@@ -497,11 +502,11 @@ class _PersonalInfoStepViewState extends State<PersonalInfoStepView> {
                                             : FontWeight.w500,
                                         color: isSelected
                                             ? (isDark
-                                                ? AppColors.accent
-                                                : AppColors.primary)
+                                                  ? AppColors.accent
+                                                  : AppColors.primary)
                                             : (isDark
-                                                ? AppColors.textPrimaryDark
-                                                : AppColors.textPrimaryLight),
+                                                  ? AppColors.textPrimaryDark
+                                                  : AppColors.textPrimaryLight),
                                       ),
                                     ),
                                     const SizedBox(height: 2),
@@ -511,11 +516,12 @@ class _PersonalInfoStepViewState extends State<PersonalInfoStepView> {
                                         fontSize: 11,
                                         color: isSelected
                                             ? (isDark
-                                                ? AppColors.accent
-                                                : AppColors.primary)
+                                                  ? AppColors.accent
+                                                  : AppColors.primary)
                                             : (isDark
-                                                ? AppColors.textSecondaryDark
-                                                : AppColors.textSecondaryLight),
+                                                  ? AppColors.textSecondaryDark
+                                                  : AppColors
+                                                        .textSecondaryLight),
                                       ),
                                     ),
                                   ],

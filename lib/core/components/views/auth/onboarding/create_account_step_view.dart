@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:medicine_reminder/core/constants/app_colors.dart';
 import 'package:medicine_reminder/core/routes/app_routes.dart';
@@ -93,7 +94,7 @@ class _CreateAccountStepViewState extends State<CreateAccountStepView> {
           }
         }
         if (!mounted) return;
-        Navigator.of(context).pushReplacementNamed(AppRoutes.authGate);
+        context.go(AppRoutes.authGate);
       } else {
         setState(() {
           _localError = result.errorMessage ?? 'Failed to create account.';
@@ -114,8 +115,9 @@ class _CreateAccountStepViewState extends State<CreateAccountStepView> {
     final signup = context.watch<SignupProvider>();
 
     return Scaffold(
-      backgroundColor:
-          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
+      backgroundColor: isDark
+          ? AppColors.backgroundDark
+          : AppColors.backgroundLight,
       body: SafeArea(
         child: Column(
           children: [
@@ -133,7 +135,7 @@ class _CreateAccountStepViewState extends State<CreateAccountStepView> {
                       children: [
                         IconButton(
                           icon: const Icon(Icons.arrow_back),
-                          onPressed: () => Navigator.of(context).pop(),
+                          onPressed: () => context.pop(),
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(),
                           color: isDark
@@ -270,10 +272,9 @@ class _CreateAccountStepViewState extends State<CreateAccountStepView> {
                                 : AppColors.borderLight,
                           ),
                         ),
-                        errorText:
-                            (_submittedOnce && !signup.isEmailValid)
-                                ? 'Invalid email format'
-                                : null,
+                        errorText: (_submittedOnce && !signup.isEmailValid)
+                            ? 'Invalid email format'
+                            : null,
                       ),
                       onChanged: (val) {
                         signup.setEmail(val);
@@ -409,8 +410,9 @@ class _CreateAccountStepViewState extends State<CreateAccountStepView> {
                     width: double.infinity,
                     height: 52,
                     child: ElevatedButton(
-                      onPressed:
-                          signup.isSubmitting ? null : _handleCreateAccount,
+                      onPressed: signup.isSubmitting
+                          ? null
+                          : _handleCreateAccount,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
@@ -452,7 +454,7 @@ class _CreateAccountStepViewState extends State<CreateAccountStepView> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.of(context).pushNamed(AppRoutes.login);
+                          context.go(AppRoutes.login);
                         },
                         child: const Text(
                           'Log in',
@@ -499,8 +501,8 @@ class _CreateAccountStepViewState extends State<CreateAccountStepView> {
             color: satisfied
                 ? (isDark ? AppColors.accent : AppColors.primary)
                 : (isDark
-                    ? AppColors.textSecondaryDark
-                    : AppColors.textSecondaryLight),
+                      ? AppColors.textSecondaryDark
+                      : AppColors.textSecondaryLight),
           ),
         ),
       ],

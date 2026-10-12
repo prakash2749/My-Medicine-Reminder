@@ -19,9 +19,7 @@ class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _nameController = TextEditingController();
 
-  bool _isSignUp = false;
   bool _obscurePassword = true;
   String? _localError;
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
@@ -30,7 +28,6 @@ class _LoginViewState extends State<LoginView> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
-    _nameController.dispose();
     super.dispose();
   }
 
@@ -45,55 +42,37 @@ class _LoginViewState extends State<LoginView> {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
-    if (_isSignUp) {
-      final result = await auth.signUp(
-        email: email,
-        password: password,
-        fullName: _nameController.text.trim(),
-      );
+    final result = await auth.signIn(email: email, password: password);
 
-      if (!mounted) return;
+    if (!mounted) return;
 
-      if (result.success) {
-        context.go(AppRoutes.authGate);
-      } else {
-        setState(
-          () => _localError = result.errorMessage ?? 'Registration failed',
-        );
-      }
+    if (result.success) {
+      context.go(AppRoutes.authGate);
     } else {
-      final result = await auth.signIn(email: email, password: password);
+      final errorMsg = result.errorMessage ?? 'Authentication failed';
+      setState(() => _localError = errorMsg);
 
-      if (!mounted) return;
-
-      if (result.success) {
-        context.go(AppRoutes.authGate);
+      if (result.needsEmailVerification) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Email unverified. Check inbox or resend.'),
+            action: SnackBarAction(
+              label: 'Resend',
+              textColor: Colors.white,
+              onPressed: () => _handleResendVerification(email),
+            ),
+            backgroundColor: AppColors.primary,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
       } else {
-        final errorMsg = result.errorMessage ?? 'Authentication failed';
-        setState(() => _localError = errorMsg);
-
-        if (result.needsEmailVerification) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: const Text('Email unverified. Check inbox or resend.'),
-              action: SnackBarAction(
-                label: 'Resend',
-                textColor: Colors.white,
-                onPressed: () => _handleResendVerification(email),
-              ),
-              backgroundColor: AppColors.primary,
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(errorMsg),
-              backgroundColor: AppColors.error,
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
-        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMsg),
+            backgroundColor: AppColors.error,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
       }
     }
   }
@@ -112,75 +91,6 @@ class _LoginViewState extends State<LoginView> {
         ),
         backgroundColor: sent ? AppColors.primary : AppColors.error,
         behavior: SnackBarBehavior.floating,
-      ),
-    );
-  }
-
-  void _showEmailVerificationDialog(String email) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Row(
-          children: const [
-            Icon(
-              Icons.mark_email_read_outlined,
-              color: AppColors.primary,
-              size: 28,
-            ),
-            SizedBox(width: 10),
-            Text('Verify Your Email'),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'We sent a verification link to:\n$email',
-              style: const TextStyle(
-                fontSize: 14.5,
-                height: 1.4,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 12),
-            const Text(
-              'Please check your inbox and tap the link to confirm your account before logging in.',
-              style: TextStyle(
-                fontSize: 13.5,
-                height: 1.4,
-                color: AppColors.textSecondaryLight,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-              _handleResendVerification(email);
-            },
-            child: const Text('Resend Email'),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(110, 42),
-              padding: const EdgeInsets.symmetric(horizontal: 18),
-            ),
-            onPressed: () {
-              Navigator.pop(ctx);
-              setState(() {
-                _isSignUp = false;
-                _localError = null;
-                _autovalidateMode = AutovalidateMode.disabled;
-              });
-              _formKey.currentState?.reset();
-            },
-            child: const Text('Go to Log In'),
-          ),
-        ],
       ),
     );
   }
@@ -287,9 +197,7 @@ class _LoginViewState extends State<LoginView> {
 
                     // Header Title
                     Text(
-                      _isSignUp
-                          ? AppStrings.createAccountTitle
-                          : AppStrings.welcomeBack,
+                      AppStrings.welcomeBack,
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.w800,
@@ -302,9 +210,7 @@ class _LoginViewState extends State<LoginView> {
 
                     // Header Subtitle
                     Text(
-                      _isSignUp
-                          ? AppStrings.createAccountSubtitle
-                          : AppStrings.loginSubtitle,
+                      AppStrings.loginSubtitle,
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
@@ -351,40 +257,6 @@ class _LoginViewState extends State<LoginView> {
                           ],
                         ),
                       ),
-                    ],
-
-                    // Sign Up: Full Name Field
-                    if (_isSignUp) ...[
-                      Text(
-                        AppStrings.fullNameLabel,
-                        style: TextStyle(
-                          fontSize: 13.5,
-                          fontWeight: FontWeight.w600,
-                          color: textPrimary,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        controller: _nameController,
-                        textInputAction: TextInputAction.next,
-                        style: TextStyle(color: textPrimary, fontSize: 15),
-                        decoration: const InputDecoration(
-                          hintText: AppStrings.fullNamePlaceholder,
-                          prefixIcon: Icon(Icons.person_outline, size: 20),
-                        ),
-                        onChanged: (_) {
-                          if (_localError != null) {
-                            setState(() => _localError = null);
-                          }
-                        },
-                        validator: (val) {
-                          if (val == null || val.trim().isEmpty) {
-                            return 'Please enter your name';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 18),
                     ],
 
                     // Email Field
@@ -436,29 +308,28 @@ class _LoginViewState extends State<LoginView> {
                             color: textPrimary,
                           ),
                         ),
-                        if (!_isSignUp)
-                          InkWell(
-                            onTap: () {
-                              context.push(AppRoutes.forgotPassword);
-                            },
-                            borderRadius: BorderRadius.circular(4),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 4,
-                                vertical: 2,
-                              ),
-                              child: Text(
-                                AppStrings.forgotPassword,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                  color: isDark
-                                      ? AppColors.accent
-                                      : AppColors.primary,
-                                ),
+                        InkWell(
+                          onTap: () {
+                            context.push(AppRoutes.forgotPassword);
+                          },
+                          borderRadius: BorderRadius.circular(4),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 4,
+                              vertical: 2,
+                            ),
+                            child: Text(
+                              AppStrings.forgotPassword,
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: isDark
+                                    ? AppColors.accent
+                                    : AppColors.primary,
                               ),
                             ),
                           ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 8),
@@ -469,9 +340,7 @@ class _LoginViewState extends State<LoginView> {
                       onFieldSubmitted: (_) => _handleAuthSubmit(),
                       style: TextStyle(color: textPrimary, fontSize: 15),
                       decoration: InputDecoration(
-                        hintText: _isSignUp
-                            ? 'Create a strong password'
-                            : '••••••••••',
+                        hintText: '••••••••••',
                         prefixIcon: const Icon(
                           Icons.lock_outline_rounded,
                           size: 20,
@@ -509,7 +378,7 @@ class _LoginViewState extends State<LoginView> {
 
                     const SizedBox(height: 24),
 
-                    // Primary Action: Log In / Create Account Button
+                    // Primary Action: Log In Button
                     SizedBox(
                       width: double.infinity,
                       height: 52,
@@ -535,9 +404,7 @@ class _LoginViewState extends State<LoginView> {
                                 ),
                               )
                             : Text(
-                                _isSignUp
-                                    ? AppStrings.createAccount
-                                    : AppStrings.logIn,
+                                AppStrings.logIn,
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w700,
