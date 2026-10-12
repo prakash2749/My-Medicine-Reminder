@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:medicine_reminder/core/constants/app_colors.dart';
@@ -56,8 +57,7 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
       );
 
       // Navigate to Home or AuthGate
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil(AppRoutes.home, (route) => false);
+      context.go(AppRoutes.home);
     } else {
       setState(() {
         _errorMessage =
@@ -367,10 +367,7 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
                       child: TextButton(
                         onPressed: () {
                           authProvider.clearPasswordRecovery();
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                            AppRoutes.login,
-                            (route) => false,
-                          );
+                          context.go(AppRoutes.login);
                         },
                         child: Text(
                           AppStrings.backToLogin,

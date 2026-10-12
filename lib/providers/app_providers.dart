@@ -3,6 +3,7 @@ import 'package:provider/single_child_widget.dart';
 
 import 'auth_provider.dart';
 import 'medicine_reminder_provider.dart';
+import 'signup_provider.dart';
 import 'theme_provider.dart';
 
 /// Centralized registry for all Provider state management classes.
@@ -19,6 +20,7 @@ class AppProviders {
       lazy: false,
       create: (_) => AuthProvider(),
     ),
+    ChangeNotifierProvider<SignupProvider>(create: (_) => SignupProvider()),
     ChangeNotifierProvider<MedicineReminderProvider>(
       create: (_) => MedicineReminderProvider(),
     ),

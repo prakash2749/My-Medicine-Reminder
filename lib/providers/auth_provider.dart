@@ -51,10 +51,7 @@ class AuthProvider extends ChangeNotifier {
           }
           if (data.event == AuthChangeEvent.passwordRecovery) {
             _isPasswordRecovery = true;
-            AppRoutes.navigatorKey.currentState?.pushNamedAndRemoveUntil(
-              AppRoutes.updatePassword,
-              (route) => false,
-            );
+            AppRoutes.router.go(AppRoutes.updatePassword);
           } else if (data.event == AuthChangeEvent.signedOut) {
             _isPasswordRecovery = false;
           }

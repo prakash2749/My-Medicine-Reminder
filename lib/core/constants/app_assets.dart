@@ -6,4 +6,10 @@ class AppAssets {
 
   /// Compact icon/favicon (used in AppBar, notifications, badges)
   static const String appIcon = 'assets/favicon.png';
+
+  /// Companion launch animation video
+  static const String launchVideo = 'assets/Notify_Launch.mp4';
+
+  /// Welcome banner image for Get Started screen
+  static const String banner = 'assets/banner.png';
 }

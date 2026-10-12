@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:video_player/video_player.dart';
 import 'package:medicine_reminder/core/constants/app_assets.dart';
 import 'package:medicine_reminder/core/constants/app_colors.dart';
 import 'package:medicine_reminder/core/constants/app_strings.dart';
@@ -17,139 +19,188 @@ class SplashView extends StatefulWidget {
 
 class _SplashViewState extends State<SplashView>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
+  VideoPlayerController? _videoController;
+  bool _isVideoInitialized = false;
+  bool _hasNavigated = false;
+
+  late AnimationController _fadeAnimController;
   late Animation<double> _fadeAnimation;
-  Timer? _navigationTimer;
+  Timer? _maxSplashTimer;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+
+    _fadeAnimController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 600),
+    );
+    _fadeAnimation = CurvedAnimation(
+      parent: _fadeAnimController,
+      curve: Curves.easeInOut,
     );
 
-    _scaleAnimation = Tween<double>(
-      begin: 0.8,
-      end: 1.0,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
+    _fadeAnimController.forward();
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
+    _initVideo();
 
-    _controller.forward();
+    // Fallback timer: if video doesn't play or takes too long, navigate after 3.5 seconds
+    _maxSplashTimer = Timer(const Duration(milliseconds: 3500), () {
+      _navigateToNextScreen();
+    });
+  }
 
-    _navigationTimer = Timer(const Duration(milliseconds: 2000), () {
+  Future<void> _initVideo() async {
+    try {
+      final controller = VideoPlayerController.asset(AppAssets.launchVideo);
+      _videoController = controller;
+      await controller.initialize();
       if (!mounted) return;
 
-      final authProvider = context.read<AuthProvider>();
-      if (authProvider.isPasswordRecovery) {
-        Navigator.of(context).pushReplacementNamed(AppRoutes.updatePassword);
-        return;
-      }
+      setState(() {
+        _isVideoInitialized = true;
+      });
 
-      // If another route was already opened on top of Splash (e.g. via deep link), don't overwrite it
-      if (ModalRoute.of(context)?.isCurrent == false) {
-        return;
-      }
+      controller.setLooping(false);
+      controller.setVolume(0.0);
+      await controller.play();
 
-      Navigator.of(context).pushReplacementNamed(AppRoutes.authGate);
-    });
+      controller.addListener(() {
+        if (!mounted || _hasNavigated) return;
+        final pos = controller.value.position;
+        final dur = controller.value.duration;
+        if (dur > Duration.zero && pos >= dur) {
+          _navigateToNextScreen();
+        }
+      });
+    } catch (e) {
+      debugPrint('Video launch animation fallback to static splash: $e');
+      // Timer will trigger navigation
+    }
+  }
+
+  void _navigateToNextScreen() {
+    if (_hasNavigated || !mounted) return;
+    _hasNavigated = true;
+
+    final authProvider = context.read<AuthProvider>();
+    if (authProvider.isPasswordRecovery) {
+      context.go(AppRoutes.updatePassword);
+      return;
+    }
+
+    final destination = authProvider.isAuthenticated
+        ? AppRoutes.authGate
+        : AppRoutes.getStarted;
+
+    context.go(destination);
   }
 
   @override
   void dispose() {
-    _navigationTimer?.cancel();
-    _controller.dispose();
+    _maxSplashTimer?.cancel();
+    _videoController?.dispose();
+    _fadeAnimController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark
+        ? AppColors.backgroundDark
+        : AppColors.backgroundLight;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? AppColors.backgroundDark
-          : AppColors.backgroundLight,
-      body: SafeArea(
-        child: Center(
-          child: FadeTransition(
-            opacity: _fadeAnimation,
-            child: ScaleTransition(
-              scale: _scaleAnimation,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 140,
-                    height: 140,
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: isDark ? AppColors.surfaceDark : Colors.white,
-                      borderRadius: BorderRadius.circular(32),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primary.withValues(alpha: 0.18),
-                          blurRadius: 24,
-                          offset: const Offset(0, 10),
+      backgroundColor: bgColor,
+      body: Stack(
+        children: [
+          Center(
+            child: FadeTransition(
+              opacity: _fadeAnimation,
+              child: _isVideoInitialized && _videoController != null
+                  ? AspectRatio(
+                      aspectRatio: _videoController!.value.aspectRatio,
+                      child: VideoPlayer(_videoController!),
+                    )
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 140,
+                          height: 140,
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: isDark
+                                ? AppColors.surfaceDark
+                                : Colors.white,
+                            borderRadius: BorderRadius.circular(32),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.primary.withValues(
+                                  alpha: 0.18,
+                                ),
+                                blurRadius: 24,
+                                offset: const Offset(0, 10),
+                              ),
+                            ],
+                          ),
+                          child: Image.asset(
+                            AppAssets.appLogo,
+                            fit: BoxFit.contain,
+                            errorBuilder: (_, _, _) {
+                              return const Icon(
+                                Icons.medication,
+                                size: 72,
+                                color: AppColors.primary,
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 28),
+                        Text(
+                          AppStrings.appName,
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -0.5,
+                            color: isDark
+                                ? AppColors.textPrimaryDark
+                                : AppColors.textPrimaryLight,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          AppStrings.appTagline,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: isDark
+                                ? AppColors.textSecondaryDark
+                                : AppColors.textSecondaryLight,
+                          ),
                         ),
                       ],
                     ),
-                    child: Image.asset(
-                      AppAssets.appLogo,
-                      fit: BoxFit.contain,
-                      errorBuilder: (_, _, _) {
-                        return const Icon(
-                          Icons.medication,
-                          size: 72,
-                          color: AppColors.primary,
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 28),
-                  Text(
-                    AppStrings.appName,
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: -0.5,
-                      color: isDark
-                          ? AppColors.textPrimaryDark
-                          : AppColors.textPrimaryLight,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    AppStrings.appTagline,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: isDark
-                          ? AppColors.textSecondaryDark
-                          : AppColors.textSecondaryLight,
-                    ),
-                  ),
-                  const SizedBox(height: 48),
-                  const SizedBox(
-                    width: 26,
-                    height: 26,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2.5,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        AppColors.primary,
-                      ),
-                    ),
-                  ),
-                ],
+            ),
+          ),
+          Positioned(
+            top: 48,
+            right: 20,
+            child: TextButton(
+              onPressed: _navigateToNextScreen,
+              style: TextButton.styleFrom(
+                foregroundColor: isDark
+                    ? AppColors.textSecondaryDark
+                    : AppColors.textSecondaryLight,
+              ),
+              child: const Text(
+                'Skip',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

@@ -24,10 +24,7 @@ Future<void> main() async {
     // 1. Supabase auth stream listener: Capture recovery auth state
     Supabase.instance.client.auth.onAuthStateChange.listen((data) {
       if (data.event == AuthChangeEvent.passwordRecovery) {
-        AppRoutes.navigatorKey.currentState?.pushNamedAndRemoveUntil(
-          AppRoutes.updatePassword,
-          (route) => false,
-        );
+        AppRoutes.router.go(AppRoutes.updatePassword);
       }
     });
 
@@ -49,16 +46,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeProvider = context.watch<ThemeProvider>();
 
-    return MaterialApp(
-      navigatorKey: AppRoutes.navigatorKey,
+    return MaterialApp.router(
+      routerConfig: AppRoutes.router,
       title: AppStrings.appName,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeProvider.themeMode,
-      initialRoute: AppRoutes.initial,
-      routes: AppRoutes.routes,
-      onGenerateRoute: AppRoutes.onGenerateRoute,
     );
   }
 }
@@ -79,10 +73,7 @@ void _setupDeepLinkHandler() {
         debugPrint('getSessionFromUrl error: $e');
       }
 
-      AppRoutes.navigatorKey.currentState?.pushNamedAndRemoveUntil(
-        AppRoutes.updatePassword,
-        (route) => false,
-      );
+      AppRoutes.router.go(AppRoutes.updatePassword);
     }
   }
 

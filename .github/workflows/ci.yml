@@ -29,7 +29,6 @@ jobs:
 
   database:
     name: Database regression
-    if: false # Disabled temporarily while focusing on Flutter test suite; re-enable when Supabase DB tests are added
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

@@ -3,8 +3,6 @@ import 'package:medicine_reminder/core/components/custom_app_bar.dart';
 import 'package:medicine_reminder/core/constants/app_assets.dart';
 import 'package:medicine_reminder/core/constants/app_colors.dart';
 import 'package:medicine_reminder/core/constants/app_strings.dart';
-import 'package:medicine_reminder/core/routes/app_routes.dart';
-import 'package:medicine_reminder/providers/auth_provider.dart';
 import 'package:medicine_reminder/providers/medicine_reminder_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -31,23 +29,8 @@ class MedicineView extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      // Centralized Reusable AppBar with Logo & Theme Toggle
-      appBar: CustomAppBar(
-        title: AppStrings.medicinesTitle,
-        subtitle: AppStrings.appTagline,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout_rounded, size: 20),
-            tooltip: 'Log out',
-            onPressed: () async {
-              await context.read<AuthProvider>().signOut();
-              if (context.mounted) {
-                Navigator.of(context).pushReplacementNamed(AppRoutes.authGate);
-              }
-            },
-          ),
-        ],
-      ),
+      // Centralized Reusable AppBar with Current User & Theme Toggle (defaults to true)
+      appBar: const CustomAppBar(),
       body: Column(
         children: [
           // 1. Adherence / Stats Header Card
@@ -123,7 +106,70 @@ class MedicineView extends StatelessWidget {
             },
           ),
 
-          // 2. Search & Filter Bar
+          // 2. Center Upcoming Section
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(
+                        Icons.schedule_rounded,
+                        color: AppColors.primary,
+                        size: 18,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Upcoming',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: isDark
+                            ? AppColors.textPrimaryDark
+                            : AppColors.textPrimaryLight,
+                      ),
+                    ),
+                  ],
+                ),
+                Consumer<MedicineReminderProvider>(
+                  builder: (context, provider, _) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 3,
+                      ),
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? AppColors.surfaceDark
+                            : AppColors.tagBgLight,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        '${provider.pendingCount} pending',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: isDark
+                              ? AppColors.tagTextDark
+                              : AppColors.tagTextLight,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+
+          // 3. Search & Filter Bar
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
