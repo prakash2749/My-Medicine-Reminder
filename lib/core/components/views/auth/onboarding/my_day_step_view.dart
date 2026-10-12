@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:medicine_reminder/core/components/shared/shared.dart';
 import 'package:medicine_reminder/core/constants/app_colors.dart';
 import 'package:medicine_reminder/core/routes/app_routes.dart';
 import 'package:medicine_reminder/core/utils/date_time_utils.dart';
@@ -19,23 +20,9 @@ class MyDayStepView extends StatelessWidget {
     required TimeOfDay initialTime,
     required ValueChanged<TimeOfDay> onSelected,
   }) async {
-    final picked = await showTimePicker(
+    final picked = await showAppTimePicker(
       context: context,
       initialTime: initialTime,
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: AppColors.primary,
-              onPrimary: Colors.white,
-              onSurface: Theme.of(context).brightness == Brightness.dark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-            ),
-          ),
-          child: child!,
-        );
-      },
     );
 
     if (picked != null) {
