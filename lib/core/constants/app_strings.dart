@@ -3,7 +3,8 @@ class AppStrings {
 
   static const String appName = 'Notify';
   static const String appSubtitle = 'Medicine Assistant';
-  static const String appTagline = 'Stay healthy, never miss a dose';
+  static const String appTagline =
+      'Your medicine plan, recorded on your device';
 
   // Auth & Onboarding (Figma - Notify)
   static const String authTagLogin = 'NOTIFY / LOG IN';
@@ -39,7 +40,7 @@ class AppStrings {
   static const String fullNameLabel = 'Full name';
   static const String fullNamePlaceholder = 'Enter your full name';
   static const String termsNotice =
-      'By continuing, you agree to the Terms and Privacy Policy.';
+      'Accounts are optional. Read how account services use your data.';
 
   // Navigation & Headers
   static const String medicinesTitle = 'Today\'s Prescriptions';

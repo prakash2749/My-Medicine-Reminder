@@ -1,3 +1,5 @@
+import '../../continue_guest_button.dart';
+import '../policy_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -104,12 +106,10 @@ class _LoginViewState extends State<LoginView> {
     final authProvider = context.watch<AuthProvider>();
 
     final bg = isDark ? AppColors.backgroundDark : AppColors.backgroundLight;
-    final textPrimary = isDark
-        ? AppColors.textPrimaryDark
-        : AppColors.textPrimaryLight;
-    final textSecondary = isDark
-        ? AppColors.textSecondaryDark
-        : AppColors.textSecondaryLight;
+    final textPrimary =
+        isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
+    final textSecondary =
+        isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight;
 
     return Scaffold(
       backgroundColor: bg,
@@ -134,9 +134,8 @@ class _LoginViewState extends State<LoginView> {
                           height: 52,
                           padding: const EdgeInsets.all(9),
                           decoration: BoxDecoration(
-                            color: isDark
-                                ? AppColors.surfaceDark
-                                : Colors.white,
+                            color:
+                                isDark ? AppColors.surfaceDark : Colors.white,
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
                               color: isDark
@@ -163,7 +162,7 @@ class _LoginViewState extends State<LoginView> {
                           child: Image.asset(
                             AppAssets.appLogo,
                             fit: BoxFit.contain,
-                            errorBuilder: (_, _, _) => const Icon(
+                            errorBuilder: (_, __, ___) => const Icon(
                               Icons.medication_rounded,
                               color: AppColors.primary,
                               size: 26,
@@ -373,9 +372,8 @@ class _LoginViewState extends State<LoginView> {
                       width: double.infinity,
                       height: 52,
                       child: ElevatedButton(
-                        onPressed: authProvider.isLoading
-                            ? null
-                            : _handleAuthSubmit,
+                        onPressed:
+                            authProvider.isLoading ? null : _handleAuthSubmit,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
                           shape: RoundedRectangleBorder(
@@ -406,6 +404,8 @@ class _LoginViewState extends State<LoginView> {
 
                     const SizedBox(height: 24),
 
+                    const ContinueGuestButton(),
+                    const SizedBox(height: 16),
                     // Toggle Sign In / Create Account
                     Center(
                       child: Wrap(
@@ -422,7 +422,7 @@ class _LoginViewState extends State<LoginView> {
                           const SizedBox(width: 6),
                           GestureDetector(
                             onTap: () {
-                              context.go(AppRoutes.getStarted);
+                              context.go(AppRoutes.accountWelcome);
                             },
                             child: Text(
                               AppStrings.createAccount,
@@ -452,6 +452,7 @@ class _LoginViewState extends State<LoginView> {
                         ),
                       ),
                     ),
+                    const Center(child: PolicyLink()),
 
                     const SizedBox(height: 16),
                   ],

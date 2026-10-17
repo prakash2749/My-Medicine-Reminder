@@ -1,3 +1,4 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:medicine_reminder/core/routes/auth_gate.dart';
@@ -6,6 +7,9 @@ import 'package:medicine_reminder/providers/app_providers.dart';
 import 'package:medicine_reminder/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:medicine_reminder/core/services/medicine_store.dart';
+
+import 'support/medicine_fakes.dart';
 
 class FakeAuthService extends AuthService {
   User? _mockUser;
@@ -39,6 +43,7 @@ class FakeAuthService extends AuthService {
 }
 
 void main() {
+  setUp(() => SharedPreferences.setMockInitialValues({}));
   testWidgets('AuthGate renders LoginScreen when user is unauthenticated', (
     tester,
   ) async {
@@ -63,12 +68,11 @@ void main() {
 
     await tester.pumpWidget(
       MultiProvider(
-        providers: [
-          ...AppProviders.providers.where(
-            (p) => p is! ChangeNotifierProvider<AuthProvider>,
-          ),
-          ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
-        ],
+        providers: AppProviders.create(
+          auth: authProvider,
+          medicineStore: MemoryMedicineStore(),
+          medicineNotifications: FakeNotifications(),
+        ),
         child: const MaterialApp(home: AuthGate()),
       ),
     );
@@ -86,6 +90,7 @@ void main() {
     // Verify HomeScreen is now rendered
     expect(find.byType(HomeScreen), findsOneWidget);
     expect(find.byType(LoginScreen), findsNothing);
+    await tester.pumpWidget(const SizedBox.shrink());
   });
 
   testWidgets(
@@ -96,12 +101,11 @@ void main() {
 
       await tester.pumpWidget(
         MultiProvider(
-          providers: [
-            ...AppProviders.providers.where(
-              (p) => p is! ChangeNotifierProvider<AuthProvider>,
-            ),
-            ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
-          ],
+          providers: AppProviders.create(
+            auth: authProvider,
+            medicineStore: MemoryMedicineStore(),
+            medicineNotifications: FakeNotifications(),
+          ),
           child: const MaterialApp(home: AuthGate()),
         ),
       );
@@ -119,6 +123,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(HomeScreen), findsOneWidget);
       expect(find.byType(LoginScreen), findsNothing);
+      await tester.pumpWidget(const SizedBox.shrink());
     },
   );
 }

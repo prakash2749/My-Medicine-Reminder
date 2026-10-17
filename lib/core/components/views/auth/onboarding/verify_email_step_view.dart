@@ -103,7 +103,8 @@ class _VerifyEmailStepViewState extends State<VerifyEmailStepView> {
       );
     } else {
       setState(() {
-        _statusMessage = 'Your email is not verified yet. Please check your inbox or click the link sent to your email.';
+        _statusMessage =
+            'Your email is not verified yet. Please check your inbox or click the link sent to your email.';
       });
     }
   }
@@ -126,9 +127,8 @@ class _VerifyEmailStepViewState extends State<VerifyEmailStepView> {
     }
 
     return Scaffold(
-      backgroundColor: isDark
-          ? AppColors.backgroundDark
-          : AppColors.backgroundLight,
+      backgroundColor:
+          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -163,7 +163,6 @@ class _VerifyEmailStepViewState extends State<VerifyEmailStepView> {
                       ),
                     ),
                     const SizedBox(height: 28),
-
                     Text(
                       'Check your inbox',
                       style: TextStyle(
@@ -176,7 +175,6 @@ class _VerifyEmailStepViewState extends State<VerifyEmailStepView> {
                       ),
                     ),
                     const SizedBox(height: 12),
-
                     Text(
                       'Open the verification link we sent to:',
                       textAlign: TextAlign.center,
@@ -188,7 +186,6 @@ class _VerifyEmailStepViewState extends State<VerifyEmailStepView> {
                       ),
                     ),
                     const SizedBox(height: 4),
-
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 14,
@@ -210,7 +207,6 @@ class _VerifyEmailStepViewState extends State<VerifyEmailStepView> {
                       ),
                     ),
                     const SizedBox(height: 14),
-
                     if (signup.wantsCareCircle &&
                         signup.contactName.isNotEmpty) ...[
                       Padding(
@@ -228,7 +224,6 @@ class _VerifyEmailStepViewState extends State<VerifyEmailStepView> {
                       ),
                       const SizedBox(height: 16),
                     ],
-
                     if (_statusMessage != null) ...[
                       Text(
                         _statusMessage!,
@@ -242,7 +237,6 @@ class _VerifyEmailStepViewState extends State<VerifyEmailStepView> {
                       ),
                       const SizedBox(height: 12),
                     ],
-
                     TextButton.icon(
                       onPressed: () => context.pop(),
                       icon: const Icon(Icons.edit_outlined, size: 16),
@@ -267,9 +261,8 @@ class _VerifyEmailStepViewState extends State<VerifyEmailStepView> {
                       width: double.infinity,
                       height: 52,
                       child: ElevatedButton(
-                        onPressed: _isCheckingVerification
-                            ? null
-                            : _handleVerified,
+                        onPressed:
+                            _isCheckingVerification ? null : _handleVerified,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
                           foregroundColor: Colors.white,
@@ -320,8 +313,8 @@ class _VerifyEmailStepViewState extends State<VerifyEmailStepView> {
                                 fontWeight: FontWeight.w600,
                                 color: _cooldownSeconds > 0
                                     ? (isDark
-                                          ? AppColors.textSecondaryDark
-                                          : AppColors.textSecondaryLight)
+                                        ? AppColors.textSecondaryDark
+                                        : AppColors.textSecondaryLight)
                                     : AppColors.primary,
                               ),
                             ),

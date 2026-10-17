@@ -75,7 +75,7 @@ class OnboardingService {
           )
           .toList();
     } catch (e) {
-      debugPrint('Error fetching onboarding questions from Supabase: $e');
+      debugPrint('Error fetching onboarding questions from Supabase.');
       return defaultQuestions;
     }
   }
@@ -171,17 +171,16 @@ class OnboardingService {
           if (questionsList.isNotEmpty) {
             for (final selectedText in signupData.selectedPurposes) {
               // Match by question text or code
-              final match = questionsList
-                  .cast<Map<String, dynamic>>()
-                  .firstWhere(
-                    (q) =>
-                        q['question_text'] == selectedText ||
-                        _matchesQuestionCode(
-                          q['code'] as String?,
-                          selectedText,
-                        ),
-                    orElse: () => <String, dynamic>{},
-                  );
+              final match =
+                  questionsList.cast<Map<String, dynamic>>().firstWhere(
+                        (q) =>
+                            q['question_text'] == selectedText ||
+                            _matchesQuestionCode(
+                              q['code'] as String?,
+                              selectedText,
+                            ),
+                        orElse: () => <String, dynamic>{},
+                      );
 
               if (match.isNotEmpty && match['id'] != null) {
                 await supabase.from('onboarding_answers').upsert({
@@ -192,7 +191,7 @@ class OnboardingService {
             }
           }
         } catch (e) {
-          debugPrint('Error syncing onboarding_answers: $e');
+          debugPrint('Error syncing onboarding_answers.');
         }
       }
 
@@ -215,13 +214,13 @@ class OnboardingService {
             'status': 'pending',
           }, onConflict: 'user_id,phone_e164');
         } catch (e) {
-          debugPrint('Error syncing care_circle_members: $e');
+          debugPrint('Error syncing care_circle_members.');
         }
       }
 
       return true;
     } catch (e) {
-      debugPrint('OnboardingService.saveOnboardingProfile failed: $e');
+      debugPrint('OnboardingService.saveOnboardingProfile failed.');
       return false;
     }
   }
@@ -238,7 +237,7 @@ class OnboardingService {
       await supabase.from('profiles').update(updates).eq('id', userId);
       return true;
     } catch (e) {
-      debugPrint('OnboardingService.updateProfile error: $e');
+      debugPrint('OnboardingService.updateProfile error.');
       return false;
     }
   }
@@ -256,7 +255,7 @@ class OnboardingService {
           .maybeSingle();
       return res;
     } catch (e) {
-      debugPrint('OnboardingService.getProfile error: $e');
+      debugPrint('OnboardingService.getProfile error.');
       return null;
     }
   }

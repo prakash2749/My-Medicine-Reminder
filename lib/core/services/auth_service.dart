@@ -85,8 +85,7 @@ class AuthService {
       return AuthResult.success(user: response.user, session: response.session);
     } on AuthException catch (e) {
       final msg = e.message.toLowerCase();
-      final isUnconfirmed =
-          msg.contains('email not confirmed') ||
+      final isUnconfirmed = msg.contains('email not confirmed') ||
           msg.contains('not verified') ||
           e.statusCode == 'email_not_confirmed';
 
@@ -152,7 +151,7 @@ class AuthService {
       await supabase.auth.resend(type: OtpType.signup, email: email);
       return true;
     } catch (e) {
-      debugPrint('Error resending verification email: $e');
+      debugPrint('Error resending verification email.');
       return false;
     }
   }
@@ -208,7 +207,7 @@ class AuthService {
         await supabase.auth.signOut();
       }
     } catch (e) {
-      debugPrint('Error signing out: $e');
+      debugPrint('Error signing out.');
     }
   }
 }

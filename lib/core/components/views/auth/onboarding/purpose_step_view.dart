@@ -29,9 +29,8 @@ class _PurposeStepViewState extends State<PurposeStepView> {
     final signup = context.watch<SignupProvider>();
 
     return Scaffold(
-      backgroundColor: isDark
-          ? AppColors.backgroundDark
-          : AppColors.backgroundLight,
+      backgroundColor:
+          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       body: SafeArea(
         child: Column(
           children: [
@@ -139,18 +138,18 @@ class _PurposeStepViewState extends State<PurposeStepView> {
                               decoration: BoxDecoration(
                                 color: isSelected
                                     ? (isDark
-                                          ? AppColors.tagBgDark
-                                          : AppColors.tagBgLight)
+                                        ? AppColors.tagBgDark
+                                        : AppColors.tagBgLight)
                                     : (isDark
-                                          ? AppColors.surfaceDark
-                                          : AppColors.surfaceLight),
+                                        ? AppColors.surfaceDark
+                                        : AppColors.surfaceLight),
                                 borderRadius: BorderRadius.circular(16),
                                 border: Border.all(
                                   color: isSelected
                                       ? AppColors.primary
                                       : (isDark
-                                            ? AppColors.borderDark
-                                            : AppColors.borderLight),
+                                          ? AppColors.borderDark
+                                          : AppColors.borderLight),
                                   width: isSelected ? 1.8 : 1.0,
                                 ),
                                 boxShadow: isSelected
@@ -177,11 +176,11 @@ class _PurposeStepViewState extends State<PurposeStepView> {
                                             : FontWeight.w600,
                                         color: isSelected
                                             ? (isDark
-                                                  ? AppColors.tagTextDark
-                                                  : AppColors.primary)
+                                                ? AppColors.tagTextDark
+                                                : AppColors.primary)
                                             : (isDark
-                                                  ? AppColors.textPrimaryDark
-                                                  : AppColors.textPrimaryLight),
+                                                ? AppColors.textPrimaryDark
+                                                : AppColors.textPrimaryLight),
                                       ),
                                     ),
                                   ),
@@ -198,8 +197,8 @@ class _PurposeStepViewState extends State<PurposeStepView> {
                                         color: isSelected
                                             ? AppColors.primary
                                             : (isDark
-                                                  ? AppColors.borderDark
-                                                  : AppColors.borderLight),
+                                                ? AppColors.borderDark
+                                                : AppColors.borderLight),
                                         width: 2,
                                       ),
                                     ),
@@ -230,9 +229,8 @@ class _PurposeStepViewState extends State<PurposeStepView> {
                 color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
                 border: Border(
                   top: BorderSide(
-                    color: isDark
-                        ? AppColors.borderDark
-                        : AppColors.borderLight,
+                    color:
+                        isDark ? AppColors.borderDark : AppColors.borderLight,
                   ),
                 ),
               ),
@@ -248,12 +246,10 @@ class _PurposeStepViewState extends State<PurposeStepView> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
-                    disabledBackgroundColor: isDark
-                        ? Colors.white10
-                        : Colors.grey.shade200,
-                    disabledForegroundColor: isDark
-                        ? Colors.white30
-                        : Colors.grey.shade400,
+                    disabledBackgroundColor:
+                        isDark ? Colors.white10 : Colors.grey.shade200,
+                    disabledForegroundColor:
+                        isDark ? Colors.white30 : Colors.grey.shade400,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),

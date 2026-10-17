@@ -7,12 +7,12 @@ import '../components/views/auth/login_view.dart';
 import '../components/views/auth/update_password_view.dart';
 import '../components/views/auth/onboarding/care_circle_step_view.dart';
 import '../components/views/auth/onboarding/create_account_step_view.dart';
+import '../components/views/auth/onboarding/local_welcome_view.dart';
 import '../components/views/auth/onboarding/get_started_view.dart';
 import '../components/views/auth/onboarding/my_day_step_view.dart';
 import '../components/views/auth/onboarding/personal_info_step_view.dart';
 import '../components/views/auth/onboarding/purpose_step_view.dart';
 import '../components/views/auth/onboarding/verify_email_step_view.dart';
-import '../components/views/medicine/medicine_view.dart';
 import '../components/views/splash/splash_view.dart';
 
 class AppRoutes {
@@ -24,6 +24,7 @@ class AppRoutes {
   static const String initial = '/';
   static const String splash = '/splash';
   static const String getStarted = '/get-started';
+  static const String accountWelcome = '/account-welcome';
   static const String personalInfo = '/signup/personal-info';
   static const String purpose = '/signup/purpose';
   static const String myDay = '/signup/my-day';
@@ -47,8 +48,11 @@ class AppRoutes {
       GoRoute(path: splash, builder: (context, state) => const SplashView()),
       GoRoute(
         path: getStarted,
-        builder: (context, state) => const GetStartedView(),
+        builder: (context, state) => const LocalWelcomeView(),
       ),
+      GoRoute(
+          path: accountWelcome,
+          builder: (context, state) => const GetStartedView()),
       GoRoute(path: login, builder: (context, state) => const LoginView()),
       GoRoute(
         path: forgotPassword,
@@ -64,10 +68,7 @@ class AppRoutes {
       ),
       GoRoute(path: authGate, builder: (context, state) => const AuthGate()),
       GoRoute(path: home, builder: (context, state) => const AuthGate()),
-      GoRoute(
-        path: medicines,
-        builder: (context, state) => const MedicineView(),
-      ),
+      GoRoute(path: medicines, builder: (context, state) => const AuthGate()),
       // Onboarding flows
       GoRoute(
         path: personalInfo,
@@ -95,24 +96,25 @@ class AppRoutes {
 
   /// Backwards-compatible legacy route map for widget test harnesses
   static Map<String, WidgetBuilder> get routes => {
-    initial: (context) => const SplashView(),
-    splash: (context) => const SplashView(),
-    getStarted: (context) => const GetStartedView(),
-    personalInfo: (context) => const PersonalInfoStepView(),
-    purpose: (context) => const PurposeStepView(),
-    myDay: (context) => const MyDayStepView(),
-    careCircle: (context) => const CareCircleStepView(),
-    createAccount: (context) => const CreateAccountStepView(),
-    verifyEmail: (context) => const VerifyEmailStepView(),
-    authGate: (context) => const AuthGate(),
-    login: (context) => const LoginView(),
-    forgotPassword: (context) => const ForgotPasswordView(),
-    updatePassword: (context) => const UpdatePasswordView(),
-    resetCallback: (context) => const UpdatePasswordView(),
-    'reset-callback': (context) => const UpdatePasswordView(),
-    home: (context) => const AuthGate(),
-    medicines: (context) => const MedicineView(),
-  };
+        initial: (context) => const SplashView(),
+        splash: (context) => const SplashView(),
+        getStarted: (context) => const LocalWelcomeView(),
+        accountWelcome: (context) => const GetStartedView(),
+        personalInfo: (context) => const PersonalInfoStepView(),
+        purpose: (context) => const PurposeStepView(),
+        myDay: (context) => const MyDayStepView(),
+        careCircle: (context) => const CareCircleStepView(),
+        createAccount: (context) => const CreateAccountStepView(),
+        verifyEmail: (context) => const VerifyEmailStepView(),
+        authGate: (context) => const AuthGate(),
+        login: (context) => const LoginView(),
+        forgotPassword: (context) => const ForgotPasswordView(),
+        updatePassword: (context) => const UpdatePasswordView(),
+        resetCallback: (context) => const UpdatePasswordView(),
+        'reset-callback': (context) => const UpdatePasswordView(),
+        home: (context) => const AuthGate(),
+        medicines: (context) => const AuthGate(),
+      };
 
   /// Backwards-compatible legacy route generator
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
@@ -139,9 +141,12 @@ class AppRoutes {
         );
       case getStarted:
         return MaterialPageRoute(
-          builder: (_) => const GetStartedView(),
+          builder: (_) => const LocalWelcomeView(),
           settings: settings,
         );
+      case accountWelcome:
+        return MaterialPageRoute(
+            builder: (_) => const GetStartedView(), settings: settings);
       case personalInfo:
         return MaterialPageRoute(
           builder: (_) => const PersonalInfoStepView(),
@@ -197,7 +202,7 @@ class AppRoutes {
         );
       case medicines:
         return MaterialPageRoute(
-          builder: (_) => const MedicineView(),
+          builder: (_) => const AuthGate(),
           settings: settings,
         );
       default:

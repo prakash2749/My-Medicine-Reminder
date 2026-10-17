@@ -28,7 +28,7 @@ class SignupProvider extends ChangeNotifier {
         _questions = fetched;
       }
     } catch (e) {
-      debugPrint('Error loading onboarding questions: $e');
+      debugPrint('Error loading onboarding questions.');
     } finally {
       _isLoadingQuestions = false;
       notifyListeners();

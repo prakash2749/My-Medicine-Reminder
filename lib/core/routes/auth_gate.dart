@@ -1,3 +1,4 @@
+import '../../providers/app_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -21,6 +22,15 @@ class AuthGate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authProvider = context.watch<AuthProvider>();
+    final settings = context.watch<AppPreferences>();
+    if (!settings.loaded) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+    if (settings.guestEnabled &&
+        !authProvider.isAuthenticated &&
+        !authProvider.isPasswordRecovery) {
+      return const HomeScreen(key: ValueKey(AppPreferences.guestOwner));
+    }
 
     // If password recovery link was activated, show UpdatePasswordView
     if (authProvider.isPasswordRecovery) {
@@ -33,7 +43,7 @@ class AuthGate extends StatelessWidget {
       if (!authProvider.isAuthenticated) {
         return const LoginScreen();
       }
-      return const HomeScreen();
+      return HomeScreen(key: ValueKey(authProvider.user?.id));
     }
 
     final client = Supabase.instance.client;
@@ -54,7 +64,7 @@ class AuthGate extends StatelessWidget {
           return const LoginScreen();
         }
 
-        return const HomeScreen();
+        return HomeScreen(key: ValueKey(authProvider.user?.id));
       },
     );
   }

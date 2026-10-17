@@ -1,0 +1,120 @@
+{
+  "schema": 1,
+  "revision": "2026-10-18-draft",
+  "pages": {
+    "privacy": {
+      "title": {"en": "Privacy notice", "hi": "गोपनीयता सूचना"},
+      "sections": [
+        {
+          "id": "purpose",
+          "title": {"en": "Purpose and limits", "hi": "उद्देश्य और सीमाएँ"},
+          "body": {
+            "en": "Medicine Reminder helps adults record their existing medicine plans, doses and stock, with local reminders. It is not a medical device and does not diagnose, treat, cure or prevent any medical condition. Consult a qualified healthcare professional for medical advice, diagnosis or treatment. Reminders and self-reported records do not establish whether a medicine was taken; delivery is not guaranteed.",
+            "hi": "Medicine Reminder वयस्कों को अपनी मौजूदा दवा योजना, खुराक और स्टॉक दर्ज करने तथा स्थानीय रिमाइंडर लगाने में मदद करता है। यह चिकित्सा उपकरण नहीं है और किसी स्वास्थ्य स्थिति का निदान, उपचार, इलाज या रोकथाम नहीं करता। चिकित्सा सलाह, निदान या उपचार के लिए योग्य स्वास्थ्य पेशेवर से परामर्श लें। रिमाइंडर और स्वयं दर्ज रिकॉर्ड से दवा लिए जाने की पुष्टि नहीं होती; रिमाइंडर पहुँचने की गारंटी नहीं है।"
+          }
+        },
+        {
+          "id": "local-records",
+          "title": {"en": "Medicine records on this device", "hi": "इस डिवाइस पर दवा के रिकॉर्ड"},
+          "body": {
+            "en": "Medicine names, instructions, strengths, quantities, schedules and timezones, previous versions, dose actions and stock ledgers are stored in an encrypted local database. The device stores its encryption key separately. Guest use has no time limit. The implemented medicine flows do not upload these records or merge guest records into an account. Signing in does not create a medicine backup. Keep your device locked; encryption does not protect an already unlocked app from someone using it.",
+            "hi": "दवा के नाम, निर्देश, ताकत, मात्राएँ, शेड्यूल और समय क्षेत्र, पुराने संस्करण, खुराक की कार्रवाइयाँ और स्टॉक विवरण स्थानीय एन्क्रिप्टेड डेटाबेस में रखे जाते हैं। उसकी कुंजी डिवाइस पर अलग रखी जाती है। अतिथि इस्तेमाल की समय सीमा नहीं है। मौजूदा दवा सुविधाएँ ये रिकॉर्ड अपलोड नहीं करतीं और अतिथि रिकॉर्ड खाते में नहीं मिलातीं। साइन इन से दवा का बैकअप नहीं बनता। डिवाइस लॉक रखें; पहले से खुले ऐप का उपयोग करने वाले व्यक्ति से एन्क्रिप्शन सुरक्षा नहीं देता।"
+          }
+        },
+        {
+          "id": "optional-account",
+          "title": {"en": "Optional account and online services", "hi": "वैकल्पिक खाता और ऑनलाइन सेवाएँ"},
+          "body": {
+            "en": "If you use account features, Supabase receives your email, password for authentication, account identifiers and any name supplied at signup. Account onboarding can send name, date of birth, gender, language, timezone, daily routine times and selected purposes. If you add a care-circle contact, it can send their name, phone number, relationship and alert preferences. This does not enable working caregiver alerts or medicine synchronization. Do not enter another person's contact details without their permission. Network providers receive connection information when account services are used. The deployed service location, server logs, retention and access controls still need operator review before public release.",
+            "hi": "खाता सुविधाएँ इस्तेमाल करने पर Supabase को प्रमाणीकरण के लिए ईमेल, पासवर्ड, खाते की पहचान और साइनअप में दिया नाम मिलता है। खाता सेटअप नाम, जन्मतिथि, लिंग, भाषा, समय क्षेत्र, दिनचर्या के समय और चुने उद्देश्य भेज सकता है। देखभाल संपर्क जोड़ने पर उसका नाम, फ़ोन नंबर, संबंध और अलर्ट की पसंद भेजी जा सकती है। इससे देखभाल करने वाले को चालू अलर्ट या दवा का सिंक नहीं मिलता। किसी दूसरे व्यक्ति की अनुमति के बिना उसके संपर्क विवरण न भरें। खाता सेवाएँ इस्तेमाल करने पर नेटवर्क प्रदाताओं को कनेक्शन की जानकारी मिलती है। सार्वजनिक रिलीज़ से पहले सेवा स्थान, सर्वर लॉग, डेटा रखने की अवधि और पहुँच नियंत्रण की संचालक समीक्षा बाकी है।"
+          }
+        },
+        {
+          "id": "notifications-and-sharing",
+          "title": {"en": "Notifications, reports and clipboard", "hi": "नोटिफ़िकेशन, रिपोर्ट और क्लिपबोर्ड"},
+          "body": {
+            "en": "The operating system holds generic reminder text, routing identifiers and alert times. Lock-screen text omits medicine details. Reports are created locally; Share opens the system chooser only after you request it. Saved or shared copies are controlled by the selected recipient or service and cannot be recalled by this app. Temporary medicine-report PDFs owned by the app are cleaned on startup, medicine deletion or reset. Review diagnostics shows only allowlisted readiness flags, with no medicine names, dose records, account details, exact times or raw errors. Copy diagnostics writes the reviewed snapshot to the system clipboard; other apps may access the clipboard and copies you paste.",
+            "hi": "ऑपरेटिंग सिस्टम सामान्य रिमाइंडर टेक्स्ट, रूटिंग पहचान और अलर्ट के समय रखता है। लॉक स्क्रीन पर दवा का विवरण नहीं दिखता। रिपोर्ट स्थानीय रूप से बनती हैं; आपके साझा करने का विकल्प चुनने पर ही सिस्टम की शेयर शीट खुलती है। सहेजी या साझा प्रतियाँ चुने प्राप्तकर्ता या सेवा के नियंत्रण में होती हैं; ऐप उन्हें वापस नहीं ले सकता। ऐप की अस्थायी medicine-report PDF अगली शुरुआत, दवा मिटाने या रीसेट पर साफ़ होती हैं। जाँच विवरण में केवल चुने हुए स्थिति संकेत होते हैं; दवा के नाम, खुराक रिकॉर्ड, खाते की जानकारी, सटीक समय या मूल त्रुटियाँ नहीं होतीं। कॉपी करने पर समीक्षा किया विवरण सिस्टम क्लिपबोर्ड पर जाता है; दूसरे ऐप क्लिपबोर्ड और पेस्ट की गई प्रतियों तक पहुँच सकते हैं।"
+          }
+        },
+        {
+          "id": "retention-and-deletion",
+          "title": {"en": "Retention and deletion", "hi": "डेटा रखना और मिटाना"},
+          "body": {
+            "en": "Archive stops a medicine's future reminders and keeps its history. Delete permanently removes the selected medicine's local schedules, dose and stock records and related reminders. Settings → Erase local medicine data removes every local medicine profile, pending reminder and app-owned temporary report; account sign-in and language preferences remain. Reset retries interrupted cleanup before reopening medicine data. Local reset does not delete a Supabase account or online profile/contact data. In-app and web account-deletion requests are not implemented in this test build and must be provided before public release with account creation. There is no medicine key recovery or cloud restore. Uninstalling or clearing app storage can lose local records. Deletion does not promise forensic erasure or removal of outside copies.",
+            "hi": "संग्रह में रखने से दवा के आगे के रिमाइंडर रुकते हैं और इतिहास रहता है। दवा मिटाने से उसकी स्थानीय योजना, खुराक और स्टॉक रिकॉर्ड तथा संबंधित रिमाइंडर स्थायी रूप से हटते हैं। सेटिंग्स → स्थानीय दवा डेटा मिटाएँ से सभी स्थानीय दवा प्रोफ़ाइल, लंबित रिमाइंडर और ऐप की अस्थायी रिपोर्ट हटती हैं; खाते का साइन-इन और भाषा की पसंद रहती है। रीसेट बीच में रुकी सफ़ाई को दवा डेटा खोलने से पहले फिर पूरा करता है। स्थानीय रीसेट Supabase खाता या ऑनलाइन प्रोफ़ाइल और संपर्क डेटा नहीं मिटाता। इस परीक्षण बिल्ड में ऐप और वेबसाइट से खाता मिटाने का अनुरोध लागू नहीं है; खाता बनाने वाली सार्वजनिक रिलीज़ से पहले यह देना होगा। दवा की कुंजी वापस पाने या क्लाउड से बहाल करने की सुविधा नहीं है। ऐप हटाने या स्टोरेज साफ़ करने से स्थानीय रिकॉर्ड खो सकते हैं। मिटाने से फ़ोरेंसिक स्तर पर सफ़ाई या बाहर की प्रतियाँ हटने की गारंटी नहीं है।"
+          }
+        },
+        {
+          "id": "permissions-and-diagnostics",
+          "title": {"en": "Permissions and diagnostics", "hi": "अनुमतियाँ और जाँच विवरण"},
+          "body": {
+            "en": "Notifications and precise-alarm access support reminders; denial can disable or delay them while records remain usable. Background work and reboot recovery rebuild eligible future alerts. Internet access supports optional online account services. The core medicine features do not request camera, contacts, location, microphone or Health Connect access. This app does not enable advertising, remote analytics or remote crash-reporting SDKs. It does not automatically send the diagnostic snapshot. Website hosting and any support service may process connection or submitted information under their own reviewed settings; a local-only medicine database is not a claim that all account, hosting or support processing stays on-device.",
+            "hi": "नोटिफ़िकेशन और सटीक अलार्म की अनुमति रिमाइंडर के लिए है; अनुमति न देने से वे रुक या देर से आ सकते हैं, जबकि रिकॉर्ड इस्तेमाल किए जा सकते हैं। बैकग्राउंड काम और रीबूट के बाद सुधार आगे के पात्र अलर्ट फिर बनाते हैं। इंटरनेट वैकल्पिक ऑनलाइन खाता सेवाओं के लिए है। मुख्य दवा सुविधाएँ कैमरा, संपर्क, स्थान, माइक्रोफ़ोन या Health Connect की अनुमति नहीं माँगतीं। ऐप में विज्ञापन, रिमोट विश्लेषण या रिमोट क्रैश रिपोर्टिंग SDK चालू नहीं हैं। जाँच विवरण अपने-आप नहीं भेजा जाता। वेबसाइट होस्ट और सहायता सेवा अपनी समीक्षा की गई सेटिंग्स के अनुसार कनेक्शन या भेजी जानकारी संसाधित कर सकते हैं; स्थानीय दवा डेटाबेस का अर्थ यह नहीं कि खाते, होस्टिंग और सहायता की सारी प्रक्रिया डिवाइस पर ही रहती है।"
+          }
+        },
+        {
+          "id": "contact",
+          "title": {"en": "Operator and contact status", "hi": "संचालक और संपर्क की स्थिति"},
+          "body": {
+            "en": "The developer/legal identity, privacy/support email, public website, hosting details and reviewed effective date are not configured for this test build. These pages are unpublished drafts. No staffed support or response time is promised. Use an already agreed private team channel if you are an arranged tester; do not post prescriptions, health reports, credentials or contact details in public issues. This notice will need the actual operator and service details and qualified review before public publication.",
+            "hi": "इस परीक्षण बिल्ड के लिए डेवलपर या कानूनी पहचान, गोपनीयता और सहायता ईमेल, सार्वजनिक वेबसाइट, होस्टिंग विवरण तथा समीक्षा की गई प्रभावी तारीख तय नहीं हैं। ये पेज अप्रकाशित मसौदे हैं। किसी उपलब्ध सहायता टीम या जवाब देने के समय का वादा नहीं है। तय परीक्षण में भाग लेने पर पहले से सहमत निजी टीम माध्यम का उपयोग करें; सार्वजनिक मुद्दों में पर्चे, स्वास्थ्य रिपोर्ट, लॉगिन जानकारी या संपर्क विवरण न डालें। सार्वजनिक प्रकाशन से पहले इस सूचना में वास्तविक संचालक और सेवा विवरण तथा योग्य समीक्षा ज़रूरी है।"
+          }
+        }
+      ]
+    },
+    "support": {
+      "title": {"en": "Help and support", "hi": "मदद और सहायता"},
+      "sections": [
+        {
+          "id": "software-help",
+          "title": {"en": "Software help and treatment questions", "hi": "ऐप की मदद और उपचार के सवाल"},
+          "body": {
+            "en": "Support can investigate app behavior using made-up examples. It cannot decide whether you should take, skip, repeat or change a dose. Ask your prescriber or pharmacist about treatment or missed-dose instructions, and use appropriate local healthcare services for urgent health concerns. Do not rely on this test build as your only critical reminder.",
+            "hi": "सहायता टीम बनाए हुए उदाहरणों से ऐप के व्यवहार की जाँच कर सकती है। वह यह तय नहीं कर सकती कि आपको खुराक लेनी, छोड़नी, दोबारा लेनी या बदलनी चाहिए। उपचार या छूटी खुराक के निर्देश के लिए अपने चिकित्सक या फ़ार्मासिस्ट से पूछें और तत्काल स्वास्थ्य चिंता के लिए उचित स्थानीय स्वास्थ्य सेवा लें। ज़रूरी रिमाइंडर के लिए केवल इस परीक्षण बिल्ड पर निर्भर न रहें।"
+          }
+        },
+        {
+          "id": "missing-reminders",
+          "title": {"en": "If reminders are missing", "hi": "रिमाइंडर नहीं आ रहे हों तो"},
+          "body": {
+            "en": "Open Reminder health and retry where offered. Check Android notification permission, the medicine channel and sound, precise-alarm access, Do Not Disturb and relevant battery settings. Settings → Test reminder requests a test; it does not prove future delivery. A powered-off or force-stopped app cannot reliably remind you. Unlock after restart and open the app to inspect readiness. Schedules retain their saved timezone when travelling. Open the app regularly to extend its bounded scheduling horizon. Do not change your treatment because an alert was missing.",
+            "hi": "रिमाइंडर की स्थिति खोलें और उपलब्ध होने पर फिर कोशिश करें। Android की नोटिफ़िकेशन अनुमति, दवा चैनल और आवाज़, सटीक अलार्म, डू नॉट डिस्टर्ब और संबंधित बैटरी सेटिंग्स जाँचें। सेटिंग्स → रिमाइंडर जाँचें केवल जाँच का अनुरोध करता है; इससे आगे पहुँचने की पुष्टि नहीं होती। बंद फ़ोन या फ़ोर्स-स्टॉप किया ऐप भरोसेमंद रिमाइंडर नहीं दे सकता। रीस्टार्ट के बाद फ़ोन अनलॉक करके ऐप में स्थिति देखें। यात्रा में शेड्यूल अपना सहेजा समय क्षेत्र रखते हैं। आगे के सीमित रिमाइंडर बढ़ाने के लिए ऐप नियमित खोलें। अलर्ट न आने के कारण अपना उपचार न बदलें।"
+          }
+        },
+        {
+          "id": "preserve-records",
+          "title": {"en": "If records cannot open or save", "hi": "रिकॉर्ड न खुलें या न सहेजे जाएँ तो"},
+          "body": {
+            "en": "Keep this installation and its storage intact. Do not uninstall, clear this app's storage or reset it as a repair step. Check whether you switched guest/account profiles. If the device is full, free unrelated space and use Retry. Signing in does not restore medicine records, and a PDF is not a restorable backup. If you intentionally started an erase and it did not finish, retry that erase; do not bypass the pending cleanup. Ask the arranged test team for software help if the issue continues, without sharing your database or encryption key.",
+            "hi": "इस इंस्टॉलेशन और स्टोरेज को सुरक्षित रखें। सुधार के लिए ऐप न हटाएँ, उसका स्टोरेज साफ़ न करें और रीसेट न करें। जाँचें कि अतिथि या खाते की प्रोफ़ाइल बदली तो नहीं। डिवाइस भर गया हो तो असंबंधित जगह खाली करें और फिर कोशिश करें। साइन इन से दवा रिकॉर्ड वापस नहीं आते और PDF बहाल करने योग्य बैकअप नहीं है। आपने जानबूझकर डेटा मिटाना शुरू किया था और वह पूरा नहीं हुआ तो उसी को फिर पूरा करें; लंबित सफ़ाई को न छोड़ें। समस्या जारी हो तो तय परीक्षण टीम से ऐप की मदद माँगें; डेटाबेस या एन्क्रिप्शन कुंजी साझा न करें।"
+          }
+        },
+        {
+          "id": "safe-feedback",
+          "title": {"en": "Share a redacted problem report", "hi": "निजी जानकारी हटाकर समस्या बताएँ"},
+          "body": {
+            "en": "Use made-up medicine details and include the app build, phone model, Android version, language and steps that failed. Settings → Review diagnostics lets you inspect a readiness snapshot. Copy only if you want to paste it into your chosen private support conversation; nothing is sent automatically. The clipboard and pasted copies are outside this app's control. Leave out prescriptions, medicine names, dose times, health PDFs, account emails, other people's contact details, passwords, keys and raw logs. If Settings will not open, the basic device/build and made-up reproduction are enough to begin investigation.",
+            "hi": "बनाए हुए दवा विवरण इस्तेमाल करें और ऐप बिल्ड, फ़ोन मॉडल, Android संस्करण, भाषा तथा विफल चरण बताएँ। सेटिंग्स → जाँच विवरण की समीक्षा करें में स्थिति देख सकते हैं। अपनी चुनी निजी सहायता बातचीत में पेस्ट करना चाहें तभी कॉपी करें; कुछ भी अपने-आप नहीं भेजा जाता। क्लिपबोर्ड और पेस्ट की गई प्रतियाँ ऐप के नियंत्रण से बाहर हैं। पर्चे, दवा के नाम, खुराक के समय, स्वास्थ्य PDF, खाते का ईमेल, दूसरे के संपर्क, पासवर्ड, कुंजी और मूल लॉग न भेजें। सेटिंग्स न खुलें तो शुरू की जाँच के लिए डिवाइस और बिल्ड की जानकारी तथा बनाया हुआ उदाहरण पर्याप्त हैं।"
+          }
+        },
+        {
+          "id": "deletion",
+          "title": {"en": "Deleting records or an account", "hi": "रिकॉर्ड या खाता मिटाना"},
+          "body": {
+            "en": "Archive preserves history; Delete removes one medicine's associated local records. Erase local medicine data removes all local medicine profiles and reminders, but not an online account, sign-in or language settings. Previously shared files cannot be recalled. This test build has no implemented online account-deletion request route. The operator must provide working in-app and web request options before public release with signup. Do not send a password or prescription to request deletion, and do not treat local reset as account deletion.",
+            "hi": "संग्रह में रखने से इतिहास रहता है; मिटाने से एक दवा के संबंधित स्थानीय रिकॉर्ड हटते हैं। स्थानीय दवा डेटा मिटाने से सभी स्थानीय दवा प्रोफ़ाइल और रिमाइंडर हटते हैं, ऑनलाइन खाता, साइन-इन या भाषा सेटिंग्स नहीं। पहले साझा फ़ाइलें वापस नहीं ली जा सकतीं। इस परीक्षण बिल्ड में ऑनलाइन खाता मिटाने का अनुरोध मार्ग लागू नहीं है। साइनअप वाली सार्वजनिक रिलीज़ से पहले संचालक को ऐप और वेबसाइट में काम करने वाले अनुरोध विकल्प देने होंगे। डेटा मिटाने का अनुरोध करते समय पासवर्ड या पर्चा न भेजें और स्थानीय रीसेट को खाता मिटाना न मानें।"
+          }
+        },
+        {
+          "id": "contact",
+          "title": {"en": "Support availability", "hi": "सहायता की उपलब्धता"},
+          "body": {
+            "en": "A public support email, developer/legal identity, website and staffed coverage are not configured. This is an unpublished test draft, not an active public support service. Arranged testers should use their already agreed private team channel. Do not put health records or contact details into public GitHub issues. Contact and privacy details must be finalized and reviewed before public release.",
+            "hi": "सार्वजनिक सहायता ईमेल, डेवलपर या कानूनी पहचान, वेबसाइट और सहायता समय तय नहीं हैं। यह अप्रकाशित परीक्षण मसौदा है, चालू सार्वजनिक सहायता सेवा नहीं। तय परीक्षण में भाग लेने वाले पहले से सहमत निजी टीम माध्यम का उपयोग करें। सार्वजनिक GitHub मुद्दों में स्वास्थ्य रिकॉर्ड या संपर्क विवरण न डालें। सार्वजनिक रिलीज़ से पहले संपर्क और गोपनीयता विवरण तय करके समीक्षा करानी होगी।"
+          }
+        }
+      ]
+    }
+  }
+}

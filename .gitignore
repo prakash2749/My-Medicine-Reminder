@@ -33,6 +33,9 @@ migrate_working_dir/
 /build/
 /coverage/
 
+# Local Python policy-page tooling
+__pycache__/
+
 # Symbolication related
 app.*.symbols
 

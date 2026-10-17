@@ -1,204 +1,238 @@
+import 'package:medicine_reminder/core/l10n/app_copy.dart';
 import 'package:flutter/material.dart';
-import 'package:medicine_reminder/core/constants/app_colors.dart';
-import 'package:medicine_reminder/providers/medicine_reminder_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../models/medicine_reminder_model.dart';
+import '../../../../models/medication.dart';
+import '../../../../../providers/medicine_reminder_provider.dart';
+
+String doseTime(BuildContext context, DateTime time) =>
+    TimeOfDay.fromDateTime(time.toLocal()).format(context);
+
+Future<void> showDoseDetails(
+  BuildContext context,
+  DoseOccurrence dose, {
+  bool allowSnooze = true,
+}) =>
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (_) => _DoseDetails(dose: dose, allowSnooze: allowSnooze),
+    );
 
 class MedicineCard extends StatelessWidget {
-  final MedicineReminder reminder;
+  final DoseOccurrence dose;
+  const MedicineCard({super.key, required this.dose});
+  @override
+  Widget build(BuildContext context) {
+    final provider = context.watch<MedicineReminderProvider>();
+    final m = dose.medication;
+    final status = dose.status(provider.clock());
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: Material(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () => showDoseDetails(context, dose),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 82,
+                      child: Text(
+                        doseTime(context, dose.dueAt),
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            m.name,
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            '${m.amount} ${m.unit}${m.strength.isEmpty ? '' : ' · ${m.strength}'}',
+                          ),
+                          const SizedBox(height: 4),
+                          AppText(
+                            status,
+                            style: TextStyle(
+                              color: dose.isTaken
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
+                            ),
+                          ),
+                          if (status == 'Snoozed')
+                            AppText(
+                              'Next alert ${doseTime(context, dose.alertAt)}',
+                            ),
+                        ],
+                      ),
+                    ),
+                    const Icon(Icons.chevron_right),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                _DoseActions(dose: dose),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
 
-  const MedicineCard({super.key, required this.reminder});
+class _DoseActions extends StatefulWidget {
+  final DoseOccurrence dose;
+  final bool allowSnooze;
+  const _DoseActions({required this.dose, this.allowSnooze = true});
+  @override
+  State<_DoseActions> createState() => _DoseActionsState();
+}
 
-  IconData _getCategoryIcon(String category) {
-    switch (category.toLowerCase()) {
-      case 'capsule':
-        return Icons.medication_liquid;
-      case 'syrup':
-        return Icons.local_drink;
-      case 'injection':
-        return Icons.vaccines;
-      case 'pill':
-      default:
-        return Icons.medication;
+class _DoseActionsState extends State<_DoseActions> {
+  bool _busy = false;
+  Future<void> _act(DoseAction action) async {
+    if (_busy) return;
+    final provider = context.read<MedicineReminderProvider>();
+    setState(() => _busy = true);
+    final success = await provider.act(widget.dose, action);
+    if (!mounted) return;
+    setState(() => _busy = false);
+    if (!success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content:
+              AppText(provider.errorMessage ?? 'Could not save this action.'),
+        ),
+      );
     }
   }
 
   @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final cardBg = isDark ? AppColors.surfaceDark : Colors.white;
-
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      decoration: BoxDecoration(
-        color: cardBg,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: reminder.isTaken
-              ? AppColors.success.withValues(alpha: 0.4)
-              : (isDark ? AppColors.borderDark : AppColors.borderLight),
-          width: reminder.isTaken ? 1.5 : 1.0,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
+  Widget build(BuildContext context) => Wrap(
+        spacing: 8,
+        runSpacing: 4,
+        children: [
+          if (widget.dose.isComplete)
+            TextButton.icon(
+              onPressed: _busy ? null : () => _act(DoseAction.undo),
+              icon: const Icon(Icons.undo, size: 18),
+              label: const AppText('Undo'),
+            )
+          else if (!widget.dose.canceled &&
+              (widget.dose.remindersAllowed ||
+                  !widget.dose.dueAt.isAfter(
+                    context.read<MedicineReminderProvider>().clock(),
+                  ))) ...[
+            FilledButton.tonalIcon(
+              onPressed: _busy ? null : () => _act(DoseAction.taken),
+              icon: const Icon(Icons.check, size: 18),
+              label: const AppText('Taken'),
+            ),
+            TextButton(
+              onPressed: _busy ? null : () => _act(DoseAction.skipped),
+              child: const AppText('Skip'),
+            ),
+            if (widget.allowSnooze && widget.dose.remindersAllowed)
+              TextButton(
+                onPressed: _busy ? null : () => _act(DoseAction.snooze),
+                child: const AppText('Snooze 15 min'),
+              ),
+            if (widget.allowSnooze &&
+                widget.dose.remindersAllowed &&
+                widget.dose.latestEvent?.action == DoseAction.snooze)
+              TextButton(
+                onPressed: _busy ? null : () => _act(DoseAction.undo),
+                child: const AppText('Undo snooze'),
+              ),
+          ],
         ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+      );
+}
+
+class _DoseDetails extends StatelessWidget {
+  final DoseOccurrence dose;
+  final bool allowSnooze;
+  const _DoseDetails({required this.dose, this.allowSnooze = true});
+  @override
+  Widget build(BuildContext context) {
+    final provider = context.watch<MedicineReminderProvider>();
+    final current = provider
+            .dosesBetween(
+              dose.dueAt.subtract(const Duration(seconds: 1)),
+              dose.dueAt.add(const Duration(seconds: 1)),
+            )
+            .where((d) => d.id == dose.id)
+            .firstOrNull ??
+        provider
+            .recordedHistory(dose.medication.id)
+            .where((d) => d.id == dose.id)
+            .firstOrNull;
+    if (current == null) {
+      return const SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(24),
+          child: AppText('This dose is no longer active.'),
+        ),
+      );
+    }
+    final medicine = current.medication;
+    final event = current.latestEvent;
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            // Category Icon Badge
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: reminder.isTaken
-                    ? AppColors.success.withValues(alpha: 0.15)
-                    : AppColors.primary.withValues(alpha: 0.12),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                _getCategoryIcon(reminder.category),
-                color: reminder.isTaken ? AppColors.success : AppColors.primary,
-                size: 24,
-              ),
+            Text(
+              medicine.name,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
-            const SizedBox(width: 14),
-
-            // Medicine Details
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          reminder.name,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            decoration: reminder.isTaken
-                                ? TextDecoration.lineThrough
-                                : TextDecoration.none,
-                            color: reminder.isTaken
-                                ? (isDark ? Colors.grey[400] : Colors.grey[600])
-                                : null,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 3,
-                        ),
-                        decoration: BoxDecoration(
-                          color: (isDark ? Colors.white10 : Colors.grey[100]),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(
-                              Icons.access_time,
-                              size: 12,
-                              color: AppColors.primary,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              reminder.time,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${reminder.dosage} • ${reminder.frequency}',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: isDark ? Colors.grey[400] : Colors.grey[600],
-                    ),
-                  ),
-                  if (reminder.notes != null && reminder.notes!.isNotEmpty) ...[
-                    const SizedBox(height: 4),
-                    Text(
-                      reminder.notes!,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontStyle: FontStyle.italic,
-                        color: isDark ? Colors.grey[500] : Colors.grey[500],
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ],
+            const SizedBox(height: 12),
+            Text('${medicine.amount} ${medicine.unit} · ${medicine.form}'),
+            if (medicine.strength.isNotEmpty)
+              AppText('Strength: ${medicine.strength}'),
+            AppText(
+              'Scheduled ${dateKey(current.dueAt.toLocal())} at ${doseTime(context, current.dueAt)}',
+            ),
+            AppText('Schedule timezone: ${medicine.timezone}'),
+            const SizedBox(height: 16),
+            AppText(
+              current.status(provider.clock()),
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            if (event != null)
+              AppText(
+                'Recorded ${dateKey(event.recordedAt.toLocal())} at ${doseTime(context, event.recordedAt)}',
               ),
-            ),
-            const SizedBox(width: 10),
-
-            // Toggle Taken Button
-            IconButton(
-              icon: Icon(
-                reminder.isTaken
-                    ? Icons.check_circle
-                    : Icons.radio_button_unchecked,
-                color: reminder.isTaken ? AppColors.success : Colors.grey[400],
-                size: 28,
+            if (!current.remindersAllowed)
+              const AppText('Previous schedule · reminders canceled'),
+            if (current.remindersAllowed &&
+                current.latestEvent?.action == DoseAction.snooze)
+              AppText(
+                'Next alert ${dateKey(current.alertAt.toLocal())} at ${doseTime(context, current.alertAt)}',
               ),
-              tooltip: reminder.isTaken ? 'Mark as pending' : 'Mark as taken',
-              onPressed: () {
-                context.read<MedicineReminderProvider>().toggleTaken(
-                  reminder.id,
-                );
-              },
-            ),
-
-            // Popup menu for Delete
-            PopupMenuButton<String>(
-              icon: Icon(Icons.more_vert, size: 20, color: Colors.grey[400]),
-              onSelected: (value) {
-                if (value == 'delete') {
-                  context.read<MedicineReminderProvider>().deleteReminder(
-                    reminder.id,
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('${reminder.name} removed'),
-                      duration: const Duration(seconds: 2),
-                    ),
-                  );
-                }
-              },
-              itemBuilder: (context) => [
-                const PopupMenuItem(
-                  value: 'delete',
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.delete_outline,
-                        color: AppColors.error,
-                        size: 20,
-                      ),
-                      SizedBox(width: 8),
-                      Text('Delete', style: TextStyle(color: AppColors.error)),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            if (medicine.instructions.isNotEmpty) ...[
+              const SizedBox(height: 16),
+              Text(medicine.instructions),
+            ],
+            const SizedBox(height: 20),
+            _DoseActions(dose: current, allowSnooze: allowSnooze),
           ],
         ),
       ),

@@ -1,6 +1,12 @@
 # Medicine Reminder 💊
 
-A modern Flutter application designed to help users track, manage, and never miss their daily medications. Built with Flutter, Provider state management, and Supabase backend services.
+A Flutter application for recording user-entered medicine plans, dose records and stock, with local reminders. Built with Flutter and Provider; Supabase supports the existing optional account flows.
+
+Guest use, encrypted local medicine plans, Today, History, Refills, reminders and recovery are documented in [Medicine flow](docs/MEDICINE_FLOW.md). Settings adds English/Hindi, local diagnostics and data reset; History provides local PDF preview and explicit sharing. See [epics 1–7 delivery status](docs/EPICS-1-7-STATUS.md) for implementation evidence and the participant, physical-phone and review gates still pending.
+
+For support triage and safe update recovery, use the [support runbook](docs/SUPPORT-RUNBOOK.md) and [private incident template](docs/SUPPORT-INCIDENT-TEMPLATE.md). Settings → Review diagnostics lets users inspect and copy a redacted readiness snapshot; nothing is sent automatically. Named support coverage and physical-device upgrade validation are still required before beta operations.
+
+Offline English/Hindi privacy and support notices are available before guest/account setup and from Settings. [Play launch review](docs/PLAY-LAUNCH-REVIEW.md) records proposed declarations and release gates. Public pages remain unpublished drafts because operator, contact and hosting details are unavailable. Generate a local preview with `python scripts/render_policy_site.py --draft`; the shared content is `assets/policies.json`.
 
 ---
 
@@ -12,7 +18,7 @@ flutter pub get
 ```
 
 ### 2. Run Locally in Debug Mode
-The app requires Supabase environment variables supplied via `--dart-define-from-file`:
+Guest medicine reminders work without Supabase configuration. Existing optional account flows require Supabase environment variables supplied via `--dart-define-from-file`:
 
 ```bash
 flutter run --dart-define-from-file=config/dev.json

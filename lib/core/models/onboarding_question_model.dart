@@ -25,10 +25,10 @@ class OnboardingQuestion {
   }
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'code': code,
-    'question_text': questionText,
-    'display_order': displayOrder,
-    'is_active': isActive,
-  };
+        'id': id,
+        'code': code,
+        'question_text': questionText,
+        'display_order': displayOrder,
+        'is_active': isActive,
+      };
 }

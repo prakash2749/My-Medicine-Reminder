@@ -1,3 +1,5 @@
+import '../../providers/app_preferences.dart';
+import '../l10n/app_copy.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -48,23 +50,28 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       final authProvider = context.watch<AuthProvider>();
       final user = authProvider.user;
       final userEmail = user?.email ?? 'user@notify.app';
-      final metadataName =
-          (user?.userMetadata?['full_name'] as String?) ??
+      final metadataName = (user?.userMetadata?['full_name'] as String?) ??
           (user?.userMetadata?['name'] as String?);
 
       final displayName = (metadataName != null && metadataName.isNotEmpty)
           ? metadataName
           : (user?.email != null && user!.email!.isNotEmpty
-                ? user.email!.split('@').first
-                : 'User');
+              ? user.email!.split('@').first
+              : 'User');
 
       effectiveTitle = title ?? displayName;
       effectiveSubtitle = subtitle ?? userEmail;
-      userInitial = effectiveTitle.isNotEmpty
-          ? effectiveTitle[0].toUpperCase()
-          : 'U';
+      userInitial =
+          effectiveTitle.isNotEmpty ? effectiveTitle[0].toUpperCase() : 'U';
     }
 
+    final guest = context.watch<AppPreferences?>()?.guestEnabled == true &&
+        context.watch<AuthProvider>().user == null;
+    if (guest && showCurrentUser) {
+      effectiveTitle = context.tr('Local guest');
+      effectiveSubtitle = context.tr('On this device only');
+      userInitial = 'G';
+    }
     Widget? leadingWidget = leading;
     if (leadingWidget == null && showCurrentUser) {
       leadingWidget = Padding(
@@ -116,7 +123,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: Image.asset(
                 AppAssets.appIcon,
                 fit: BoxFit.contain,
-                errorBuilder: (_, _, _) => const Icon(
+                errorBuilder: (_, __, ___) => const Icon(
                   Icons.medication,
                   color: AppColors.primary,
                   size: 22,
@@ -165,7 +172,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 icon: Icon(
                   themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode,
                 ),
-                tooltip: 'Toggle Theme',
+                tooltip: context.tr('Toggle Theme'),
                 onPressed: () => themeProvider.toggleTheme(),
               );
             },
@@ -173,8 +180,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         if (showLogout || showCurrentUser)
           IconButton(
             icon: const Icon(Icons.logout_rounded, size: 20),
-            tooltip: 'Log out',
+            tooltip: context.tr('Log out'),
             onPressed: () async {
+              final settings = context.read<AppPreferences?>();
+              if (guest && settings != null) await settings.setGuest(false);
+              if (!context.mounted) return;
               await context.read<AuthProvider>().signOut();
               if (context.mounted) {
                 context.go(AppRoutes.authGate);

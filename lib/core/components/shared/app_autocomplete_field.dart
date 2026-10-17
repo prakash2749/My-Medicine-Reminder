@@ -32,12 +32,10 @@ class AppAutocompleteField<T extends Object> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textPrimary = isDark
-        ? AppColors.textPrimaryDark
-        : AppColors.textPrimaryLight;
-    final textSecondary = isDark
-        ? AppColors.textSecondaryDark
-        : AppColors.textSecondaryLight;
+    final textPrimary =
+        isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
+    final textSecondary =
+        isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight;
     final bgCol = isDark ? AppColors.surfaceDark : AppColors.surfaceLight;
     final cardBg = isDark ? AppColors.cardDark : Colors.white;
     final borderCol = isDark ? AppColors.borderDark : AppColors.borderLight;
@@ -65,63 +63,63 @@ class AppAutocompleteField<T extends Object> extends StatelessWidget {
           onSelected: onSelected,
           fieldViewBuilder:
               (context, textEditingController, focusNode, onFieldSubmitted) {
-                return TextFormField(
-                  controller: textEditingController,
-                  focusNode: focusNode,
-                  validator: validator,
-                  onChanged: onChanged,
-                  onFieldSubmitted: (String value) => onFieldSubmitted(),
-                  style: TextStyle(
-                    color: textPrimary,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
+            return TextFormField(
+              controller: textEditingController,
+              focusNode: focusNode,
+              validator: validator,
+              onChanged: onChanged,
+              onFieldSubmitted: (String value) => onFieldSubmitted(),
+              style: TextStyle(
+                color: textPrimary,
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+              ),
+              decoration: InputDecoration(
+                hintText: hintText,
+                hintStyle: TextStyle(
+                  color: textSecondary.withValues(alpha: 0.6),
+                  fontSize: 14,
+                ),
+                filled: true,
+                fillColor: bgCol,
+                prefixIcon: prefixIcon,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 14,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide(color: borderCol, width: 1),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide(color: borderCol, width: 1),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: const BorderSide(
+                    color: AppColors.primary,
+                    width: 1.5,
                   ),
-                  decoration: InputDecoration(
-                    hintText: hintText,
-                    hintStyle: TextStyle(
-                      color: textSecondary.withValues(alpha: 0.6),
-                      fontSize: 14,
-                    ),
-                    filled: true,
-                    fillColor: bgCol,
-                    prefixIcon: prefixIcon,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 14,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: borderCol, width: 1),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: borderCol, width: 1),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: const BorderSide(
-                        color: AppColors.primary,
-                        width: 1.5,
-                      ),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: const BorderSide(
-                        color: AppColors.error,
-                        width: 1,
-                      ),
-                    ),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: const BorderSide(
-                        color: AppColors.error,
-                        width: 1.5,
-                      ),
-                    ),
-                    errorText: errorText,
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: const BorderSide(
+                    color: AppColors.error,
+                    width: 1,
                   ),
-                );
-              },
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: const BorderSide(
+                    color: AppColors.error,
+                    width: 1.5,
+                  ),
+                ),
+                errorText: errorText,
+              ),
+            );
+          },
           optionsViewBuilder: (context, onSelectedOption, options) {
             return Align(
               alignment: Alignment.topLeft,

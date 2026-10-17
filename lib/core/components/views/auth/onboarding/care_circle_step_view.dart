@@ -60,7 +60,7 @@ class _CareCircleStepViewState extends State<CareCircleStepView> {
           _phoneError = null;
         }
         _agreementError = !signup.agreedToShareAlerts
-            ? 'Please agree to share alerts to invite this person.'
+            ? 'Please confirm permission to store these contact details.'
             : null;
       });
 
@@ -82,9 +82,8 @@ class _CareCircleStepViewState extends State<CareCircleStepView> {
     final signup = context.watch<SignupProvider>();
 
     return Scaffold(
-      backgroundColor: isDark
-          ? AppColors.backgroundDark
-          : AppColors.backgroundLight,
+      backgroundColor:
+          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       body: SafeArea(
         child: Column(
           children: [
@@ -101,7 +100,8 @@ class _CareCircleStepViewState extends State<CareCircleStepView> {
                       totalSteps: 4,
                       onBack: () => context.pop(),
                       title: 'A little support helps.',
-                      subtitle: 'Would you like someone to receive an alert when a dose hasn’t been confirmed?',
+                      subtitle:
+                          'Optional contact preferences. This test build stores these details but does not send invitations or caregiver alerts.',
                     ),
                     const SizedBox(height: 24),
 
@@ -109,8 +109,9 @@ class _CareCircleStepViewState extends State<CareCircleStepView> {
                     _buildSelectionCard(
                       isSelected: signup.wantsCareCircle,
                       icon: Icons.group_add_outlined,
-                      title: 'Yes, invite someone',
-                      subtitle: 'A caregiver, family member, or friend will receive a nudge.',
+                      title: 'Save contact preferences',
+                      subtitle:
+                          'Enter details only with that person’s permission. Account setup sends them to Supabase.',
                       isDark: isDark,
                       onTap: () => signup.setWantsCareCircle(true),
                     ),
@@ -122,7 +123,8 @@ class _CareCircleStepViewState extends State<CareCircleStepView> {
                       isSelected: !signup.wantsCareCircle,
                       icon: Icons.person_outline,
                       title: 'Maybe later',
-                      subtitle: 'You can always add care circle contacts anytime from settings.',
+                      subtitle:
+                          'Skip collecting another person’s details. You can use local medicine reminders without a contact.',
                       isDark: isDark,
                       onTap: () => signup.setWantsCareCircle(false),
                     ),
@@ -288,7 +290,7 @@ class _CareCircleStepViewState extends State<CareCircleStepView> {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              'Time to wait after missed dose before alerting contact.',
+                              'Preference only. This test build does not send caregiver alerts.',
                               style: TextStyle(
                                 fontSize: 12,
                                 color: isDark
@@ -310,7 +312,8 @@ class _CareCircleStepViewState extends State<CareCircleStepView> {
                             // Checkbox agreement
                             AppCheckboxTile(
                               value: signup.agreedToShareAlerts,
-                              titleText: 'I agree to share unconfirmed-dose alerts with this person.',
+                              titleText:
+                                  'I have permission to store this person’s contact details for optional account setup.',
                               errorText: _agreementError,
                               onChanged: (val) {
                                 signup.setAgreedToShareAlerts(val ?? false);
@@ -473,8 +476,8 @@ class _CareCircleStepViewState extends State<CareCircleStepView> {
                       color: isSelected
                           ? (isDark ? AppColors.accent : AppColors.primary)
                           : (isDark
-                                ? AppColors.textPrimaryDark
-                                : AppColors.textPrimaryLight),
+                              ? AppColors.textPrimaryDark
+                              : AppColors.textPrimaryLight),
                     ),
                   ),
                   const SizedBox(height: 4),

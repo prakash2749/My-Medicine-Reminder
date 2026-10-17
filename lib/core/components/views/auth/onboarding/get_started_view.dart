@@ -1,3 +1,4 @@
+import '../../../continue_guest_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:medicine_reminder/core/constants/app_assets.dart';
@@ -13,9 +14,8 @@ class GetStartedView extends StatelessWidget {
       builder: (ctx) {
         final isDark = Theme.of(ctx).brightness == Brightness.dark;
         return AlertDialog(
-          backgroundColor: isDark
-              ? AppColors.surfaceDark
-              : AppColors.surfaceLight,
+          backgroundColor:
+              isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -63,9 +63,8 @@ class GetStartedView extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? AppColors.backgroundDark
-          : AppColors.backgroundLight,
+      backgroundColor:
+          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       body: SafeArea(
         child: Column(
           children: [
@@ -95,7 +94,7 @@ class GetStartedView extends StatelessWidget {
                         child: Image.asset(
                           AppAssets.banner,
                           fit: BoxFit.cover,
-                          errorBuilder: (_, _, _) {
+                          errorBuilder: (_, __, ___) {
                             return Center(
                               child: Image.asset(
                                 AppAssets.appLogo,
@@ -156,8 +155,8 @@ class GetStartedView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           _buildBenefitItem(
-                            icon: Icons.camera_alt_outlined,
-                            label: 'Upload',
+                            icon: Icons.edit_note,
+                            label: 'Enter plan',
                             isDark: isDark,
                           ),
                           _buildDivider(isDark),
@@ -220,6 +219,7 @@ class GetStartedView extends StatelessWidget {
                       ),
                     ),
                   ),
+                  const ContinueGuestButton(),
                   const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -282,7 +282,7 @@ class GetStartedView extends StatelessWidget {
                         onTap: () => _showPolicyDialog(
                           context,
                           'Privacy Policy',
-                          'Your health details and prescription data stay private and encrypted on your device and account. We never share or sell personal health data.',
+                          'Medicine plans and dose records are encrypted on this device and are not backed up by signing in. Optional account creation sends the profile details you enter to Supabase. Guest use needs no account. Reports leave the app only when you choose to share them.',
                         ),
                         child: Text(
                           'Privacy Policy',
@@ -321,9 +321,8 @@ class GetStartedView extends StatelessWidget {
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
-            color: isDark
-                ? AppColors.textPrimaryDark
-                : AppColors.textPrimaryLight,
+            color:
+                isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
           ),
         ),
       ],

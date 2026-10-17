@@ -18,7 +18,7 @@ class AuthProvider extends ChangeNotifier {
   StreamSubscription<AuthState>? _authSubscription;
 
   AuthProvider({AuthService? authService})
-    : _authService = authService ?? AuthService() {
+      : _authService = authService ?? AuthService() {
     _initAuthListener();
   }
 
@@ -59,7 +59,7 @@ class AuthProvider extends ChangeNotifier {
         });
       }
     } catch (e) {
-      debugPrint('Supabase auth listener initialization skipped: $e');
+      debugPrint('Supabase auth listener initialization skipped.');
     }
   }
 
@@ -171,7 +171,7 @@ class AuthProvider extends ChangeNotifier {
         }
       }
     } catch (e) {
-      debugPrint('refreshOrCheckSession error: $e');
+      debugPrint('refreshOrCheckSession error.');
     }
     _setLoading(false);
     return false;

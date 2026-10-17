@@ -61,8 +61,7 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
       context.go(AppRoutes.home);
     } else {
       setState(() {
-        _errorMessage =
-            result.errorMessage ??
+        _errorMessage = result.errorMessage ??
             'Failed to update password. Please try again.';
       });
     }
@@ -74,12 +73,10 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
     final authProvider = context.watch<AuthProvider>();
 
     final bg = isDark ? AppColors.backgroundDark : AppColors.backgroundLight;
-    final textPrimary = isDark
-        ? AppColors.textPrimaryDark
-        : AppColors.textPrimaryLight;
-    final textSecondary = isDark
-        ? AppColors.textSecondaryDark
-        : AppColors.textSecondaryLight;
+    final textPrimary =
+        isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
+    final textSecondary =
+        isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight;
     final tagBg = isDark ? AppColors.tagBgDark : AppColors.tagBgLight;
     final tagText = isDark ? AppColors.tagTextDark : AppColors.tagTextLight;
 
@@ -134,7 +131,6 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
                             ],
                           ),
                         ),
-
                         Consumer<ThemeProvider>(
                           builder: (context, themeProvider, _) {
                             return IconButton(
@@ -353,9 +349,8 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
-                            color: isDark
-                                ? AppColors.accent
-                                : AppColors.primary,
+                            color:
+                                isDark ? AppColors.accent : AppColors.primary,
                           ),
                         ),
                       ),

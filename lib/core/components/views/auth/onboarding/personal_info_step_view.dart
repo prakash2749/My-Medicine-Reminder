@@ -9,6 +9,7 @@ import 'package:medicine_reminder/providers/signup_provider.dart';
 import 'package:medicine_reminder/core/components/shared/shared.dart';
 
 import 'widgets/onboarding_step_header.dart';
+import '../../policy_view.dart';
 
 class PersonalInfoStepView extends StatefulWidget {
   const PersonalInfoStepView({super.key});
@@ -108,8 +109,8 @@ class _PersonalInfoStepViewState extends State<PersonalInfoStepView> {
                         color: isSelected
                             ? AppColors.primary
                             : (isDark
-                                  ? AppColors.cardDark
-                                  : AppColors.tagBgLight),
+                                ? AppColors.cardDark
+                                : AppColors.tagBgLight),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -122,14 +123,13 @@ class _PersonalInfoStepViewState extends State<PersonalInfoStepView> {
                       g,
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight: isSelected
-                            ? FontWeight.w700
-                            : FontWeight.w500,
+                        fontWeight:
+                            isSelected ? FontWeight.w700 : FontWeight.w500,
                         color: isSelected
                             ? (isDark ? AppColors.accent : AppColors.primary)
                             : (isDark
-                                  ? AppColors.textPrimaryDark
-                                  : AppColors.textPrimaryLight),
+                                ? AppColors.textPrimaryDark
+                                : AppColors.textPrimaryLight),
                       ),
                     ),
                     trailing: isSelected
@@ -158,9 +158,8 @@ class _PersonalInfoStepViewState extends State<PersonalInfoStepView> {
 
     setState(() {
       _nameError = name.isEmpty ? 'Please enter your name.' : null;
-      _birthDateError = signup.birthDate == null
-          ? 'Please select your birth date.'
-          : null;
+      _birthDateError =
+          signup.birthDate == null ? 'Please select your birth date.' : null;
     });
 
     if (_nameError == null && _birthDateError == null) {
@@ -175,9 +174,8 @@ class _PersonalInfoStepViewState extends State<PersonalInfoStepView> {
     final signup = context.watch<SignupProvider>();
 
     return Scaffold(
-      backgroundColor: isDark
-          ? AppColors.backgroundDark
-          : AppColors.backgroundLight,
+      backgroundColor:
+          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       body: SafeArea(
         child: Column(
           children: [
@@ -197,6 +195,7 @@ class _PersonalInfoStepViewState extends State<PersonalInfoStepView> {
                       title: 'Let’s get to know you.',
                       subtitle: 'A few details to make Notify feel like yours.',
                     ),
+                    const PolicyLink(),
                     const SizedBox(height: 32),
 
                     // Name Input
@@ -292,12 +291,12 @@ class _PersonalInfoStepViewState extends State<PersonalInfoStepView> {
                                   fontSize: 15,
                                   color: signup.gender != null
                                       ? (isDark
-                                            ? AppColors.textPrimaryDark
-                                            : AppColors.textPrimaryLight)
+                                          ? AppColors.textPrimaryDark
+                                          : AppColors.textPrimaryLight)
                                       : (isDark
-                                            ? AppColors.textSecondaryDark
-                                            : AppColors.textSecondaryLight
-                                                  .withValues(alpha: 0.6)),
+                                          ? AppColors.textSecondaryDark
+                                          : AppColors.textSecondaryLight
+                                              .withValues(alpha: 0.6)),
                                 ),
                               ),
                             ),
@@ -343,18 +342,18 @@ class _PersonalInfoStepViewState extends State<PersonalInfoStepView> {
                                 decoration: BoxDecoration(
                                   color: isSelected
                                       ? (isDark
-                                            ? AppColors.tagBgDark
-                                            : AppColors.tagBgLight)
+                                          ? AppColors.tagBgDark
+                                          : AppColors.tagBgLight)
                                       : (isDark
-                                            ? AppColors.surfaceDark
-                                            : AppColors.surfaceLight),
+                                          ? AppColors.surfaceDark
+                                          : AppColors.surfaceLight),
                                   borderRadius: BorderRadius.circular(14),
                                   border: Border.all(
                                     color: isSelected
                                         ? AppColors.primary
                                         : (isDark
-                                              ? AppColors.borderDark
-                                              : AppColors.borderLight),
+                                            ? AppColors.borderDark
+                                            : AppColors.borderLight),
                                     width: isSelected ? 1.8 : 1.0,
                                   ),
                                 ),
@@ -370,11 +369,11 @@ class _PersonalInfoStepViewState extends State<PersonalInfoStepView> {
                                             : FontWeight.w500,
                                         color: isSelected
                                             ? (isDark
-                                                  ? AppColors.accent
-                                                  : AppColors.primary)
+                                                ? AppColors.accent
+                                                : AppColors.primary)
                                             : (isDark
-                                                  ? AppColors.textPrimaryDark
-                                                  : AppColors.textPrimaryLight),
+                                                ? AppColors.textPrimaryDark
+                                                : AppColors.textPrimaryLight),
                                       ),
                                     ),
                                     const SizedBox(height: 2),
@@ -384,12 +383,11 @@ class _PersonalInfoStepViewState extends State<PersonalInfoStepView> {
                                         fontSize: 11,
                                         color: isSelected
                                             ? (isDark
-                                                  ? AppColors.accent
-                                                  : AppColors.primary)
+                                                ? AppColors.accent
+                                                : AppColors.primary)
                                             : (isDark
-                                                  ? AppColors.textSecondaryDark
-                                                  : AppColors
-                                                        .textSecondaryLight),
+                                                ? AppColors.textSecondaryDark
+                                                : AppColors.textSecondaryLight),
                                       ),
                                     ),
                                   ],

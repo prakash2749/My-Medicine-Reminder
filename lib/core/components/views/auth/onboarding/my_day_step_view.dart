@@ -36,9 +36,8 @@ class MyDayStepView extends StatelessWidget {
     final signup = context.watch<SignupProvider>();
 
     return Scaffold(
-      backgroundColor: isDark
-          ? AppColors.backgroundDark
-          : AppColors.backgroundLight,
+      backgroundColor:
+          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       body: SafeArea(
         child: Column(
           children: [
@@ -55,7 +54,8 @@ class MyDayStepView extends StatelessWidget {
                       totalSteps: 4,
                       onBack: () => context.pop(),
                       title: 'Your day, your rhythm.',
-                      subtitle: 'Confirm your usual times. You can change these later.',
+                      subtitle:
+                          'Confirm your usual times. You can change these later.',
                     ),
                     const SizedBox(height: 24),
 
@@ -83,8 +83,8 @@ class MyDayStepView extends StatelessWidget {
                             color: signup.isRoutineFlexible
                                 ? AppColors.primary
                                 : (isDark
-                                      ? AppColors.textSecondaryDark
-                                      : AppColors.textSecondaryLight),
+                                    ? AppColors.textSecondaryDark
+                                    : AppColors.textSecondaryLight),
                             size: 22,
                           ),
                           const SizedBox(width: 12),

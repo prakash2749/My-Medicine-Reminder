@@ -7,6 +7,7 @@ import 'package:medicine_reminder/core/services/onboarding_service.dart';
 import 'package:medicine_reminder/providers/auth_provider.dart';
 import 'package:medicine_reminder/providers/signup_provider.dart';
 import 'package:medicine_reminder/core/components/shared/shared.dart';
+import '../../policy_view.dart';
 
 class CreateAccountStepView extends StatefulWidget {
   const CreateAccountStepView({super.key});
@@ -65,7 +66,7 @@ class _CreateAccountStepViewState extends State<CreateAccountStepView> {
 
     if (!signup.agreedToTerms) {
       setState(
-        () => _localError = 'Please accept the Terms of Service to continue.',
+        () => _localError = 'Please read and acknowledge the privacy notice.',
       );
       return;
     }
@@ -91,7 +92,7 @@ class _CreateAccountStepViewState extends State<CreateAccountStepView> {
               signupData: signup,
             );
           } catch (e) {
-            debugPrint('Failed to sync onboarding data to Supabase: $e');
+            debugPrint('Failed to sync onboarding data to Supabase.');
           }
         }
         if (!mounted) return;
@@ -121,9 +122,8 @@ class _CreateAccountStepViewState extends State<CreateAccountStepView> {
     final signup = context.watch<SignupProvider>();
 
     return Scaffold(
-      backgroundColor: isDark
-          ? AppColors.backgroundDark
-          : AppColors.backgroundLight,
+      backgroundColor:
+          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       body: SafeArea(
         child: Column(
           children: [
@@ -170,9 +170,8 @@ class _CreateAccountStepViewState extends State<CreateAccountStepView> {
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
-                              color: isDark
-                                  ? AppColors.accent
-                                  : AppColors.primary,
+                              color:
+                                  isDark ? AppColors.accent : AppColors.primary,
                             ),
                           ),
                         ),
@@ -313,11 +312,12 @@ class _CreateAccountStepViewState extends State<CreateAccountStepView> {
                     ),
                     const SizedBox(height: 20),
 
-                    // Terms agreement
+                    const PolicyLink(),
+                    // The legacy provider field now records notice acknowledgement.
                     AppCheckboxTile(
                       value: signup.agreedToTerms,
                       titleText:
-                          'I agree to the Terms of Service and Privacy Policy.',
+                          'I have read the privacy notice for optional account services.',
                       onChanged: (val) {
                         signup.setAgreedToTerms(val ?? false);
                         if (val == true && _localError != null) {
@@ -345,9 +345,8 @@ class _CreateAccountStepViewState extends State<CreateAccountStepView> {
                     width: double.infinity,
                     height: 52,
                     child: ElevatedButton(
-                      onPressed: signup.isSubmitting
-                          ? null
-                          : _handleCreateAccount,
+                      onPressed:
+                          signup.isSubmitting ? null : _handleCreateAccount,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
@@ -436,8 +435,8 @@ class _CreateAccountStepViewState extends State<CreateAccountStepView> {
             color: satisfied
                 ? (isDark ? AppColors.accent : AppColors.primary)
                 : (isDark
-                      ? AppColors.textSecondaryDark
-                      : AppColors.textSecondaryLight),
+                    ? AppColors.textSecondaryDark
+                    : AppColors.textSecondaryLight),
           ),
         ),
       ],

@@ -1,3 +1,4 @@
+import 'package:medicine_reminder/providers/app_preferences.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -68,13 +69,13 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
     );
 
     // Staggered text slide & fade
-    _textSlide = Tween<Offset>(begin: const Offset(0.0, 0.35), end: Offset.zero)
-        .animate(
-          CurvedAnimation(
-            parent: _entranceController,
-            curve: const Interval(0.4, 0.9, curve: Curves.easeOutCubic),
-          ),
-        );
+    _textSlide =
+        Tween<Offset>(begin: const Offset(0.0, 0.35), end: Offset.zero).animate(
+      CurvedAnimation(
+        parent: _entranceController,
+        curve: const Interval(0.4, 0.9, curve: Curves.easeOutCubic),
+      ),
+    );
 
     _textFade = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
@@ -98,17 +99,20 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
     });
   }
 
-  void _navigateToNextScreen() {
+  Future<void> _navigateToNextScreen() async {
     if (_hasNavigated || !mounted) return;
     _hasNavigated = true;
 
+    final settings = context.read<AppPreferences>();
+    await settings.ready;
+    if (!mounted) return;
     final authProvider = context.read<AuthProvider>();
     if (authProvider.isPasswordRecovery) {
       context.go(AppRoutes.updatePassword);
       return;
     }
 
-    final destination = authProvider.isAuthenticated
+    final destination = (authProvider.isAuthenticated || settings.guestEnabled)
         ? AppRoutes.authGate
         : AppRoutes.getStarted;
 
@@ -129,9 +133,8 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? AppColors.backgroundDark
-          : AppColors.backgroundLight,
+      backgroundColor:
+          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       body: Stack(
         children: [
           // Ambient background gradient glow
@@ -234,17 +237,18 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
                                   child: Image.asset(
                                     AppAssets.mascotGif,
                                     fit: BoxFit.contain,
-                                    errorBuilder: (_, _, _) {
+                                    errorBuilder: (_, __, ___) {
                                       // Fallback to static mascot PNG
                                       return Image.asset(
                                         AppAssets.mascot,
                                         fit: BoxFit.contain,
-                                        errorBuilder: (_, _, _) {
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
                                           // Fallback to main app logo
                                           return Image.asset(
                                             AppAssets.appLogo,
                                             fit: BoxFit.contain,
-                                            errorBuilder: (_, _, _) {
+                                            errorBuilder: (ctx, err, st) {
                                               return const Icon(
                                                 Icons.medication_rounded,
                                                 size: 72,

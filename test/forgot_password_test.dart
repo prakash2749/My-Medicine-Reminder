@@ -1,3 +1,4 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:medicine_reminder/core/components/views/auth/forgot_password_view.dart';
@@ -20,6 +21,7 @@ class ResetMockAuthService extends AuthService {
 }
 
 void main() {
+  setUp(() => SharedPreferences.setMockInitialValues({}));
   testWidgets('ForgotPasswordView sends password recovery email successfully', (
     tester,
   ) async {
@@ -29,10 +31,10 @@ void main() {
     await tester.pumpWidget(
       MultiProvider(
         providers: [
+          ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
           ...AppProviders.providers.where(
             (p) => p is! ChangeNotifierProvider<AuthProvider>,
           ),
-          ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
         ],
         child: const MaterialApp(home: ForgotPasswordView()),
       ),
